@@ -1,0 +1,55 @@
+@base = http://localhost:10002/api/commerce
+
+### 1. 加载初始业务数据（不清除工单）
+POST {{base}}/demo/load
+
+### 2. 演示身份
+POST {{base}}/demo/identities
+
+### 3. 小林有两笔杯子订单，返回 NEED_SELECTION
+POST {{base}}/orders/query
+Content-Type: application/json
+
+{"scope":{"merchantId":"demo-merchant","shopId":"demo-shop-tb","customerId":"demo-customer-tb-1"},"productClue":"杯"}
+
+### 4. 查询已选择订单的物流
+POST {{base}}/logistics/query
+Content-Type: application/json
+
+{"scope":{"merchantId":"demo-merchant","shopId":"demo-shop-tb","customerId":"demo-customer-tb-1"},"orderId":"demo-order-tb-01"}
+
+### 5. 同店其他顾客订单不得返回
+POST {{base}}/orders/query
+Content-Type: application/json
+
+{"scope":{"merchantId":"demo-merchant","shopId":"demo-shop-tb","customerId":"demo-customer-tb-1"},"orderNumber":"TB202610120005"}
+
+### 6. 未确认不得创建；将 false 改为 true 才可成功（HTTP 直接演示入口）
+POST {{base}}/tickets/create
+Content-Type: application/json
+
+{"scope":{"merchantId":"demo-merchant","shopId":"demo-shop-dy","customerId":"demo-customer-dy-1"},"sessionId":"demo-session-dy-1","messageId":"customer-message-001","orderId":"demo-order-dy-01","ticketType":"RETURN_REQUEST","reason":"杯盖破损，申请退货","customerConfirmed":false}
+
+### 7. 再次发送相同消息返回同一工单
+POST {{base}}/tickets/create
+Content-Type: application/json
+
+{"scope":{"merchantId":"demo-merchant","shopId":"demo-shop-dy","customerId":"demo-customer-dy-1"},"sessionId":"demo-session-dy-1","messageId":"customer-message-001","orderId":"demo-order-dy-01","ticketType":"RETURN_REQUEST","reason":"杯盖破损，申请退货","customerConfirmed":true}
+
+### 8. 按会话读取工单及处理历史
+POST {{base}}/tickets/query
+Content-Type: application/json
+
+{"scope":{"merchantId":"demo-merchant","shopId":"demo-shop-dy","customerId":"demo-customer-dy-1"},"sessionId":"demo-session-dy-1"}
+
+### 9. 替换 ticketId；之后可 expectedStatus=PROCESSING,status=COMPLETED
+POST {{base}}/tickets/update
+Content-Type: application/json
+
+{"merchantId":"demo-merchant","shopId":"demo-shop-dy","ticketId":"REPLACE_WITH_RETURNED_TICKET_ID","expectedStatus":"PENDING_REVIEW","status":"PROCESSING","note":"已联系顾客核实破损情况","operatorId":"demo-operator"}
+
+### 10. 仅恢复 commerce 演示数据；阅读影响后将 false 改成 true
+POST {{base}}/demo/restore
+Content-Type: application/json
+
+{"confirmed":false}

@@ -107,6 +107,12 @@
 
 
         <!-- Spring Boot Starter Test -->
+        <!-- commerce 持久化/并发测试使用内存数据库，不改变运行时 MySQL 配置。 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
