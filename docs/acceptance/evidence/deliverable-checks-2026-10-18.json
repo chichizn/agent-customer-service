@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-10-18T13:14:59.943Z",
+  "scope": "OFFLINE_C_DELIVERABLE_CHECKS_NOT_BUSINESS_ACCEPTANCE",
+  "datasetSha256": "a5981df988f90a3f6b5e68ce42f55bb91e9067934bf8bd20092e10f26b5bf067",
+  "dataset": {
+    "status": "PASS",
+    "counts": {
+      "merchants": 1,
+      "shops": 2,
+      "customers": 6,
+      "products": 4,
+      "orders": 12,
+      "logistics": 8,
+      "knowledge": 10
+    }
+  },
+  "negativeChecks": [
+    {
+      "name": "wrong customer ownership",
+      "status": "PASS"
+    },
+    {
+      "name": "wrong amount",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate order",
+      "status": "PASS"
+    },
+    {
+      "name": "cross-shop knowledge scope",
+      "status": "PASS"
+    },
+    {
+      "name": "tracking timeline reversal",
+      "status": "PASS"
+    }
+  ],
+  "loaderChecks": {
+    "status": "PASS",
+    "mode": "IN_MEMORY_FETCH_SUBSTITUTE_NO_REAL_NETWORK",
+    "dryRunRequests": 6,
+    "firstRunCreates": 6,
+    "secondRunCreates": 0,
+    "contentConflictCreates": 0,
+    "duplicateKeyCreates": 0,
+    "unavailableServerCreates": 0,
+    "simulatedHttpCalls": 14
+  }
+}

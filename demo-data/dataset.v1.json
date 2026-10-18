@@ -1,0 +1,783 @@
+{
+  "meta": {
+    "schemaVersion": "1.0.0",
+    "contractStatus": "DRAFT_FOR_A_D_MAPPING",
+    "demoNamespace": "customer-service-demo-v1",
+    "referenceTime": "2026-10-18T12:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "currency": "CNY",
+    "timePolicy": "SHIFT_ALL_TIMESTAMPS_BY_SAME_DELTA_ON_LOAD_OR_USE_REFERENCE_CLOCK",
+    "note": "演示数据；不含真实身份、真实运单和已执行的业务结果。字段为C侧交换格式，不代表已有后端接口。"
+  },
+  "merchants": [
+    {
+      "id": "demo-merchant-01",
+      "name": "安景生活演示商家",
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ],
+  "shops": [
+    {
+      "id": "demo-shop-taobao",
+      "merchantId": "demo-merchant-01",
+      "platform": "TAOBAO",
+      "name": "安景生活淘宝演示店",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-shop-douyin",
+      "merchantId": "demo-merchant-01",
+      "platform": "DOUYIN",
+      "name": "安景生活抖店演示店",
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ],
+  "customers": [
+    {
+      "id": "demo-customer-tb-01",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-taobao",
+      "platformUserId": "buyer_001",
+      "displayName": "小林",
+      "scenario": "多笔杯子订单",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-customer-tb-02",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-taobao",
+      "platformUserId": "buyer_002",
+      "displayName": "小周",
+      "scenario": "单笔杯子订单及收纳盒延迟",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-customer-tb-03",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-taobao",
+      "platformUserId": "buyer_003",
+      "displayName": "小陈",
+      "scenario": "无订单",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-customer-dy-01",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-douyin",
+      "platformUserId": "buyer_001",
+      "displayName": "小林",
+      "scenario": "多笔杯子订单",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-customer-dy-02",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-douyin",
+      "platformUserId": "buyer_002",
+      "displayName": "小周",
+      "scenario": "单笔杯子订单及收纳盒延迟",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-customer-dy-03",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-douyin",
+      "platformUserId": "buyer_003",
+      "displayName": "小陈",
+      "scenario": "无订单",
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ],
+  "products": [
+    {
+      "id": "demo-product-cup",
+      "merchantId": "demo-merchant-01",
+      "productCode": "C-DEMO-CUP",
+      "productName": "保温杯",
+      "listPriceCents": 5900,
+      "currency": "CNY",
+      "category": "日用百货",
+      "brand": "安景演示",
+      "specifications": "500ml；内胆304不锈钢；蓝色",
+      "features": "杯盖需拧紧；无保温时长承诺",
+      "description": "演示商品：保温杯。500ml；内胆304不锈钢；蓝色。杯盖需拧紧；无保温时长承诺。",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-product-box",
+      "merchantId": "demo-merchant-01",
+      "productCode": "C-DEMO-BOX",
+      "productName": "收纳盒",
+      "listPriceCents": 3900,
+      "currency": "CNY",
+      "category": "日用百货",
+      "brand": "安景演示",
+      "specifications": "30×20×15cm；PP材质；白色",
+      "features": "用于日常收纳；不可微波加热",
+      "description": "演示商品：收纳盒。30×20×15cm；PP材质；白色。用于日常收纳；不可微波加热。",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-product-cloth",
+      "merchantId": "demo-merchant-01",
+      "productCode": "C-DEMO-CLOTH",
+      "productName": "清洁布",
+      "listPriceCents": 1900,
+      "currency": "CNY",
+      "category": "日用百货",
+      "brand": "安景演示",
+      "specifications": "30×30cm；聚酯纤维；3片装",
+      "features": "适合日常擦拭；无除菌承诺",
+      "description": "演示商品：清洁布。30×30cm；聚酯纤维；3片装。适合日常擦拭；无除菌承诺。",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-product-bag",
+      "merchantId": "demo-merchant-01",
+      "productCode": "C-DEMO-BAG",
+      "productName": "帆布袋",
+      "listPriceCents": 2900,
+      "currency": "CNY",
+      "category": "日用百货",
+      "brand": "安景演示",
+      "specifications": "35×40cm；棉帆布；原色",
+      "features": "日常购物使用；无承重测试数据",
+      "description": "演示商品：帆布袋。35×40cm；棉帆布；原色。日常购物使用；无承重测试数据。",
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ],
+  "orders": [
+    {
+      "id": "demo-order-tb-001",
+      "orderNumber": "DEMO-TB-20261018-001",
+      "merchantId": "demo-merchant-01",
+      "platform": "TAOBAO",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-01",
+      "items": [
+        {
+          "productId": "demo-product-cup",
+          "productName": "保温杯",
+          "quantity": 1,
+          "unitPriceCents": 5900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 5900,
+      "currency": "CNY",
+      "status": "SHIPPED",
+      "orderedAt": "2026-10-15T10:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-tb-002",
+      "orderNumber": "DEMO-TB-20261018-002",
+      "merchantId": "demo-merchant-01",
+      "platform": "TAOBAO",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-01",
+      "items": [
+        {
+          "productId": "demo-product-cup",
+          "productName": "保温杯",
+          "quantity": 1,
+          "unitPriceCents": 5900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 5900,
+      "currency": "CNY",
+      "status": "DELIVERED",
+      "orderedAt": "2026-10-10T10:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-tb-003",
+      "orderNumber": "DEMO-TB-20261018-003",
+      "merchantId": "demo-merchant-01",
+      "platform": "TAOBAO",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-01",
+      "items": [
+        {
+          "productId": "demo-product-box",
+          "productName": "收纳盒",
+          "quantity": 2,
+          "unitPriceCents": 3900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 7800,
+      "currency": "CNY",
+      "status": "PENDING_SHIPMENT",
+      "orderedAt": "2026-10-18T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-tb-004",
+      "orderNumber": "DEMO-TB-20261018-004",
+      "merchantId": "demo-merchant-01",
+      "platform": "TAOBAO",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-01",
+      "items": [
+        {
+          "productId": "demo-product-cloth",
+          "productName": "清洁布",
+          "quantity": 1,
+          "unitPriceCents": 1900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 1900,
+      "currency": "CNY",
+      "status": "CANCELLED",
+      "orderedAt": "2026-10-16T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-tb-005",
+      "orderNumber": "DEMO-TB-20261018-005",
+      "merchantId": "demo-merchant-01",
+      "platform": "TAOBAO",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-02",
+      "items": [
+        {
+          "productId": "demo-product-cup",
+          "productName": "保温杯",
+          "quantity": 1,
+          "unitPriceCents": 5900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 5900,
+      "currency": "CNY",
+      "status": "DELIVERED",
+      "orderedAt": "2026-10-15T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-tb-006",
+      "orderNumber": "DEMO-TB-20261018-006",
+      "merchantId": "demo-merchant-01",
+      "platform": "TAOBAO",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-02",
+      "items": [
+        {
+          "productId": "demo-product-box",
+          "productName": "收纳盒",
+          "quantity": 1,
+          "unitPriceCents": 3900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 3900,
+      "currency": "CNY",
+      "status": "SHIPPED",
+      "orderedAt": "2026-10-14T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-dy-001",
+      "orderNumber": "DEMO-DY-20261018-001",
+      "merchantId": "demo-merchant-01",
+      "platform": "DOUYIN",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-01",
+      "items": [
+        {
+          "productId": "demo-product-cup",
+          "productName": "保温杯",
+          "quantity": 1,
+          "unitPriceCents": 5900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 5900,
+      "currency": "CNY",
+      "status": "SHIPPED",
+      "orderedAt": "2026-10-15T10:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-dy-002",
+      "orderNumber": "DEMO-DY-20261018-002",
+      "merchantId": "demo-merchant-01",
+      "platform": "DOUYIN",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-01",
+      "items": [
+        {
+          "productId": "demo-product-cup",
+          "productName": "保温杯",
+          "quantity": 1,
+          "unitPriceCents": 5900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 5900,
+      "currency": "CNY",
+      "status": "DELIVERED",
+      "orderedAt": "2026-10-10T10:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-dy-003",
+      "orderNumber": "DEMO-DY-20261018-003",
+      "merchantId": "demo-merchant-01",
+      "platform": "DOUYIN",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-01",
+      "items": [
+        {
+          "productId": "demo-product-box",
+          "productName": "收纳盒",
+          "quantity": 2,
+          "unitPriceCents": 3900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 7800,
+      "currency": "CNY",
+      "status": "PENDING_SHIPMENT",
+      "orderedAt": "2026-10-18T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-dy-004",
+      "orderNumber": "DEMO-DY-20261018-004",
+      "merchantId": "demo-merchant-01",
+      "platform": "DOUYIN",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-01",
+      "items": [
+        {
+          "productId": "demo-product-cloth",
+          "productName": "清洁布",
+          "quantity": 1,
+          "unitPriceCents": 1900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 1900,
+      "currency": "CNY",
+      "status": "CANCELLED",
+      "orderedAt": "2026-10-16T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-dy-005",
+      "orderNumber": "DEMO-DY-20261018-005",
+      "merchantId": "demo-merchant-01",
+      "platform": "DOUYIN",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-02",
+      "items": [
+        {
+          "productId": "demo-product-cup",
+          "productName": "保温杯",
+          "quantity": 1,
+          "unitPriceCents": 5900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 5900,
+      "currency": "CNY",
+      "status": "DELIVERED",
+      "orderedAt": "2026-10-15T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-order-dy-006",
+      "orderNumber": "DEMO-DY-20261018-006",
+      "merchantId": "demo-merchant-01",
+      "platform": "DOUYIN",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-02",
+      "items": [
+        {
+          "productId": "demo-product-box",
+          "productName": "收纳盒",
+          "quantity": 1,
+          "unitPriceCents": 3900
+        }
+      ],
+      "discountCents": 0,
+      "paidAmountCents": 3900,
+      "currency": "CNY",
+      "status": "SHIPPED",
+      "orderedAt": "2026-10-14T09:00:00+08:00",
+      "platformAfterSaleStatus": "NONE",
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ],
+  "logistics": [
+    {
+      "id": "demo-logistics-tb-001",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-01",
+      "orderId": "demo-order-tb-001",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-TB-001",
+      "status": "IN_TRANSIT",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-16T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-18T10:00:00+08:00",
+          "description": "演示包裹到达杭州转运中心"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-logistics-tb-002",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-01",
+      "orderId": "demo-order-tb-002",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-TB-002",
+      "status": "DELIVERED",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-16T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-17T15:00:00+08:00",
+          "description": "演示包裹已签收"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-logistics-tb-005",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-02",
+      "orderId": "demo-order-tb-005",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-TB-005",
+      "status": "DELIVERED",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-16T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-17T15:00:00+08:00",
+          "description": "演示包裹已签收"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-logistics-tb-006",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-taobao",
+      "customerId": "demo-customer-tb-02",
+      "orderId": "demo-order-tb-006",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-TB-006",
+      "status": "DELAYED",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-15T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-16T16:00:00+08:00",
+          "description": "演示运输节点延迟，尚无预计送达时间"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-logistics-dy-001",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-01",
+      "orderId": "demo-order-dy-001",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-DY-001",
+      "status": "IN_TRANSIT",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-16T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-18T10:00:00+08:00",
+          "description": "演示包裹到达杭州转运中心"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-logistics-dy-002",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-01",
+      "orderId": "demo-order-dy-002",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-DY-002",
+      "status": "DELIVERED",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-16T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-17T15:00:00+08:00",
+          "description": "演示包裹已签收"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-logistics-dy-005",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-02",
+      "orderId": "demo-order-dy-005",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-DY-005",
+      "status": "DELIVERED",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-16T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-17T15:00:00+08:00",
+          "description": "演示包裹已签收"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-logistics-dy-006",
+      "merchantId": "demo-merchant-01",
+      "shopId": "demo-shop-douyin",
+      "customerId": "demo-customer-dy-02",
+      "orderId": "demo-order-dy-006",
+      "carrier": "演示速递",
+      "trackingNumber": "DEMO-TRACK-DY-006",
+      "status": "DELAYED",
+      "estimatedDeliveryAt": null,
+      "nodes": [
+        {
+          "occurredAt": "2026-10-15T10:00:00+08:00",
+          "description": "演示包裹已揽收"
+        },
+        {
+          "occurredAt": "2026-10-16T16:00:00+08:00",
+          "description": "演示运输节点延迟，尚无预计送达时间"
+        }
+      ],
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ],
+  "knowledge": [
+    {
+      "id": "demo-knowledge-cup",
+      "merchantId": "demo-merchant-01",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "PRODUCT",
+      "topic": "MATERIAL",
+      "title": "保温杯材质与容量",
+      "content": "保温杯容量500ml，内胆304不锈钢。杯盖需拧紧。未提供检测报告或保温时长，不能据此作保证。",
+      "productIds": [
+        "demo-product-cup"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-box",
+      "merchantId": "demo-merchant-01",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "PRODUCT",
+      "topic": "DIMENSIONS",
+      "title": "收纳盒尺寸与使用",
+      "content": "收纳盒30×20×15cm，PP材质，不可微波加热。",
+      "productIds": [
+        "demo-product-box"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-ticket",
+      "merchantId": "demo-merchant-01",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "TICKET_SCOPE",
+      "title": "本地服务工单的含义",
+      "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-logistics",
+      "merchantId": "demo-merchant-01",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "NO_ETA",
+      "title": "物流时效说明",
+      "content": "物流以演示订单的实际节点为准。未提供预计送达时间时不能承诺明天到货；未发货和已取消订单没有运单。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-tb-return",
+      "merchantId": "demo-merchant-01",
+      "scope": "SHOP",
+      "shopId": "demo-shop-taobao",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_WINDOW",
+      "title": "淘宝演示店退货期限",
+      "content": "本演示店普通商品签收后15天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非淘宝官方政策。",
+      "productIds": [],
+      "policy": {
+        "returnWindowDays": 15
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-dy-return",
+      "merchantId": "demo-merchant-01",
+      "scope": "SHOP",
+      "shopId": "demo-shop-douyin",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_WINDOW",
+      "title": "抖店演示店退货期限",
+      "content": "本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+      "productIds": [],
+      "policy": {
+        "returnWindowDays": 7
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-tb-fee",
+      "merchantId": "demo-merchant-01",
+      "scope": "SHOP",
+      "shopId": "demo-shop-taobao",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_SHIPPING",
+      "title": "淘宝演示店退货运费",
+      "content": "个人原因退货由顾客承担寄回运费；质量问题需商家审核后决定承担方式。不得自动承诺赔偿金额。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-dy-fee",
+      "merchantId": "demo-merchant-01",
+      "scope": "SHOP",
+      "shopId": "demo-shop-douyin",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_SHIPPING",
+      "title": "抖店演示店退货运费",
+      "content": "本演示店个人原因退货可申请一次最高10元寄回运费补贴，需商家审核；额外赔偿需人工决定，不自动批准。",
+      "productIds": [],
+      "policy": {
+        "shippingSubsidyCapCents": 1000
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-tb-activity",
+      "merchantId": "demo-merchant-01",
+      "scope": "SHOP",
+      "shopId": "demo-shop-taobao",
+      "kind": "ACTIVITY",
+      "topic": "DISCOUNT",
+      "title": "淘宝演示店收纳盒活动",
+      "content": "仅淘宝演示店收纳盒新订单单件9折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+      "productIds": [
+        "demo-product-box"
+      ],
+      "policy": {
+        "discountRate": 0.9,
+        "startsAt": "2026-10-01T00:00:00+08:00",
+        "endsAt": "2026-10-31T23:59:59+08:00"
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-dy-activity",
+      "merchantId": "demo-merchant-01",
+      "scope": "SHOP",
+      "shopId": "demo-shop-douyin",
+      "kind": "ACTIVITY",
+      "topic": "DISCOUNT",
+      "title": "抖店演示店保温杯活动",
+      "content": "仅抖店演示店保温杯新订单单件95折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+      "productIds": [
+        "demo-product-cup"
+      ],
+      "policy": {
+        "discountRate": 0.95,
+        "startsAt": "2026-10-01T00:00:00+08:00",
+        "endsAt": "2026-10-31T23:59:59+08:00"
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示店铺资料 v1；非平台官方规则",
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ],
+  "sessions": [],
+  "messages": [],
+  "serviceTickets": [],
+  "executionRecords": []
+}
