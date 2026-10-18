@@ -2,7 +2,7 @@ import { AppRouteRecord } from '@/types/router'
 
 /**
  * 🤖 智能客服系统路由配置
- * 
+ *
  * 三大核心模块：
  * 1. 对话中心 - 核心对话功能（四栏布局）
  * 2. 知识中心 - 知识库管理（Tab切换）
@@ -25,8 +25,19 @@ export const customerServiceRoutes: AppRouteRecord = {
       name: 'ChatCenter',
       component: '/customer-service/chat/index',
       meta: {
-        title: '对话中心',
+        title: '客服工作台',
         icon: 'ri:message-3-line',
+        keepAlive: true
+      }
+    },
+
+    {
+      path: 'simulator',
+      name: 'CustomerSimulatorMenu',
+      component: '/customer-service/simulator/index',
+      meta: {
+        title: '顾客模拟入口',
+        icon: 'ri:user-voice-line',
         keepAlive: true
       }
     },

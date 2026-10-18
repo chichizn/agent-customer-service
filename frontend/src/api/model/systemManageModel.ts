@@ -4,7 +4,9 @@
  * @module api/model/systemManageModel
  */
 
-import type { PaginatedResponse, CommonSearchParams } from '@/types/common/response'
+import type { PaginatedResponse } from '@/types/common/response'
+
+type CommonSearchParams = Api.Common.CommonSearchParams
 
 // ========== 用户相关 ==========
 
@@ -81,4 +83,3 @@ export interface CreateRoleParams {
 
 /** 更新角色参数 */
 export type UpdateRoleParams = Partial<CreateRoleParams>
-

@@ -72,13 +72,13 @@ const handleToggleEnabled = async (row: Rule) => {
 }
 
 const getRuleTypeColor = (type: string) => {
-  const colorMap: Record<string, string> = {
+  const colorMap: Record<string, 'primary' | 'danger' | 'warning' | 'info'> = {
     '路由规则': 'primary',
     '安全规则': 'danger',
     '转接规则': 'warning',
     '时间规则': 'info'
   }
-  return colorMap[type] || ''
+  return colorMap[type] || 'info'
 }
 </script>
 

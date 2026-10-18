@@ -137,7 +137,7 @@ const sendMessage = async () => {
 
     await nextTick()
     scrollToBottom()
-  } catch (error: any) {
+  } catch {
     ElMessage.error('发送消息失败，请检查后端服务是否启动')
     // 回退：移除用户消息
     messages.value.pop()
@@ -154,7 +154,8 @@ const scrollToBottom = () => {
 }
 
 // 按下回车发送
-const handleKeydown = (e: KeyboardEvent) => {
+const handleKeydown = (e: Event | KeyboardEvent) => {
+  if (!(e instanceof KeyboardEvent)) return
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault()
     sendMessage()

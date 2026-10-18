@@ -5,8 +5,8 @@
  */
 
 import request from '@/utils/http'
-import { BaseResult } from '@/types/axios'
-import type { UserInfo } from '@/types/store'
+import type { BaseResponse as BaseResult } from '@/types/common/response'
+import type { UserInfo } from './model/authModel'
 import type {
   LoginParams,
   LoginResponse,
