@@ -1,0 +1,599 @@
+---
+title: 样式开发规范
+description: Tailwind CSS、SCSS、Element Plus 样式定制和主题切换规范
+tags: [样式, Tailwind, SCSS, 主题, CSS]
+---
+
+# 样式开发规范
+
+## 样式技术栈
+
+- **SCSS**: 用于复杂样式和主题定制
+- **Tailwind CSS 4**: 用于快速构建 UI
+- **Element Plus**: UI 组件库样式
+
+## Tailwind CSS 使用
+
+### 优先使用 Tailwind
+
+```vue
+<template>
+  <!-- ✅ 推荐 - 使用 Tailwind 实用类 -->
+  <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
+    <span class="text-lg font-bold text-gray-800">标题</span>
+    <el-button class="ml-4">操作</el-button>
+  </div>
+
+  <!-- ❌ 避免 - 不必要的自定义样式 -->
+  <div class="custom-header">
+    <span class="custom-title">标题</span>
+    <el-button>操作</el-button>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+</style>
+```
+
+### 常用 Tailwind 类
+
+```vue
+<template>
+  <!-- 布局 -->
+  <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+    <!-- Flex 布局 -->
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Grid 布局 -->
+  </div>
+
+  <!-- 间距 -->
+  <div class="p-4 px-6 py-2 m-4 mx-auto my-8">
+    <!-- padding 和 margin -->
+  </div>
+
+  <!-- 尺寸 -->
+  <div class="w-full h-screen max-w-7xl min-h-[200px]">
+    <!-- 宽度和高度 -->
+  </div>
+
+  <!-- 文字 -->
+  <p class="text-sm text-gray-600 font-medium leading-6 tracking-wide">
+    <!-- 文字样式 -->
+  </p>
+
+  <!-- 颜色 -->
+  <div class="bg-blue-500 text-white border border-gray-300">
+    <!-- 背景色、文字色、边框色 -->
+  </div>
+
+  <!-- 圆角和阴影 -->
+  <div class="rounded-lg shadow-md hover:shadow-lg">
+    <!-- 圆角和阴影 -->
+  </div>
+
+  <!-- 响应式 -->
+  <div class="text-sm md:text-base lg:text-lg xl:text-xl">
+    <!-- 不同屏幕尺寸 -->
+  </div>
+
+  <!-- 状态 -->
+  <button class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:bg-gray-300">
+    <!-- 交互状态 -->
+  </button>
+</template>
+```
+
+### Tailwind 响应式设计
+
+```vue
+<template>
+  <!-- ✅ 移动优先的响应式设计 -->
+  <div class="
+    flex flex-col
+    md:flex-row
+    lg:gap-6
+    xl:gap-8
+  ">
+    <!-- 小屏幕纵向排列，中等屏幕及以上横向排列 -->
+  </div>
+
+  <div class="
+    text-base
+    sm:text-lg
+    md:text-xl
+    lg:text-2xl
+  ">
+    <!-- 响应式文字大小 -->
+  </div>
+
+  <div class="
+    grid
+    grid-cols-1
+    sm:grid-cols-2
+    md:grid-cols-3
+    lg:grid-cols-4
+  ">
+    <!-- 响应式网格 -->
+  </div>
+</template>
+```
+
+## SCSS 使用
+
+### 全局 SCSS 混入
+
+项目已配置全局 SCSS 混入，可直接使用：
+
+```scss
+// 文件位置: src/assets/styles/core/mixin.scss
+// vite.config.ts 中已配置自动注入
+
+// ✅ 直接使用，无需导入
+.container {
+  @include flex-center; // Flex 居中
+  @include text-ellipsis; // 文字省略号
+  @include text-ellipsis-multiline(2); // 多行文字省略号
+}
+```
+
+### 变量使用
+
+```scss
+// ✅ 使用 CSS 变量（推荐）
+.button {
+  color: var(--el-color-primary);
+  background-color: var(--el-bg-color);
+  border-color: var(--el-border-color);
+}
+
+// ✅ 使用 SCSS 变量
+$primary-color: #409eff;
+$text-color: #333;
+
+.title {
+  color: $text-color;
+}
+```
+
+### 嵌套和父选择器
+
+```scss
+.card {
+  padding: 20px;
+  background-color: white;
+
+  // ✅ 嵌套
+  &__header {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &__body {
+    margin-top: 16px;
+  }
+
+  // ✅ 伪类
+  &:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  // ✅ 状态类
+  &.active {
+    border-color: var(--el-color-primary);
+  }
+
+  // ✅ 修饰符
+  &--large {
+    padding: 30px;
+  }
+}
+```
+
+### 深度选择器
+
+```vue
+<style lang="scss" scoped>
+// ✅ 修改 Element Plus 组件样式
+:deep(.el-dialog) {
+  .el-dialog__header {
+    background-color: var(--el-color-primary);
+    color: white;
+  }
+
+  .el-dialog__body {
+    padding: 30px;
+  }
+}
+
+// ✅ 修改子组件样式
+:deep(.child-component) {
+  .title {
+    color: red;
+  }
+}
+</style>
+```
+
+## BEM 命名规范
+
+当使用自定义样式时，遵循 BEM 命名规范：
+
+```scss
+// Block（块）
+.user-card {
+  // Element（元素）- 使用 __
+  &__header {
+    padding: 16px;
+  }
+
+  &__avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  &__name {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  &__email {
+    color: #999;
+    font-size: 14px;
+  }
+
+  // Modifier（修饰符）- 使用 --
+  &--large {
+    padding: 24px;
+
+    .user-card__avatar {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  &--active {
+    border-color: var(--el-color-primary);
+  }
+}
+```
+
+## Element Plus 样式定制
+
+### 组件级别样式覆盖
+
+```vue
+<style lang="scss" scoped>
+// ✅ 使用 :deep() 修改组件样式
+:deep(.el-table) {
+  .el-table__header {
+    th {
+      background-color: #f5f7fa;
+      color: #333;
+      font-weight: 600;
+    }
+  }
+
+  .el-table__row {
+    &:hover {
+      background-color: #f0f9ff;
+    }
+  }
+}
+
+:deep(.el-dialog) {
+  border-radius: 8px;
+
+  .el-dialog__header {
+    padding: 20px;
+    border-bottom: 1px solid #ebeef5;
+  }
+
+  .el-dialog__body {
+    padding: 20px 24px;
+  }
+
+  .el-dialog__footer {
+    padding: 16px 24px;
+    border-top: 1px solid #ebeef5;
+  }
+}
+
+:deep(.el-form) {
+  .el-form-item__label {
+    font-weight: 500;
+  }
+}
+</style>
+```
+
+## 主题切换
+
+### 明暗主题切换
+
+```vue
+<script setup lang="ts">
+import { useSettingStore } from '@stores/setting'
+
+const settingStore = useSettingStore()
+const { theme } = storeToRefs(settingStore)
+
+const toggleTheme = () => {
+  settingStore.toggleTheme()
+}
+</script>
+
+<template>
+  <el-switch
+    v-model="theme"
+    active-value="dark"
+    inactive-value="light"
+    @change="toggleTheme"
+  />
+</template>
+
+<style lang="scss" scoped>
+// ✅ 根据主题切换样式
+.container {
+  background-color: var(--el-bg-color);
+  color: var(--el-text-color-primary);
+}
+
+// ✅ 使用 CSS 变量自动适配主题
+.card {
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color);
+  color: var(--el-text-color-primary);
+}
+</style>
+```
+
+### CSS 变量
+
+```scss
+// ✅ 定义 CSS 变量
+:root {
+  --app-header-height: 60px;
+  --app-sidebar-width: 200px;
+  --app-sidebar-collapsed-width: 64px;
+  --app-content-padding: 20px;
+}
+
+// 暗色主题
+.dark {
+  --app-bg-color: #1a1a1a;
+  --app-text-color: #e5e5e5;
+}
+
+// 使用
+.header {
+  height: var(--app-header-height);
+}
+
+.sidebar {
+  width: var(--app-sidebar-width);
+
+  &.collapsed {
+    width: var(--app-sidebar-collapsed-width);
+  }
+}
+```
+
+## 动画和过渡
+
+### Vue 过渡
+
+```vue
+<template>
+  <!-- ✅ 使用 Transition 组件 -->
+  <Transition name="fade">
+    <div v-if="visible">内容</div>
+  </Transition>
+
+  <Transition name="slide">
+    <div v-if="visible">内容</div>
+  </Transition>
+</template>
+
+<style lang="scss" scoped>
+// fade 动画
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// slide 动画
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.slide-enter-from {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>
+```
+
+### CSS 动画
+
+```scss
+// ✅ 定义动画
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// 使用动画
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+```
+
+### Tailwind 动画
+
+```vue
+<template>
+  <!-- ✅ 使用 Tailwind 动画类 -->
+  <div class="animate-pulse">加载中...</div>
+  <div class="animate-bounce">弹跳</div>
+  <div class="animate-spin">旋转</div>
+
+  <!-- ✅ 过渡效果 -->
+  <button class="transition-colors duration-300 hover:bg-blue-600">
+    悬停变色
+  </button>
+
+  <div class="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+    悬停放大
+  </div>
+</template>
+```
+
+## 响应式设计
+
+### 断点使用
+
+```scss
+// Tailwind 默认断点
+// sm: 640px
+// md: 768px
+// lg: 1024px
+// xl: 1280px
+// 2xl: 1536px
+```
+
+```vue
+<template>
+  <!-- ✅ Tailwind 响应式 -->
+  <div class="
+    w-full
+    sm:w-1/2
+    md:w-1/3
+    lg:w-1/4
+    xl:w-1/5
+  ">
+    响应式宽度
+  </div>
+
+  <!-- ✅ 隐藏/显示 -->
+  <div class="hidden md:block">
+    中等屏幕及以上显示
+  </div>
+
+  <div class="block md:hidden">
+    小屏幕显示
+  </div>
+</template>
+
+<style lang="scss" scoped>
+// ✅ SCSS 媒体查询
+.container {
+  padding: 16px;
+
+  @media (min-width: 768px) {
+    padding: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 32px;
+  }
+}
+</style>
+```
+
+## 性能优化
+
+### 避免深层嵌套
+
+```scss
+// ❌ 不推荐 - 嵌套过深
+.level1 {
+  .level2 {
+    .level3 {
+      .level4 {
+        .level5 {
+          color: red;
+        }
+      }
+    }
+  }
+}
+
+// ✅ 推荐 - 扁平化
+.level1 {}
+.level1__level2 {}
+.level1__level3 {}
+.level1__level4 {}
+.level1__level5 {
+  color: red;
+}
+```
+
+### Scoped 样式优化
+
+```vue
+<!-- ✅ 使用 scoped 避免样式污染 -->
+<style lang="scss" scoped>
+.container {
+  padding: 20px;
+}
+</style>
+
+<!-- ✅ 需要全局样式时不加 scoped -->
+<style lang="scss">
+.global-class {
+  color: red;
+}
+</style>
+```
+
+## 最佳实践
+
+1. **优先使用 Tailwind CSS**: 快速构建 UI，减少自定义样式
+2. **使用 CSS 变量**: 便于主题切换和维护
+3. **遵循 BEM 命名**: 自定义样式使用 BEM 提高可维护性
+4. **使用 scoped**: 避免样式污染
+5. **避免深层嵌套**: SCSS 嵌套不超过 3 层
+6. **响应式优先**: 使用移动优先的设计思路
+7. **性能考虑**: 避免使用耗性能的选择器和属性
+8. **主题适配**: 使用 CSS 变量支持明暗主题切换

@@ -1,0 +1,10 @@
+// 导入暗黑主题
+@use 'element-plus/theme-chalk/src/dark/css-vars.scss' as *;
+
+html.dark {
+  .el-button--primary:not(.is-plain,.is-link) {
+    color: #303133;
+  }
+}
+
+  

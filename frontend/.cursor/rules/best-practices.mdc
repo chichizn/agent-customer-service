@@ -1,0 +1,584 @@
+---
+title: 最佳实践和注意事项
+description: 项目配置、代码质量、安全性和常见问题解决方案
+tags: [最佳实践, 代码质量, 安全性, 问题排查]
+---
+
+# 最佳实践和注意事项
+
+## 项目配置
+
+### 环境变量
+
+```bash
+# .env.development
+VITE_API_URL=http://localhost:3000
+VITE_API_PROXY_URL=http://localhost:3000
+VITE_VERSION=1.0.0
+VITE_PORT=5173
+VITE_BASE_URL=/
+
+# .env.production
+VITE_API_URL=https://api.example.com
+VITE_VERSION=1.0.0
+VITE_BASE_URL=/
+```
+
+使用环境变量：
+
+```typescript
+// ✅ 正确使用
+const apiUrl = import.meta.env.VITE_API_URL
+const version = import.meta.env.VITE_VERSION
+
+// ❌ 不要直接使用 process.env（Vite 项目中）
+const apiUrl = process.env.VITE_API_URL
+```
+
+### 路径别名
+
+项目已配置的别名：
+
+```typescript
+// ✅ 使用别名
+import { useUserStore } from '@stores/user'
+import { fetchGetUserList } from '@/api/system-manage'
+import Logo from '@imgs/common/logo.svg'
+import { formatDate } from '@utils/index'
+
+// ❌ 避免使用相对路径（深层嵌套）
+import { useUserStore } from '../../../store/modules/user'
+```
+
+## 代码质量
+
+### 避免在模板中使用复杂逻辑
+
+```vue
+<!-- ❌ 不推荐 - 模板中的复杂逻辑 -->
+<template>
+  <div>
+    {{ user.name.split(' ').map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(' ') }}
+  </div>
+</template>
+
+<!-- ✅ 推荐 - 使用计算属性 -->
+<script setup lang="ts">
+const formattedName = computed(() => 
+  user.value.name
+    .split(' ')
+    .map(n => n.charAt(0).toUpperCase() + n.slice(1))
+    .join(' ')
+)
+</script>
+
+<template>
+  <div>{{ formattedName }}</div>
+</template>
+```
+
+### 类型安全
+
+```typescript
+// ✅ 推荐 - 明确的类型定义
+interface UserInfo {
+  id: number
+  name: string
+  email: string
+}
+
+const user = ref<UserInfo | null>(null)
+
+// ✅ 类型守卫
+function isUserInfo(data: unknown): data is UserInfo {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'id' in data &&
+    'name' in data
+  )
+}
+
+if (isUserInfo(response)) {
+  console.log(response.id) // 类型安全
+}
+
+// ❌ 避免过度使用 any
+const data: any = {}
+data.anything.goes // 没有类型检查
+```
+
+### 错误处理
+
+```vue
+<script setup lang="ts">
+import { ElMessage } from 'element-plus'
+
+// ✅ 推荐 - 完整的错误处理
+const fetchData = async () => {
+  try {
+    loading.value = true
+    const response = await fetchGetUserList()
+    tableData.value = response.records
+  } catch (error) {
+    console.error('获取数据失败:', error)
+    ElMessage.error('获取数据失败，请稍后重试')
+  } finally {
+    loading.value = false
+  }
+}
+
+// ❌ 不推荐 - 忽略错误
+const fetchData = async () => {
+  const response = await fetchGetUserList()
+  tableData.value = response.records
+}
+</script>
+```
+
+## 组件开发
+
+### 组件拆分原则
+
+```vue
+<!-- ❌ 不推荐 - 单个组件过大 -->
+<!-- UserManagement.vue - 500+ 行 -->
+<script setup lang="ts">
+// 列表逻辑
+// 搜索逻辑
+// 编辑逻辑
+// 删除逻辑
+// 权限逻辑
+// ...
+</script>
+
+<!-- ✅ 推荐 - 合理拆分 -->
+<!-- UserManagement.vue - 主组件 -->
+<script setup lang="ts">
+import UserSearch from './components/UserSearch.vue'
+import UserTable from './components/UserTable.vue'
+import UserDialog from './components/UserDialog.vue'
+</script>
+
+<template>
+  <div>
+    <UserSearch @search="handleSearch" />
+    <UserTable :data="tableData" @edit="handleEdit" @delete="handleDelete" />
+    <UserDialog v-model:visible="dialogVisible" :user-id="currentUserId" />
+  </div>
+</template>
+```
+
+### Props 验证
+
+```vue
+<script setup lang="ts">
+// ✅ 推荐 - 完整的 Props 定义
+interface Props {
+  id: number
+  name: string
+  status?: '1' | '2'
+  data?: UserInfo
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  status: '1'
+})
+
+// 自定义验证
+const isValidId = computed(() => props.id > 0)
+
+watchEffect(() => {
+  if (!isValidId.value) {
+    console.warn('Invalid id prop:', props.id)
+  }
+})
+</script>
+```
+
+### 事件命名
+
+```vue
+<script setup lang="ts">
+// ✅ 推荐 - 清晰的事件命名
+interface Emits {
+  'update:visible': [value: boolean]
+  success: [user: UserInfo]
+  error: [error: Error]
+  change: [value: string, oldValue: string]
+}
+
+const emit = defineEmits<Emits>()
+
+// 使用
+emit('update:visible', false)
+emit('success', userInfo)
+emit('error', new Error('操作失败'))
+emit('change', 'new', 'old')
+</script>
+
+<template>
+  <!-- 父组件中使用 -->
+  <UserDialog
+    v-model:visible="dialogVisible"
+    @success="handleSuccess"
+    @error="handleError"
+    @change="handleChange"
+  />
+</template>
+```
+
+## API 使用
+
+### 统一的 API 调用
+
+```typescript
+// ✅ 推荐 - 在组件中使用 API
+import { fetchGetUserList } from '@/api/system-manage'
+
+const fetchData = async () => {
+  try {
+    const response = await fetchGetUserList(params)
+    tableData.value = response.records
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+// ❌ 不推荐 - 直接使用 axios
+import axios from 'axios'
+
+const fetchData = async () => {
+  const response = await axios.get('/api/user/list')
+  tableData.value = response.data
+}
+```
+
+### API 类型定义
+
+```typescript
+// ✅ 所有 API 类型定义在 api.d.ts 中
+declare namespace Api {
+  namespace User {
+    interface UserInfo {
+      id: number
+      name: string
+    }
+    
+    interface CreateParams {
+      name: string
+      email: string
+    }
+  }
+}
+
+// 使用
+const user: Api.User.UserInfo = { id: 1, name: 'admin' }
+```
+
+## 状态管理
+
+### Store 使用规范
+
+```vue
+<script setup lang="ts">
+import { useUserStore } from '@stores/user'
+import { storeToRefs } from 'pinia'
+
+// ✅ 推荐 - 使用 storeToRefs 保持响应式
+const userStore = useUserStore()
+const { token, userInfo, isLoggedIn } = storeToRefs(userStore)
+const { login, logout } = userStore
+
+// ❌ 不推荐 - 直接解构（失去响应式）
+const { token, userInfo, isLoggedIn } = useUserStore()
+
+// ✅ 调用 action
+await userStore.login({ userName: 'admin', password: '123456' })
+
+// ❌ 不推荐 - 直接修改 state
+userStore.token = 'new-token'
+</script>
+```
+
+### 避免在 Store 中使用 this
+
+```typescript
+// ✅ 推荐 - Setup Store
+export const useUserStore = defineStore('user', () => {
+  const token = ref('')
+  const userInfo = ref<UserInfo | null>(null)
+
+  const login = async (params: LoginParams) => {
+    // 直接访问 token 和 userInfo
+    const response = await fetchLogin(params)
+    token.value = response.token
+  }
+
+  return { token, userInfo, login }
+})
+
+// ❌ 不推荐 - Options Store（使用 this）
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    token: ''
+  }),
+  actions: {
+    login() {
+      this.token = 'xxx' // 使用 this
+    }
+  }
+})
+```
+
+## 样式开发
+
+### 优先使用 Tailwind
+
+```vue
+<template>
+  <!-- ✅ 推荐 - 使用 Tailwind -->
+  <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+    <span class="text-lg font-bold">标题</span>
+  </div>
+
+  <!-- ❌ 不推荐 - 不必要的自定义样式 -->
+  <div class="custom-container">
+    <span class="custom-title">标题</span>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.custom-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+}
+</style>
+```
+
+### 使用 CSS 变量
+
+```scss
+// ✅ 推荐 - 使用 CSS 变量
+.button {
+  color: var(--el-color-primary);
+  background-color: var(--el-bg-color);
+}
+
+// ❌ 不推荐 - 硬编码颜色
+.button {
+  color: #409eff;
+  background-color: #ffffff;
+}
+```
+
+## 性能优化
+
+### 合理使用 v-if 和 v-show
+
+```vue
+<template>
+  <!-- ✅ v-if - 不频繁切换的内容 -->
+  <div v-if="isAdmin">管理员面板</div>
+
+  <!-- ✅ v-show - 频繁切换的内容 -->
+  <div v-show="visible">对话框内容</div>
+
+  <!-- ❌ 不推荐 - 频繁切换使用 v-if -->
+  <div v-if="tabIndex === 0">标签页 1</div>
+  <div v-if="tabIndex === 1">标签页 2</div>
+</template>
+```
+
+### 列表渲染使用 key
+
+```vue
+<template>
+  <!-- ✅ 推荐 - 使用唯一 ID 作为 key -->
+  <div v-for="item in list" :key="item.id">
+    {{ item.name }}
+  </div>
+
+  <!-- ❌ 不推荐 - 使用 index 作为 key -->
+  <div v-for="(item, index) in list" :key="index">
+    {{ item.name }}
+  </div>
+</template>
+```
+
+### 避免在 v-for 中使用 v-if
+
+```vue
+<template>
+  <!-- ❌ 不推荐 -->
+  <div v-for="item in list" v-if="item.visible" :key="item.id">
+    {{ item.name }}
+  </div>
+
+  <!-- ✅ 推荐 - 使用计算属性过滤 -->
+  <div v-for="item in visibleList" :key="item.id">
+    {{ item.name }}
+  </div>
+</template>
+
+<script setup lang="ts">
+const visibleList = computed(() => 
+  list.value.filter(item => item.visible)
+)
+</script>
+```
+
+## 安全性
+
+### XSS 防护
+
+```vue
+<template>
+  <!-- ✅ 安全 - Vue 自动转义 -->
+  <div>{{ userInput }}</div>
+
+  <!-- ⚠️ 危险 - v-html 可能导致 XSS -->
+  <div v-html="userInput"></div>
+
+  <!-- ✅ 如果必须使用 v-html，先进行清理 -->
+  <div v-html="sanitizedHtml"></div>
+</template>
+
+<script setup lang="ts">
+import DOMPurify from 'dompurify'
+
+const sanitizedHtml = computed(() => 
+  DOMPurify.sanitize(userInput.value)
+)
+</script>
+```
+
+### 权限控制
+
+```vue
+<script setup lang="ts">
+import { useUserStore } from '@stores/user'
+
+const userStore = useUserStore()
+
+// ✅ 推荐 - 使用权限判断
+const canEdit = computed(() => userStore.hasButton('user:edit'))
+const canDelete = computed(() => userStore.hasButton('user:delete'))
+</script>
+
+<template>
+  <!-- ✅ 使用指令控制权限 -->
+  <el-button v-auth="'user:edit'" @click="handleEdit">编辑</el-button>
+  <el-button v-auth="'user:delete'" @click="handleDelete">删除</el-button>
+
+  <!-- ✅ 使用 v-if 控制 -->
+  <el-button v-if="canEdit" @click="handleEdit">编辑</el-button>
+</template>
+```
+
+## 常见问题
+
+### 1. 自动导入不生效
+
+**问题**: Vue API 和组件没有自动导入
+
+**解决**:
+```bash
+# 删除自动生成的类型文件，重新生成
+rm -rf src/types/import/auto-imports.d.ts
+rm -rf src/types/import/components.d.ts
+
+# 重启开发服务器
+pnpm dev
+```
+
+### 2. 类型报错
+
+**问题**: TypeScript 类型检查报错
+
+**解决**:
+```bash
+# 运行类型检查
+pnpm vue-tsc --noEmit
+
+# 检查 tsconfig.json 配置
+# 确保 include 包含所有源文件
+```
+
+### 3. 样式不生效
+
+**问题**: SCSS 或 Tailwind 样式不生效
+
+**解决**:
+```bash
+# 检查 vite.config.ts 中的 scss 配置
+# 确保 @tailwindcss/vite 插件已正确配置
+# 清除缓存并重启
+rm -rf node_modules/.vite
+pnpm dev
+```
+
+### 4. 路由跳转失败
+
+**问题**: 使用 router.push 跳转失败
+
+**解决**:
+```typescript
+// 检查路由是否已注册
+// 检查路由守卫是否拦截
+// 使用命名路由而不是路径
+router.push({ name: 'UserDetail', params: { id: 1 } })
+```
+
+### 5. API 请求跨域
+
+**问题**: 开发环境 API 请求跨域
+
+**解决**:
+```typescript
+// vite.config.ts 中配置代理
+server: {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      changeOrigin: true
+    }
+  }
+}
+```
+
+## 开发工具推荐
+
+### VSCode 插件
+
+- Vue Language Features (Volar)
+- TypeScript Vue Plugin (Volar)
+- ESLint
+- Prettier
+- Tailwind CSS IntelliSense
+- GitLens
+- Auto Rename Tag
+- Path Intellisense
+
+### Chrome 插件
+
+- Vue.js devtools
+
+## 代码审查清单
+
+### 提交前检查
+
+- [ ] 代码符合 ESLint 规范
+- [ ] 代码已格式化（Prettier）
+- [ ] 所有类型定义完整
+- [ ] 没有 console.log 调试代码
+- [ ] 组件名称和文件名一致
+- [ ] API 函数使用 fetch 前缀
+- [ ] Commit message 符合规范
+- [ ] 没有未使用的导入和变量
+- [ ] 错误处理完整
+- [ ] 加载状态处理正确

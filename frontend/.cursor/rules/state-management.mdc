@@ -1,0 +1,471 @@
+---
+title: 状态管理规范 (Pinia)
+description: Pinia Store 定义、使用、持久化和最佳实践
+tags: [Pinia, 状态管理, Store, 持久化]
+---
+
+# 状态管理规范 (Pinia)
+
+## Store 基本结构
+
+### Setup Store 写法（推荐）
+
+```typescript
+// src/store/modules/user.ts
+import { defineStore } from 'pinia'
+import { fetchLogin, fetchGetUserInfo } from '@/api/auth'
+import { router } from '@/router'
+
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    // ========== State ==========
+    const token = ref<string>('')
+    const refreshToken = ref<string>('')
+    const userInfo = ref<Api.Auth.UserInfo | null>(null)
+    const roles = ref<string[]>([])
+    const buttons = ref<string[]>([])
+
+    // ========== Getters ==========
+    const isLoggedIn = computed(() => !!token.value)
+    const userName = computed(() => userInfo.value?.userName || '')
+    const avatar = computed(() => userInfo.value?.avatar || '')
+    const hasRoles = computed(() => roles.value.length > 0)
+
+    // ========== Actions ==========
+    
+    /**
+     * 登录
+     */
+    const login = async (params: Api.Auth.LoginParams) => {
+      try {
+        const response = await fetchLogin(params)
+        token.value = response.token
+        refreshToken.value = response.refreshToken
+        
+        // 登录成功后获取用户信息
+        await getUserInfo()
+        
+        return response
+      } catch (error) {
+        console.error('登录失败:', error)
+        throw error
+      }
+    }
+
+    /**
+     * 获取用户信息
+     */
+    const getUserInfo = async () => {
+      try {
+        const response = await fetchGetUserInfo()
+        userInfo.value = response
+        roles.value = response.roles
+        buttons.value = response.buttons
+        return response
+      } catch (error) {
+        console.error('获取用户信息失败:', error)
+        throw error
+      }
+    }
+
+    /**
+     * 登出
+     */
+    const logout = async () => {
+      try {
+        // 清空状态
+        token.value = ''
+        refreshToken.value = ''
+        userInfo.value = null
+        roles.value = []
+        buttons.value = []
+        
+        // 跳转到登录页
+        router.push('/login')
+      } catch (error) {
+        console.error('登出失败:', error)
+        throw error
+      }
+    }
+
+    /**
+     * 检查是否有指定角色
+     */
+    const hasRole = (role: string) => {
+      return roles.value.includes(role)
+    }
+
+    /**
+     * 检查是否有指定按钮权限
+     */
+    const hasButton = (button: string) => {
+      return buttons.value.includes(button)
+    }
+
+    return {
+      // State
+      token,
+      refreshToken,
+      userInfo,
+      roles,
+      buttons,
+      
+      // Getters
+      isLoggedIn,
+      userName,
+      avatar,
+      hasRoles,
+      
+      // Actions
+      login,
+      logout,
+      getUserInfo,
+      hasRole,
+      hasButton
+    }
+  },
+  {
+    // 开启持久化
+    persist: {
+      key: 'user-store',
+      storage: localStorage,
+      paths: ['token', 'refreshToken', 'userInfo', 'roles', 'buttons']
+    }
+  }
+)
+```
+
+## Store 文件组织
+
+```
+src/store/
+├── index.ts          # 导出所有 store
+└── modules/
+    ├── user.ts       # 用户状态
+    ├── menu.ts       # 菜单状态
+    ├── setting.ts    # 系统设置
+    ├── table.ts      # 表格状态
+    └── worktab.ts    # 工作标签页
+```
+
+```typescript
+// src/store/index.ts
+export * from './modules/user'
+export * from './modules/menu'
+export * from './modules/setting'
+export * from './modules/table'
+export * from './modules/worktab'
+```
+
+## 组件中使用 Store
+
+### 基础使用
+
+```vue
+<script setup lang="ts">
+import { useUserStore } from '@stores/user'
+import { storeToRefs } from 'pinia'
+
+// ✅ 获取 store 实例
+const userStore = useUserStore()
+
+// ✅ 使用 storeToRefs 解构保持响应式
+const { token, userInfo, isLoggedIn, userName } = storeToRefs(userStore)
+
+// ✅ 方法可以直接解构
+const { login, logout, hasRole, hasButton } = userStore
+
+// 使用状态
+console.log(userInfo.value?.email)
+console.log(isLoggedIn.value)
+
+// 调用方法
+const handleLogin = async () => {
+  await login({
+    userName: 'admin',
+    password: '123456'
+  })
+}
+
+const handleLogout = async () => {
+  await logout()
+}
+
+// 权限判断
+const canEdit = hasRole('admin')
+const canDelete = hasButton('user:delete')
+</script>
+
+<template>
+  <div v-if="isLoggedIn">
+    <p>欢迎, {{ userName }}</p>
+    <el-button @click="handleLogout">退出</el-button>
+  </div>
+  <div v-else>
+    <el-button @click="handleLogin">登录</el-button>
+  </div>
+</template>
+```
+
+### 在 setup 外使用
+
+```typescript
+// ❌ 错误 - 在 setup 外直接使用
+const userStore = useUserStore() // 会报错
+
+// ✅ 正确 - 在函数内部使用
+export function someFunction() {
+  const userStore = useUserStore()
+  console.log(userStore.token)
+}
+
+// ✅ 正确 - 在路由守卫中使用
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  if (userStore.isLoggedIn) {
+    next()
+  } else {
+    next('/login')
+  }
+})
+```
+
+## Store 状态持久化
+
+项目使用 `pinia-plugin-persistedstate` 插件实现状态持久化：
+
+```typescript
+// ✅ 完整持久化配置
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    // ... store 定义
+  },
+  {
+    persist: {
+      key: 'user-store', // 存储的 key
+      storage: localStorage, // 存储方式：localStorage 或 sessionStorage
+      paths: ['token', 'refreshToken', 'userInfo'] // 指定需要持久化的字段
+    }
+  }
+)
+
+// ✅ 简化配置（持久化所有状态）
+export const useSettingStore = defineStore(
+  'setting',
+  () => {
+    // ... store 定义
+  },
+  {
+    persist: true
+  }
+)
+
+// ✅ 不持久化
+export const useTempStore = defineStore('temp', () => {
+  // ... store 定义
+})
+```
+
+## 常见 Store 模式
+
+### 系统设置管理
+
+```typescript
+// src/store/modules/setting.ts
+import { defineStore } from 'pinia'
+
+export const useSettingStore = defineStore('setting', () => {
+  // State
+  const theme = ref<'light' | 'dark'>('light')
+  const primaryColor = ref('#409eff')
+  const locale = ref<'zh' | 'en'>('zh')
+  const pageSize = ref(20)
+  const showBreadcrumb = ref(true)
+  const showTags = ref(true)
+
+  // Getters
+  const isDark = computed(() => theme.value === 'dark')
+
+  // Actions
+  const setTheme = (value: 'light' | 'dark') => {
+    theme.value = value
+    // 更新 HTML 的 class
+    document.documentElement.classList.toggle('dark', value === 'dark')
+  }
+
+  const toggleTheme = () => {
+    setTheme(isDark.value ? 'light' : 'dark')
+  }
+
+  const setPrimaryColor = (color: string) => {
+    primaryColor.value = color
+    // 更新 CSS 变量
+    document.documentElement.style.setProperty('--el-color-primary', color)
+  }
+
+  const setLocale = (value: 'zh' | 'en') => {
+    locale.value = value
+  }
+
+  return {
+    theme,
+    primaryColor,
+    locale,
+    pageSize,
+    showBreadcrumb,
+    showTags,
+    isDark,
+    setTheme,
+    toggleTheme,
+    setPrimaryColor,
+    setLocale
+  }
+}, {
+  persist: true
+})
+```
+
+### 菜单状态管理
+
+```typescript
+// src/store/modules/menu.ts
+import { defineStore } from 'pinia'
+import type { AppRouteRecord } from '@/types/router'
+
+export const useMenuStore = defineStore('menu', () => {
+  // State
+  const menuList = ref<AppRouteRecord[]>([])
+  const activeMenu = ref<string>('')
+  const openMenus = ref<string[]>([])
+  const collapsed = ref(false)
+
+  // Getters
+  const flatMenuList = computed(() => {
+    const result: AppRouteRecord[] = []
+    const flatten = (menus: AppRouteRecord[]) => {
+      menus.forEach(menu => {
+        result.push(menu)
+        if (menu.children) {
+          flatten(menu.children)
+        }
+      })
+    }
+    flatten(menuList.value)
+    return result
+  })
+
+  // Actions
+  const setMenuList = (menus: AppRouteRecord[]) => {
+    menuList.value = menus
+  }
+
+  const setActiveMenu = (path: string) => {
+    activeMenu.value = path
+  }
+
+  const toggleCollapsed = () => {
+    collapsed.value = !collapsed.value
+  }
+
+  const addOpenMenu = (path: string) => {
+    if (!openMenus.value.includes(path)) {
+      openMenus.value.push(path)
+    }
+  }
+
+  const removeOpenMenu = (path: string) => {
+    const index = openMenus.value.indexOf(path)
+    if (index > -1) {
+      openMenus.value.splice(index, 1)
+    }
+  }
+
+  return {
+    menuList,
+    activeMenu,
+    openMenus,
+    collapsed,
+    flatMenuList,
+    setMenuList,
+    setActiveMenu,
+    toggleCollapsed,
+    addOpenMenu,
+    removeOpenMenu
+  }
+}, {
+  persist: {
+    paths: ['collapsed', 'openMenus']
+  }
+})
+```
+
+## Store 之间的通信
+
+```typescript
+// ✅ 在一个 store 中使用另一个 store
+export const useMenuStore = defineStore('menu', () => {
+  const menuList = ref<AppRouteRecord[]>([])
+
+  const loadMenuList = async () => {
+    // 使用 userStore
+    const userStore = useUserStore()
+    
+    if (!userStore.isLoggedIn) {
+      console.error('用户未登录')
+      return
+    }
+
+    try {
+      const response = await fetchGetMenuList()
+      menuList.value = response
+    } catch (error) {
+      console.error('加载菜单失败:', error)
+    }
+  }
+
+  return {
+    menuList,
+    loadMenuList
+  }
+})
+```
+
+## Store 重置
+
+```typescript
+export const useUserStore = defineStore('user', () => {
+  const token = ref('')
+  const userInfo = ref<Api.Auth.UserInfo | null>(null)
+
+  // ✅ 手动重置方法
+  const reset = () => {
+    token.value = ''
+    userInfo.value = null
+  }
+
+  return {
+    token,
+    userInfo,
+    reset
+  }
+})
+
+// 使用
+const userStore = useUserStore()
+
+// ✅ 调用自定义重置方法
+userStore.reset()
+```
+
+## 最佳实践
+
+1. **优先使用 Setup Store**: 语法与 Composition API 一致
+2. **合理拆分 Store**: 按功能模块划分，避免单个 Store 过大
+3. **使用 storeToRefs**: 解构 state 时保持响应式
+4. **类型安全**: 为 state 定义明确的类型
+5. **持久化策略**: 只持久化必要的数据，敏感数据加密存储
+6. **避免直接修改 state**: 通过 action 修改状态
+7. **异步操作放在 action**: 所有异步逻辑在 action 中处理
+8. **命名规范**: store 名称使用 `use` + 功能名 + `Store`

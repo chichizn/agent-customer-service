@@ -1,0 +1,482 @@
+---
+title: TypeScript 开发规范
+description: TypeScript 类型定义、泛型使用、API 类型规范和 Vue 3 类型定义
+tags: [TypeScript, 类型定义, 泛型, API类型]
+---
+
+# TypeScript 开发规范
+
+## 基本原则
+
+- 优先使用类型推断，避免不必要的类型标注
+- 允许使用 `any` 类型（项目已配置 `@typescript-eslint/no-explicit-any: off`）
+- 使用 `interface` 定义对象类型，使用 `type` 定义联合类型或工具类型
+- 所有 API 类型定义统一放在 `src/types/api/api.d.ts` 的 `Api` 命名空间下
+
+## 类型定义
+
+### Interface vs Type
+
+```typescript
+// ✅ 使用 interface 定义对象类型
+interface UserInfo {
+  id: number
+  name: string
+  email: string
+}
+
+// ✅ 使用 type 定义联合类型
+type UserStatus = '1' | '2' | '3'
+type UserId = number | string
+
+// ✅ 使用 type 定义工具类型
+type PartialUser = Partial<UserInfo>
+type RequiredUser = Required<UserInfo>
+
+// ✅ interface 可以扩展
+interface AdminInfo extends UserInfo {
+  permissions: string[]
+}
+
+// ✅ type 可以使用联合和交叉类型
+type UserWithRole = UserInfo & { role: string }
+```
+
+### 函数类型定义
+
+```typescript
+// ✅ 推荐 - 参数和返回值都有类型
+function fetchUserList(params: SearchParams): Promise<UserList> {
+  return request.get({ url: '/api/user/list', params })
+}
+
+// ✅ 箭头函数
+const handleSubmit = async (data: FormData): Promise<void> => {
+  await saveData(data)
+}
+
+// ✅ 函数类型别名
+type FetchFunction = (id: number) => Promise<UserInfo>
+
+// ✅ 泛型函数
+function fetchList<T>(url: string): Promise<T[]> {
+  return request.get({ url })
+}
+```
+
+### 可选和只读属性
+
+```typescript
+// ✅ 可选属性使用 ?
+interface UserForm {
+  id?: number // 可选
+  name: string // 必填
+  email?: string // 可选
+}
+
+// ✅ 只读属性使用 readonly
+interface Config {
+  readonly apiUrl: string
+  readonly timeout: number
+}
+
+// ✅ 完全只读对象
+interface ReadonlyUser {
+  readonly id: number
+  readonly name: string
+}
+
+// 或使用工具类型
+type ReadonlyUser2 = Readonly<UserInfo>
+```
+
+## 泛型使用
+
+### 基础泛型
+
+```typescript
+// ✅ 泛型函数
+function wrapArray<T>(value: T): T[] {
+  return [value]
+}
+
+// ✅ 泛型接口
+interface ApiResponse<T> {
+  code: number
+  message: string
+  data: T
+}
+
+// ✅ 泛型类型别名
+type PromiseResult<T> = Promise<ApiResponse<T>>
+
+// ✅ 约束泛型
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key]
+}
+```
+
+### 实际应用
+
+```typescript
+// ✅ API 请求泛型
+function request<T = any>(config: RequestConfig): Promise<ApiResponse<T>> {
+  // 实现
+}
+
+// 使用
+const response = await request<UserInfo>({ url: '/api/user/info' })
+console.log(response.data.name) // 类型安全
+
+// ✅ 表格数据泛型
+interface TableColumn<T = any> {
+  prop: keyof T
+  label: string
+  width?: number
+}
+
+const columns: TableColumn<UserInfo>[] = [
+  { prop: 'id', label: 'ID' },
+  { prop: 'name', label: '姓名' },
+  { prop: 'email', label: '邮箱' }
+]
+```
+
+## 工具类型
+
+### 内置工具类型
+
+```typescript
+interface UserInfo {
+  id: number
+  name: string
+  email: string
+  age: number
+}
+
+// ✅ Partial - 所有属性可选
+type PartialUser = Partial<UserInfo>
+
+// ✅ Required - 所有属性必填
+type RequiredUser = Required<Partial<UserInfo>>
+
+// ✅ Readonly - 所有属性只读
+type ReadonlyUser = Readonly<UserInfo>
+
+// ✅ Pick - 选择部分属性
+type UserBasic = Pick<UserInfo, 'id' | 'name'>
+
+// ✅ Omit - 排除部分属性
+type UserWithoutId = Omit<UserInfo, 'id'>
+
+// ✅ Record - 创建键值对类型
+type UserMap = Record<number, UserInfo>
+
+// ✅ ReturnType - 获取函数返回类型
+function getUser(): UserInfo { return {} as UserInfo }
+type UserReturnType = ReturnType<typeof getUser>
+
+// ✅ Parameters - 获取函数参数类型
+function createUser(name: string, age: number) {}
+type CreateUserParams = Parameters<typeof createUser>
+```
+
+### 自定义工具类型
+
+```typescript
+// ✅ 深度只读
+type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P]
+}
+
+// ✅ 可空类型
+type Nullable<T> = T | null
+
+// ✅ 可选类型
+type Optional<T> = T | undefined
+
+// ✅ 深度可选
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
+}
+```
+
+## API 类型定义规范
+
+### 统一命名空间
+
+所有 API 相关类型必须定义在 `src/types/api/api.d.ts` 的 `Api` 命名空间下：
+
+```typescript
+// src/types/api/api.d.ts
+declare namespace Api {
+  /** 通用类型 */
+  namespace Common {
+    interface PaginationParams {
+      current: number
+      size: number
+      total: number
+    }
+
+    type CommonSearchParams = Pick<PaginationParams, 'current' | 'size'>
+
+    interface PaginatedResponse<T = any> {
+      records: T[]
+      current: number
+      size: number
+      total: number
+    }
+  }
+
+  /** 认证模块 */
+  namespace Auth {
+    interface LoginParams {
+      userName: string
+      password: string
+    }
+
+    interface LoginResponse {
+      token: string
+      refreshToken: string
+    }
+
+    interface UserInfo {
+      userId: number
+      userName: string
+      email: string
+      avatar?: string
+      roles: string[]
+      buttons: string[]
+    }
+  }
+
+  /** 系统管理模块 */
+  namespace SystemManage {
+    type UserList = Api.Common.PaginatedResponse<UserListItem>
+
+    interface UserListItem {
+      id: number
+      userName: string
+      nickName: string
+      email: string
+      phone: string
+      status: string
+      createTime: string
+    }
+
+    type UserSearchParams = Partial<
+      Pick<UserListItem, 'userName' | 'email' | 'status'> &
+        Api.Common.CommonSearchParams
+    >
+  }
+}
+```
+
+### 类型使用
+
+```typescript
+// ✅ 无需导入，直接使用全局命名空间
+const params: Api.Auth.LoginParams = {
+  userName: 'admin',
+  password: '123456'
+}
+
+// ✅ API 函数中使用
+export function fetchLogin(data: Api.Auth.LoginParams) {
+  return request.post<Api.Auth.LoginResponse>({
+    url: '/api/auth/login',
+    data
+  })
+}
+
+// ✅ 组件中使用
+const userInfo = ref<Api.Auth.UserInfo | null>(null)
+```
+
+## Vue 3 类型定义
+
+### Ref 和 Reactive
+
+```typescript
+// ✅ ref - 基本类型自动推断
+const count = ref(0) // Ref<number>
+const name = ref('admin') // Ref<string>
+
+// ✅ ref - 复杂类型需要指定
+const user = ref<Api.Auth.UserInfo | null>(null)
+const list = ref<UserInfo[]>([])
+
+// ✅ reactive - 对象类型
+interface State {
+  loading: boolean
+  data: UserInfo[]
+}
+
+const state = reactive<State>({
+  loading: false,
+  data: []
+})
+
+// ✅ computed - 自动推断返回类型
+const fullName = computed(() => `${user.value?.name}`)
+
+// ✅ computed - 显式指定类型
+const total = computed<number>(() => list.value.length)
+```
+
+### Props 和 Emits
+
+```typescript
+// ✅ defineProps 带类型
+interface Props {
+  visible: boolean
+  userId?: number
+  data?: UserInfo
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  visible: false,
+  userId: undefined,
+  data: undefined
+})
+
+// ✅ defineEmits 带类型
+interface Emits {
+  close: []
+  success: [id: number]
+  change: [value: string, oldValue: string]
+}
+
+const emit = defineEmits<Emits>()
+
+// 使用
+emit('close')
+emit('success', 123)
+emit('change', 'new', 'old')
+```
+
+### 组件实例类型
+
+```typescript
+import type { FormInstance, TableInstance } from 'element-plus'
+
+// ✅ Element Plus 组件实例
+const formRef = ref<FormInstance>()
+const tableRef = ref<TableInstance>()
+
+// ✅ 自定义组件实例
+import type UserDialog from './UserDialog.vue'
+
+const dialogRef = ref<InstanceType<typeof UserDialog>>()
+```
+
+## 类型守卫
+
+```typescript
+// ✅ typeof 类型守卫
+function isString(value: unknown): value is string {
+  return typeof value === 'string'
+}
+
+// ✅ instanceof 类型守卫
+function isDate(value: unknown): value is Date {
+  return value instanceof Date
+}
+
+// ✅ in 操作符类型守卫
+function isUserInfo(data: unknown): data is UserInfo {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'userId' in data &&
+    'userName' in data
+  )
+}
+
+// ✅ 自定义类型守卫
+function isSuccessResponse<T>(
+  response: ApiResponse<T>
+): response is ApiResponse<T> & { code: 200 } {
+  return response.code === 200
+}
+
+// 使用
+if (isSuccessResponse(response)) {
+  console.log(response.data) // 类型安全
+}
+```
+
+## 枚举和常量
+
+```typescript
+// ✅ 字符串枚举
+enum UserStatus {
+  ACTIVE = '1',
+  INACTIVE = '2',
+  PENDING = '3'
+}
+
+// ✅ 数字枚举
+enum ErrorCode {
+  SUCCESS = 0,
+  FAILED = 1,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403
+}
+
+// ✅ const 断言（推荐用于配置对象）
+const USER_STATUS = {
+  ACTIVE: '1',
+  INACTIVE: '2',
+  PENDING: '3'
+} as const
+
+type UserStatusValue = typeof USER_STATUS[keyof typeof USER_STATUS]
+// '1' | '2' | '3'
+
+// ✅ 字面量类型
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
+type ResponseCode = 200 | 400 | 401 | 403 | 404 | 500
+```
+
+## 类型导入导出
+
+```typescript
+// ✅ 导出类型
+export interface UserInfo {
+  id: number
+  name: string
+}
+
+export type UserId = number
+
+// ✅ 类型导入（使用 type 关键字）
+import type { UserInfo, UserId } from './types'
+
+// ✅ 混合导入
+import { fetchUserList } from './api'
+import type { UserListParams } from './types'
+
+// ✅ 命名空间导出
+export namespace User {
+  export interface Info {
+    id: number
+    name: string
+  }
+  
+  export type Id = number
+}
+
+// 使用
+import type { User } from './types'
+const user: User.Info = { id: 1, name: 'admin' }
+```
+
+## 注意事项
+
+1. **避免使用 any**（但允许在必要时使用）
+2. **优先使用类型推断**，只在必要时显式标注类型
+3. **使用严格模式**（项目已启用 `strict: true`）
+4. **全局类型**定义在 `Api` 命名空间下，使用时无需导入
+5. **组件类型**优先使用 Element Plus 提供的类型
+6. **避免类型断言**，优先使用类型守卫

@@ -1,0 +1,353 @@
+---
+title: Git 提交规范
+description: Conventional Commits 规范、Commit Message 格式和分支管理
+tags: [Git, Commit规范, Commitizen, 分支管理]
+---
+
+# Git 提交规范
+
+## Commit Message 格式
+
+项目使用 **Conventional Commits** 规范：
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### 格式说明
+
+- **type**: 提交类型（必填）
+- **scope**: 影响范围（可选）
+- **subject**: 简短描述（必填）
+- **body**: 详细描述（可选）
+- **footer**: 关联 issue 或 breaking changes（可选）
+
+## Type 类型
+
+### 主要类型
+
+| Type | 说明 | 示例 |
+|------|------|------|
+| `feat` | 新功能 | `feat(user): 添加用户搜索功能` |
+| `fix` | 修复 bug | `fix(auth): 修复登录token过期问题` |
+| `docs` | 文档更新 | `docs(readme): 更新安装说明` |
+| `style` | 代码格式调整（不影响功能） | `style(user): 格式化用户列表代码` |
+| `refactor` | 重构代码 | `refactor(api): 重构HTTP请求封装` |
+| `perf` | 性能优化 | `perf(table): 优化表格渲染性能` |
+| `test` | 测试相关 | `test(utils): 添加日期格式化单元测试` |
+| `chore` | 构建/工具链相关 | `chore(deps): 升级依赖版本` |
+| `revert` | 回滚提交 | `revert: 回滚feat(user): 添加用户搜索功能` |
+
+### 次要类型
+
+| Type | 说明 | 示例 |
+|------|------|------|
+| `build` | 构建系统或外部依赖 | `build(vite): 优化打包配置` |
+| `ci` | CI 配置文件和脚本 | `ci(github): 添加自动部署流程` |
+| `wip` | 进行中的工作 | `wip(dashboard): 开发仪表盘功能` |
+
+## Scope 范围
+
+常用的 scope 包括：
+
+### 功能模块
+
+- `user` - 用户管理
+- `role` - 角色管理
+- `menu` - 菜单管理
+- `auth` - 认证相关
+- `dashboard` - 仪表盘
+- `system` - 系统管理
+
+### 技术层面
+
+- `api` - API 接口
+- `store` - 状态管理
+- `router` - 路由
+- `component` - 组件
+- `style` - 样式
+- `types` - 类型定义
+- `utils` - 工具函数
+- `config` - 配置文件
+
+### 工具和依赖
+
+- `deps` - 依赖
+- `vite` - Vite 配置
+- `eslint` - ESLint 配置
+- `prettier` - Prettier 配置
+
+## Subject 描述
+
+### 规则
+
+1. 使用动词开头：添加、修复、更新、删除、优化等
+2. 不超过 50 个字符
+3. 结尾不加句号
+4. 使用现在时态
+5. 首字母小写（英文）
+
+### 示例
+
+```bash
+# ✅ 正确
+feat(user): 添加用户批量删除功能
+fix(table): 修复分页组件页码显示错误
+docs(api): 更新接口文档
+
+# ❌ 错误
+feat(user): 添加了用户批量删除功能。  # 使用了过去时、加了句号
+Fix(table): 修复分页bug               # 首字母大写
+update docs                           # 缺少 scope、描述不清晰
+```
+
+## Body 详细描述
+
+详细说明本次提交的内容，可以分多行：
+
+```
+feat(user): 添加用户导出功能
+
+1. 实现用户数据导出为 Excel
+2. 支持选择导出字段
+3. 支持按条件筛选导出
+4. 添加导出进度提示
+
+技术实现:
+- 使用 xlsx 库处理 Excel 导出
+- 前端实现文件下载
+- 优化大数据量导出性能
+```
+
+## Footer 备注
+
+### 关联 Issue
+
+```bash
+# 关闭单个 issue
+feat(user): 添加用户搜索功能
+
+Closes #123
+
+# 关闭多个 issue
+fix(auth): 修复登录相关问题
+
+Closes #123, #124, #125
+
+# 关联但不关闭
+feat(dashboard): 添加数据统计图表
+
+Related to #456
+```
+
+### Breaking Changes
+
+```bash
+# 不兼容的重大变更
+feat(api): 重构用户API接口
+
+BREAKING CHANGE: 
+用户列表接口返回格式已变更，需要更新调用代码。
+
+旧格式:
+{
+  data: []
+}
+
+新格式:
+{
+  records: [],
+  total: 0
+}
+```
+
+## 完整示例
+
+### 简单提交
+
+```bash
+feat(user): 添加用户列表搜索功能
+```
+
+```bash
+fix(table): 修复表格排序异常
+```
+
+```bash
+docs(readme): 更新项目介绍
+```
+
+### 复杂提交
+
+```bash
+feat(user): 实现用户管理完整功能
+
+实现内容:
+1. 用户列表展示和分页
+2. 用户搜索和筛选
+3. 用户新增、编辑、删除
+4. 用户状态启用/禁用
+5. 用户角色分配
+
+技术要点:
+- 使用 Element Plus Table 组件
+- 实现表格数据缓存
+- 添加操作权限控制
+- 优化大数据量渲染性能
+
+Closes #101, #102
+```
+
+```bash
+refactor(api): 重构 HTTP 请求封装
+
+重构内容:
+- 统一错误处理
+- 添加请求拦截器
+- 添加响应拦截器
+- 支持请求取消
+- 优化类型定义
+
+BREAKING CHANGE:
+API 调用方式已变更，需要更新所有接口调用代码。
+
+旧方式:
+request.get('/api/user/list')
+
+新方式:
+request.get({ url: '/api/user/list' })
+```
+
+## Commitizen 使用
+
+项目已配置 `commitizen` 和 `cz-git`，可以通过交互式命令行生成规范的 commit message。
+
+### 使用方式
+
+```bash
+# 代替 git commit
+pnpm commit
+
+# 或者
+git cz
+```
+
+### 交互流程
+
+1. 选择提交类型（type）
+2. 输入影响范围（scope，可选）
+3. 输入简短描述（subject）
+4. 输入详细描述（body，可选）
+5. 是否有 Breaking Changes（可选）
+6. 关联的 Issue（可选）
+
+## Commit 规范检查
+
+项目使用 `commitlint` 进行提交信息验证，配置文件：`commitlint.config.cjs`
+
+### 自动检查
+
+在执行 `git commit` 时会自动检查 commit message 格式：
+
+```bash
+# ✅ 通过检查
+git commit -m "feat(user): 添加用户搜索功能"
+
+# ❌ 不通过检查
+git commit -m "添加用户搜索功能"
+# Error: subject may not be empty
+# Error: type may not be empty
+```
+
+## 最佳实践
+
+1. **小而频繁的提交**: 每个功能点单独提交
+2. **提交完整的功能**: 功能完整可用
+3. **先 pull 再 commit**: 避免冲突
+4. **使用有意义的描述**: 清晰明确
+5. **修复 bug 时引用 Issue**: 便于追踪
+
+## 分支管理规范
+
+### 主要分支
+
+- `main` / `master` - 主分支，保持稳定
+- `develop` - 开发分支
+- `feature/*` - 功能分支
+- `bugfix/*` - 修复分支
+- `hotfix/*` - 紧急修复分支
+- `release/*` - 发布分支
+
+### 分支命名
+
+```bash
+# 功能开发
+feature/user-management
+feature/role-permission
+
+# Bug 修复
+bugfix/table-sorting
+bugfix/login-error
+
+# 紧急修复
+hotfix/security-patch
+hotfix/critical-bug
+
+# 发布版本
+release/v1.0.0
+release/v1.1.0
+```
+
+### 工作流程
+
+```bash
+# 1. 从 develop 创建功能分支
+git checkout develop
+git pull origin develop
+git checkout -b feature/user-management
+
+# 2. 开发并提交
+git add .
+pnpm commit
+# feat(user): 添加用户管理功能
+
+# 3. 推送到远程
+git push origin feature/user-management
+
+# 4. 创建 Pull Request 到 develop
+
+# 5. 代码审查通过后合并
+
+# 6. 删除功能分支
+git branch -d feature/user-management
+git push origin --delete feature/user-management
+```
+
+## 常用命令
+
+```bash
+# 查看提交历史
+git log --oneline
+
+# 修改最后一次提交
+git commit --amend
+
+# 交互式提交（使用 commitizen）
+pnpm commit
+
+# 查看某个文件的提交历史
+git log -- path/to/file
+
+# 查看提交详情
+git show <commit-hash>
+
+# 回滚到某个提交
+git revert <commit-hash>
+
+# 查看两个提交之间的差异
+git diff <commit1> <commit2>
+```

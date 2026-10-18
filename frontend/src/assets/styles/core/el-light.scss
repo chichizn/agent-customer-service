@@ -1,0 +1,68 @@
+// https://github.com/element-plus/element-plus/blob/dev/packages/theme-chalk/src/common/var.scss
+// 自定义Element 亮色主题
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'white': #ffffff,
+    'black': #000000,
+    'primary': (
+      'base': #ffcb00,
+    ),
+    'success': (
+      'base': #91C545,
+    ),
+    'warning': (
+      'base': #E6A23C,
+    ),
+    'danger': (
+      'base': #f56c6c,
+    ),
+    'error': (
+      'base': #F56C6C,
+    ),
+    'info': (
+      'base': #606266,
+    ),
+  ),
+  // $text-color: (
+  //   'primary': #303133,
+  //   'regular': #606266,
+  //   'secondary': #909399,
+  //   // 'secondary': #909399,
+  //   'placeholder': #a8abb2,
+  //   'disabled': #c0c4cc,
+  // ),
+  $button: (
+    // 'hover-bg-color': var(--el-color-primary-light-9),
+    // 'hover-border-color': var(--el-color-primary),
+    // 'border-color': var(--el-color-primary),
+    // 'text-color': var(--el-color-primary)
+    'font-weight': 500,
+    // 'border-color': getCssVar('border-color'),
+    // 'bg-color': getCssVar('fill-color', 'blank'),
+    // 'text-color': #606266,
+    // 'disabled-text-color': getCssVar('disabled-text-color'),
+    // 'disabled-bg-color': getCssVar('fill-color', 'blank'),
+    // 'disabled-border-color': getCssVar('border-color-light'),
+    // 'divide-border-color': rgba(#ffffff, 0.5),
+    // 'hover-text-color': getCssVar('color-primary'),
+    // 'hover-bg-color': getCssVar('color-primary', 'light-9'),
+    // 'hover-border-color': getCssVar('color-primary-light-7'),
+    // 'active-text-color': getCssVar('button-hover-text-color'),
+    // 'active-border-color': getCssVar('color-primary'),
+    // 'active-bg-color': getCssVar('button', 'hover-bg-color'),
+    // 'outline-color': getCssVar('color-primary', 'light-5'),
+    // 'hover-link-text-color': getCssVar('text-color', 'secondary'),
+    // 'active-color': getCssVar('text-color', 'primary'),
+  ),
+  $messagebox: (
+    'border-radius': '12px'
+  ),
+  $popover: (
+    'padding': '14px',
+    'border-radius': '10px'
+  )
+);
+.el-button--primary {
+  color: var(--el-text-color-primary);
+}

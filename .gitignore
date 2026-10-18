@@ -1,0 +1,39 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build output
+target/
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Environment files (may contain secrets)
+.env
+.env.local
+.env.production
+*.env
+
+# Local config (contains real credentials)
+application-local.yml
+application-dev.yml
+application-prod.yml
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+
+# Study project (contains third-party demo code with different org namespace)
+study_project/

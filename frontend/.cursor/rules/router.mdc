@@ -1,0 +1,450 @@
+---
+title: 路由开发规范
+description: Vue Router 路由配置、路由守卫、导航和动态路由规范
+tags: [路由, Vue Router, 导航, 权限]
+---
+
+# 路由开发规范
+
+## 路由文件组织
+
+```
+src/router/
+├── core/                    # 路由核心逻辑
+│   ├── ComponentLoader.ts   # 组件加载器
+│   ├── IframeRouteManager.ts # iframe 路由管理
+│   ├── index.ts             # 路由实例
+│   ├── MenuProcessor.ts     # 菜单处理器
+│   ├── RoutePermissionValidator.ts # 权限验证
+│   ├── RouteRegistry.ts     # 路由注册
+│   ├── RouteTransformer.ts  # 路由转换
+│   └── RouteValidator.ts    # 路由验证
+├── guards/                  # 路由守卫
+│   ├── afterEach.ts         # 全局后置守卫
+│   └── beforeEach.ts        # 全局前置守卫
+├── modules/                 # 路由模块
+│   ├── dashboard.ts         # 仪表盘路由
+│   ├── exception.ts         # 异常页面路由
+│   ├── index.ts             # 模块导出
+│   ├── result.ts            # 结果页面路由
+│   ├── system.ts            # 系统管理路由
+│   └── theme.ts             # 主题页面路由
+├── routes/                  # 路由配置
+│   ├── asyncRoutes.ts       # 动态路由
+│   └── staticRoutes.ts      # 静态路由
+├── index.ts                 # 路由入口
+└── routesAlias.ts           # 路由别名
+```
+
+## 路由定义
+
+### 静态路由
+
+```typescript
+// src/router/routes/staticRoutes.ts
+import type { RouteRecordRaw } from 'vue-router'
+
+/**
+ * 静态路由配置
+ * 这些路由不需要权限验证，所有用户都可以访问
+ */
+export const staticRoutes: RouteRecordRaw[] = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@views/auth/login/index.vue'),
+    meta: {
+      title: '登录',
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@views/auth/register/index.vue'),
+    meta: {
+      title: '注册',
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: () => import('@views/exception/404/index.vue'),
+    meta: {
+      title: '页面不存在',
+      requiresAuth: false
+    }
+  }
+]
+```
+
+### 动态路由
+
+```typescript
+// src/router/modules/system.ts
+import type { AppRouteRecord } from '@/types/router'
+
+/**
+ * 系统管理路由模块
+ */
+const systemRoutes: AppRouteRecord[] = [
+  {
+    path: '/system',
+    name: 'System',
+    redirect: '/system/user',
+    meta: {
+      title: '系统管理',
+      icon: 'system',
+      order: 999
+    },
+    children: [
+      {
+        path: 'user',
+        name: 'SystemUser',
+        component: () => import('@views/system/user/index.vue'),
+        meta: {
+          title: '用户管理',
+          icon: 'user',
+          keepAlive: true,
+          roles: ['admin'], // 角色权限
+          buttons: ['user:create', 'user:update', 'user:delete'] // 按钮权限
+        }
+      },
+      {
+        path: 'user/:id',
+        name: 'SystemUserDetail',
+        component: () => import('@views/system/user/detail.vue'),
+        meta: {
+          title: '用户详情',
+          hidden: true, // 不在菜单中显示
+          activeMenu: '/system/user' // 激活的菜单项
+        }
+      },
+      {
+        path: 'role',
+        name: 'SystemRole',
+        component: () => import('@views/system/role/index.vue'),
+        meta: {
+          title: '角色管理',
+          icon: 'role',
+          keepAlive: true,
+          roles: ['admin']
+        }
+      }
+    ]
+  }
+]
+
+export default systemRoutes
+```
+
+### 路由类型定义
+
+```typescript
+// src/types/router/index.ts
+import type { RouteRecordRaw } from 'vue-router'
+
+/**
+ * 路由元信息
+ */
+export interface RouteMeta {
+  /** 页面标题 */
+  title: string
+  /** 图标 */
+  icon?: string
+  /** 是否需要认证 */
+  requiresAuth?: boolean
+  /** 角色权限 */
+  roles?: string[]
+  /** 按钮权限 */
+  buttons?: string[]
+  /** 是否缓存 */
+  keepAlive?: boolean
+  /** 是否隐藏 */
+  hidden?: boolean
+  /** 激活的菜单 */
+  activeMenu?: string
+  /** 排序 */
+  order?: number
+  /** 是否固定在标签页 */
+  affix?: boolean
+  /** 外链地址 */
+  link?: string
+  /** iframe 地址 */
+  iframe?: string
+}
+
+/**
+ * 扩展的路由记录
+ */
+export interface AppRouteRecord extends Omit<RouteRecordRaw, 'meta' | 'children'> {
+  meta?: RouteMeta
+  children?: AppRouteRecord[]
+}
+```
+
+## 路由守卫
+
+### 全局前置守卫
+
+```typescript
+// src/router/guards/beforeEach.ts
+import type { Router } from 'vue-router'
+import { useUserStore } from '@stores/user'
+import NProgress from 'nprogress'
+
+export function setupBeforeEach(router: Router) {
+  router.beforeEach(async (to, from, next) => {
+    // 开始进度条
+    NProgress.start()
+
+    const userStore = useUserStore()
+
+    // 设置页面标题
+    document.title = `${to.meta.title || ''} - Art Design Pro`
+
+    // 白名单路由（不需要登录）
+    const whiteList = ['/login', '/register', '/forget-password', '/404', '/403', '/500']
+
+    if (whiteList.includes(to.path)) {
+      next()
+      return
+    }
+
+    // 检查是否登录
+    if (!userStore.isLoggedIn) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+      return
+    }
+
+    // 检查用户信息
+    if (!userStore.userInfo) {
+      try {
+        await userStore.getUserInfo()
+      } catch (error) {
+        // 获取用户信息失败，退出登录
+        await userStore.logout()
+        next('/login')
+        return
+      }
+    }
+
+    // 检查角色权限
+    if (to.meta.roles && to.meta.roles.length > 0) {
+      const hasRole = to.meta.roles.some(role => userStore.hasRole(role))
+      if (!hasRole) {
+        next('/403')
+        return
+      }
+    }
+
+    next()
+  })
+}
+```
+
+### 全局后置守卫
+
+```typescript
+// src/router/guards/afterEach.ts
+import type { Router } from 'vue-router'
+import NProgress from 'nprogress'
+
+export function setupAfterEach(router: Router) {
+  router.afterEach((to, from) => {
+    // 结束进度条
+    NProgress.done()
+
+    // 记录路由访问
+    console.log('Route changed:', from.path, '->', to.path)
+  })
+}
+```
+
+## 编程式导航
+
+### 基础导航
+
+```vue
+<script setup lang="ts">
+const router = useRouter()
+const route = useRoute()
+
+// ✅ 路径导航
+const goToUser = () => {
+  router.push('/system/user')
+}
+
+// ✅ 命名路由导航
+const goToUserDetail = (id: number) => {
+  router.push({
+    name: 'SystemUserDetail',
+    params: { id }
+  })
+}
+
+// ✅ 带查询参数
+const goToUserList = () => {
+  router.push({
+    path: '/system/user',
+    query: {
+      page: 1,
+      size: 20,
+      keyword: 'admin'
+    }
+  })
+}
+
+// ✅ 替换当前路由（不会留下历史记录）
+const replaceRoute = () => {
+  router.replace('/system/role')
+}
+
+// ✅ 返回
+const goBack = () => {
+  router.back()
+}
+
+// ✅ 前进
+const goForward = () => {
+  router.forward()
+}
+
+// ✅ 指定步数
+const go = (n: number) => {
+  router.go(n)
+}
+
+// ✅ 获取当前路由信息
+console.log(route.path) // 当前路径
+console.log(route.params) // 路由参数
+console.log(route.query) // 查询参数
+console.log(route.meta) // 路由元信息
+</script>
+```
+
+### 导航钩子
+
+```vue
+<script setup lang="ts">
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+
+// ✅ 离开当前路由前
+onBeforeRouteLeave((to, from) => {
+  const answer = window.confirm('确定要离开吗？未保存的数据将丢失')
+  if (!answer) {
+    return false // 取消导航
+  }
+})
+
+// ✅ 当前路由更新时（参数变化）
+onBeforeRouteUpdate((to, from) => {
+  console.log('Route updated:', to.params)
+  // 重新加载数据
+  fetchData(to.params.id)
+})
+</script>
+```
+
+## 路由懒加载
+
+### 组件懒加载
+
+```typescript
+// ✅ 推荐 - 按路由懒加载
+{
+  path: '/user',
+  component: () => import('@views/system/user/index.vue')
+}
+
+// ✅ 分组懒加载（相同 webpackChunkName 的组件会打包在一起）
+{
+  path: '/user',
+  component: () => import(/* webpackChunkName: "system" */ '@views/system/user/index.vue')
+}
+
+{
+  path: '/role',
+  component: () => import(/* webpackChunkName: "system" */ '@views/system/role/index.vue')
+}
+
+// ❌ 不推荐 - 同步加载（会增加首屏加载时间）
+import UserView from '@views/system/user/index.vue'
+
+{
+  path: '/user',
+  component: UserView
+}
+```
+
+## 路由缓存 (keep-alive)
+
+```vue
+<!-- 在 Layout 组件中 -->
+<template>
+  <router-view v-slot="{ Component, route }">
+    <keep-alive :include="cachedViews">
+      <component :is="Component" :key="route.path" />
+    </keep-alive>
+  </router-view>
+</template>
+
+<script setup lang="ts">
+// 需要缓存的路由组件名称
+const cachedViews = computed(() => {
+  // 从路由配置中获取需要缓存的组件
+  return routes
+    .filter(route => route.meta?.keepAlive)
+    .map(route => route.name)
+})
+</script>
+```
+
+```typescript
+// 路由配置中设置 keepAlive
+{
+  path: '/user',
+  name: 'SystemUser',
+  component: () => import('@views/system/user/index.vue'),
+  meta: {
+    title: '用户管理',
+    keepAlive: true // 开启缓存
+  }
+}
+```
+
+## 动态路由
+
+```typescript
+// 从后端获取路由配置并动态添加
+const loadDynamicRoutes = async () => {
+  try {
+    const routes = await fetchGetMenuList()
+    
+    // 转换路由格式
+    const dynamicRoutes = transformRoutes(routes)
+    
+    // 添加到路由器
+    dynamicRoutes.forEach(route => {
+      router.addRoute(route)
+    })
+  } catch (error) {
+    console.error('加载动态路由失败:', error)
+  }
+}
+```
+
+## 最佳实践
+
+1. **路由懒加载**: 所有页面组件使用懒加载
+2. **命名路由**: 使用命名路由进行导航，避免硬编码路径
+3. **路由元信息**: 充分利用 meta 配置权限、缓存等
+4. **权限控制**: 在路由守卫中统一处理权限验证
+5. **页面标题**: 在路由守卫中设置页面标题
+6. **404 处理**: 配置 404 页面并放在路由配置最后
+7. **路由参数**: 使用 params 传递必要参数，query 传递可选参数
+8. **keep-alive**: 合理使用路由缓存提升性能

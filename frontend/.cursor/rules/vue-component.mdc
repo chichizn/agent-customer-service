@@ -1,0 +1,918 @@
+---
+title: Vue 组件开发规范
+description: Vue 3 Composition API、组件结构、Props/Emits、生命周期和组件通信规范
+tags: [Vue 3, Composition API, 组件开发, Props, Emits]
+---
+
+# Vue 组件开发规范
+
+## 组件基本结构
+
+### 标准组件模板
+
+Vue 组件内部代码组织顺序：
+
+```vue
+<script setup lang="ts">
+// 1. 导入依赖（非自动导入的内容）
+import { ElMessage } from 'element-plus'
+import type { FormInstance } from 'element-plus'
+import { fetchGetUserList } from '@/api/system-manage'
+
+// 2. 定义接口和类型
+interface Props {
+  userId?: number
+  title?: string
+}
+
+interface FormData {
+  userName: string
+  email: string
+  phone: string
+}
+
+interface Emits {
+  close: []
+  success: [user: Api.Auth.UserInfo]
+}
+
+// 3. 定义 v-model 绑定（推荐）
+const visible = defineModel<boolean>('visible', { default: false })
+
+// 4. 定义 props 和 emits
+const props = withDefaults(defineProps<Props>(), {
+  title: '用户信息'
+})
+
+const emit = defineEmits<Emits>()
+
+// 5. 依赖注入（router, store 等）
+const route = useRoute()
+const router = useRouter()
+const userStore = useUserStore()
+
+// 6. 响应式数据
+const loading = ref(false)
+const formRef = ref<FormInstance>()
+const formData = reactive<FormData>({
+  userName: '',
+  email: '',
+  phone: ''
+})
+
+// 7. 计算属性
+const isEdit = computed(() => !!props.userId)
+const dialogTitle = computed(() => 
+  isEdit.value ? '编辑用户' : '新增用户'
+)
+
+// 8. 方法
+const handleSubmit = async () => {
+  try {
+    await formRef.value?.validate()
+    loading.value = true
+    // 提交逻辑
+    ElMessage.success('操作成功')
+    emit('success', {} as Api.Auth.UserInfo)
+  } catch (error) {
+    console.error(error)
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleClose = () => {
+  visible.value = false
+  emit('close')
+}
+
+// 9. 监听器
+watch(visible, (val) => {
+  if (val) {
+    // 对话框打开时的逻辑
+  } else {
+    // 对话框关闭时的逻辑
+    formRef.value?.resetFields()
+  }
+})
+
+// 10. 生命周期
+onMounted(() => {
+  // 组件挂载后的逻辑
+})
+
+onUnmounted(() => {
+  // 组件卸载前的清理逻辑
+})
+</script>
+
+<template>
+  <!-- 模板内容 -->
+</template>
+
+<style lang="scss" scoped>
+/* 组件样式 */
+</style>
+```
+
+## v-model 双向绑定（defineModel）
+
+### 推荐使用 defineModel
+
+Vue 3.4+ 提供了 `defineModel` 宏，这是实现 v-model 双向绑定的最佳方式。
+
+```vue
+<script setup lang="ts">
+// ✅ 最推荐 - 使用 defineModel（Vue 3.4+）
+// 默认 v-model（对应 modelValue）
+const modelValue = defineModel<string>()
+
+// 具名 v-model
+const visible = defineModel<boolean>('visible', { default: false })
+const keyword = defineModel<string>('keyword', { default: '' })
+const count = defineModel<number>('count', { default: 0 })
+
+// 带选项的 defineModel
+const checked = defineModel<boolean>('checked', {
+  default: false,
+  required: false,
+  // 可以添加 local 选项（不会向父组件同步）
+  local: false
+})
+
+// 使用 defineModel 的值
+const handleClick = () => {
+  // 直接修改，会自动触发 update:visible 事件
+  visible.value = !visible.value
+  
+  // 也可以用在计算中
+  console.log(visible.value)
+}
+</script>
+
+<template>
+  <el-dialog v-model="visible">
+    <!-- visible 可以直接在模板中使用 -->
+    <div>对话框内容</div>
+  </el-dialog>
+</template>
+```
+
+### defineModel vs 传统方式对比
+
+```vue
+<!-- ✅ 推荐方式：defineModel -->
+<script setup lang="ts">
+const visible = defineModel<boolean>('visible', { default: false })
+
+// 直接修改即可
+const close = () => {
+  visible.value = false
+}
+</script>
+
+<!-- ❌ 传统方式：computed + emit（不推荐） -->
+<script setup lang="ts">
+interface Props {
+  visible: boolean
+}
+
+interface Emits {
+  'update:visible': [value: boolean]
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+// 需要手动创建计算属性
+const localVisible = computed({
+  get: () => props.visible,
+  set: (val) => emit('update:visible', val)
+})
+
+const close = () => {
+  emit('update:visible', false)
+}
+</script>
+```
+
+### 多个 v-model 示例
+
+```vue
+<!-- 父组件 -->
+<template>
+  <UserSearch
+    v-model:keyword="searchKeyword"
+    v-model:status="searchStatus"
+    v-model:visible="dialogVisible"
+  />
+</template>
+
+<script setup lang="ts">
+const searchKeyword = ref('')
+const searchStatus = ref<'active' | 'inactive'>('active')
+const dialogVisible = ref(false)
+</script>
+
+<!-- 子组件 -->
+<script setup lang="ts">
+// ✅ 使用 defineModel 定义多个双向绑定
+const keyword = defineModel<string>('keyword', { default: '' })
+const status = defineModel<'active' | 'inactive'>('status', { default: 'active' })
+const visible = defineModel<boolean>('visible', { default: false })
+
+// 直接使用，自动同步到父组件
+const handleSearch = () => {
+  console.log(keyword.value, status.value)
+}
+
+const handleClose = () => {
+  visible.value = false
+}
+</script>
+```
+
+### defineModel 转换和验证
+
+```vue
+<script setup lang="ts">
+// ✅ 带转换的 defineModel
+const count = defineModel<number>('count', {
+  default: 0,
+  get(value) {
+    // 从父组件接收时转换
+    return value ?? 0
+  },
+  set(value) {
+    // 向父组件发送时转换
+    return Math.max(0, value) // 确保非负数
+  }
+})
+
+// ✅ 带验证的 defineModel（TypeScript 类型守卫）
+type Status = 'pending' | 'success' | 'error'
+
+const status = defineModel<Status>('status', {
+  default: 'pending',
+  validator: (value: unknown): value is Status => {
+    return ['pending', 'success', 'error'].includes(value as string)
+  }
+})
+</script>
+```
+
+## Props 定义规范
+
+### 基础 Props
+
+```vue
+<script setup lang="ts">
+// ✅ 推荐 - 使用 TypeScript 接口
+interface Props {
+  // 必填属性
+  id: number
+  name: string
+  
+  // 可选属性
+  title?: string
+  description?: string
+  
+  // 带默认值的属性
+  visible?: boolean
+  size?: 'small' | 'default' | 'large'
+  
+  // 复杂类型
+  user?: Api.Auth.UserInfo
+  list?: UserItem[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  visible: false,
+  size: 'default',
+  title: '默认标题'
+})
+
+// ❌ 不推荐 - 运行时声明方式（缺少类型安全）
+const props = defineProps({
+  id: Number,
+  name: String,
+  visible: {
+    type: Boolean,
+    default: false
+  }
+})
+</script>
+```
+
+## Emits 定义规范
+
+```vue
+<script setup lang="ts">
+// ✅ 推荐 - 使用 TypeScript 类型定义
+interface Emits {
+  // 无参数事件
+  close: []
+  cancel: []
+  
+  // 单参数事件
+  change: [value: string]
+  input: [value: number]
+  
+  // 多参数事件
+  update: [id: number, data: UserInfo]
+  select: [item: UserInfo, index: number]
+}
+
+const emit = defineEmits<Emits>()
+
+// 使用
+emit('close')
+emit('change', 'new value')
+emit('update', 1, userInfo)
+
+// ❌ 不推荐 - 运行时声明
+const emit = defineEmits(['close', 'change', 'update'])
+</script>
+```
+
+## 响应式数据
+
+### Ref vs Reactive
+
+```vue
+<script setup lang="ts">
+// ✅ ref - 用于基本类型
+const count = ref(0)
+const name = ref('')
+const loading = ref(false)
+
+// ✅ ref - 用于可能为 null 的复杂类型
+const user = ref<Api.Auth.UserInfo | null>(null)
+const list = ref<UserInfo[]>([])
+
+// ✅ reactive - 用于对象
+interface State {
+  loading: boolean
+  page: number
+  size: number
+  total: number
+}
+
+const state = reactive<State>({
+  loading: false,
+  page: 1,
+  size: 20,
+  total: 0
+})
+
+// ✅ 访问方式
+console.log(count.value) // ref 需要 .value
+console.log(state.loading) // reactive 不需要
+
+// ❌ 避免 - reactive 解构会失去响应式
+const { loading, page } = state // 失去响应式
+
+// ✅ 正确 - 使用 toRefs
+const { loading, page } = toRefs(state) // 保持响应式
+</script>
+```
+
+### 响应式数据最佳实践
+
+```vue
+<script setup lang="ts">
+// ✅ 简单状态用 ref
+const visible = ref(false)
+const keyword = ref('')
+
+// ✅ 相关状态组合用 reactive
+const tableState = reactive({
+  loading: false,
+  data: [],
+  total: 0,
+  page: 1,
+  size: 20
+})
+
+// ✅ 表单数据用 reactive
+const formData = reactive({
+  userName: '',
+  email: '',
+  phone: ''
+})
+
+// ✅ 大对象用 shallowRef（性能优化）
+const largeData = shallowRef<BigDataType>({})
+
+// ✅ 大对象用 shallowReactive（性能优化）
+const largeState = shallowReactive({
+  data: [],
+  config: {}
+})
+</script>
+```
+
+## 计算属性
+
+```vue
+<script setup lang="ts">
+const firstName = ref('Zhang')
+const lastName = ref('San')
+
+// ✅ 只读计算属性（常用）
+const fullName = computed(() => `${firstName.value} ${lastName.value}`)
+
+// ✅ 可写计算属性
+const fullName2 = computed({
+  get() {
+    return `${firstName.value} ${lastName.value}`
+  },
+  set(value: string) {
+    const [first, last] = value.split(' ')
+    firstName.value = first
+    lastName.value = last
+  }
+})
+
+// ✅ 复杂计算逻辑
+const filteredList = computed(() => {
+  return tableData.value
+    .filter(item => item.status === 'active')
+    .map(item => ({
+      ...item,
+      fullName: `${item.firstName} ${item.lastName}`
+    }))
+    .sort((a, b) => a.id - b.id)
+})
+</script>
+```
+
+## 监听器
+
+### watch vs watchEffect
+
+```vue
+<script setup lang="ts">
+const keyword = ref('')
+const userId = ref(0)
+
+// ✅ watch - 监听特定数据源
+watch(keyword, (newVal, oldVal) => {
+  console.log('keyword changed:', newVal, oldVal)
+})
+
+// ✅ watch - 监听多个数据源
+watch([keyword, userId], ([newKeyword, newUserId], [oldKeyword, oldUserId]) => {
+  console.log('multiple values changed')
+})
+
+// ✅ watch - 监听 reactive 对象的属性
+watch(() => state.loading, (val) => {
+  console.log('loading:', val)
+})
+
+// ✅ watch - 深度监听
+watch(
+  () => formData,
+  (val) => {
+    console.log('form data changed:', val)
+  },
+  { deep: true }
+)
+
+// ✅ watchEffect - 自动收集依赖
+watchEffect(() => {
+  // 自动追踪 keyword 和 userId 的变化
+  console.log(keyword.value, userId.value)
+})
+
+// ✅ watch - 立即执行
+watch(
+  keyword,
+  (val) => {
+    fetchData(val)
+  },
+  { immediate: true }
+)
+
+// ✅ 停止监听
+const stop = watch(keyword, (val) => {
+  // ...
+})
+
+// 在某个时机停止监听
+stop()
+</script>
+```
+
+## 生命周期
+
+```vue
+<script setup lang="ts">
+// ✅ 组件挂载后
+onMounted(() => {
+  console.log('component mounted')
+  fetchData()
+})
+
+// ✅ 组件更新后
+onUpdated(() => {
+  console.log('component updated')
+})
+
+// ✅ 组件卸载前
+onUnmounted(() => {
+  console.log('component will unmount')
+  // 清理定时器、事件监听器等
+  clearInterval(timer)
+  window.removeEventListener('resize', handleResize)
+})
+
+// ✅ 组件激活（keep-alive）
+onActivated(() => {
+  console.log('component activated')
+  refreshData()
+})
+
+// ✅ 组件停用（keep-alive）
+onDeactivated(() => {
+  console.log('component deactivated')
+})
+
+// ✅ 错误捕获
+onErrorCaptured((err, instance, info) => {
+  console.error('Error captured:', err, info)
+  return false // 阻止错误继续传播
+})
+</script>
+```
+
+## 组件通信
+
+### 父子组件通信
+
+```vue
+<!-- 父组件 -->
+<template>
+  <UserDialog
+    v-model:visible="dialogVisible"
+    :user-id="currentUserId"
+    @success="handleSuccess"
+    @close="handleClose"
+  />
+</template>
+
+<script setup lang="ts">
+const dialogVisible = ref(false)
+const currentUserId = ref(0)
+
+const handleSuccess = (user: Api.Auth.UserInfo) => {
+  console.log('操作成功:', user)
+  dialogVisible.value = false
+}
+
+const handleClose = () => {
+  dialogVisible.value = false
+}
+</script>
+
+<!-- 子组件 - 使用 defineModel（推荐） -->
+<script setup lang="ts">
+interface Props {
+  userId?: number
+}
+
+interface Emits {
+  success: [user: Api.Auth.UserInfo]
+  close: []
+}
+
+// ✅ v-model 双向绑定使用 defineModel
+const visible = defineModel<boolean>('visible', { default: false })
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const handleSubmit = async () => {
+  // 提交逻辑
+  emit('success', user)
+  visible.value = false // 直接修改即可
+}
+
+const handleClose = () => {
+  visible.value = false
+  emit('close')
+}
+</script>
+
+<!-- 子组件 - 传统方式（不推荐） -->
+<script setup lang="ts">
+interface Props {
+  visible: boolean
+  userId?: number
+}
+
+interface Emits {
+  'update:visible': [value: boolean]
+  success: [user: Api.Auth.UserInfo]
+  close: []
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+// ❌ 需要手动创建计算属性
+const localVisible = computed({
+  get: () => props.visible,
+  set: (val) => emit('update:visible', val)
+})
+
+const handleSubmit = async () => {
+  // 提交逻辑
+  emit('success', user)
+  emit('update:visible', false)
+}
+</script>
+```
+
+### 跨层级通信 - Provide/Inject
+
+```vue
+<!-- 祖先组件 -->
+<script setup lang="ts">
+import { provide } from 'vue'
+
+interface ThemeContext {
+  theme: Ref<'light' | 'dark'>
+  toggleTheme: () => void
+}
+
+const theme = ref<'light' | 'dark'>('light')
+
+const toggleTheme = () => {
+  theme.value = theme.value === 'light' ? 'dark' : 'light'
+}
+
+// ✅ 提供数据（使用 Symbol 作为 key）
+const ThemeSymbol = Symbol('theme')
+provide<ThemeContext>(ThemeSymbol, {
+  theme,
+  toggleTheme
+})
+</script>
+
+<!-- 后代组件 -->
+<script setup lang="ts">
+import { inject } from 'vue'
+
+// ✅ 注入数据
+const themeContext = inject<ThemeContext>(ThemeSymbol)
+
+if (themeContext) {
+  const { theme, toggleTheme } = themeContext
+  
+  // 使用
+  console.log(theme.value)
+  toggleTheme()
+}
+</script>
+```
+
+## 组件实例和 Ref
+
+```vue
+<script setup lang="ts">
+import type { FormInstance, TableInstance } from 'element-plus'
+import UserDialog from './UserDialog.vue'
+
+// ✅ Element Plus 组件实例
+const formRef = ref<FormInstance>()
+const tableRef = ref<TableInstance>()
+
+// ✅ 自定义组件实例
+const dialogRef = ref<InstanceType<typeof UserDialog>>()
+
+// 使用实例方法
+const handleSubmit = async () => {
+  await formRef.value?.validate()
+}
+
+const clearTable = () => {
+  tableRef.value?.clearSelection()
+}
+
+// 调用子组件方法（需要子组件用 defineExpose 暴露）
+const openDialog = () => {
+  dialogRef.value?.open()
+}
+</script>
+
+<template>
+  <el-form ref="formRef">
+    <!-- ... -->
+  </el-form>
+  
+  <el-table ref="tableRef">
+    <!-- ... -->
+  </el-table>
+  
+  <UserDialog ref="dialogRef" />
+</template>
+
+<!-- 子组件需要暴露方法 -->
+<script setup lang="ts">
+const open = () => {
+  console.log('dialog opened')
+}
+
+// ✅ 暴露给父组件
+defineExpose({
+  open
+})
+</script>
+```
+
+## 插槽使用
+
+```vue
+<!-- 子组件 - 定义插槽 -->
+<template>
+  <div class="card">
+    <!-- 默认插槽 -->
+    <div class="card-header">
+      <slot name="header">默认标题</slot>
+    </div>
+    
+    <!-- 具名插槽 -->
+    <div class="card-body">
+      <slot>默认内容</slot>
+    </div>
+    
+    <!-- 作用域插槽 -->
+    <div class="card-footer">
+      <slot name="footer" :data="footerData" :loading="loading">
+        默认底部
+      </slot>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+const footerData = reactive({ total: 100 })
+const loading = ref(false)
+</script>
+
+<!-- 父组件 - 使用插槽 -->
+<template>
+  <Card>
+    <!-- 具名插槽 -->
+    <template #header>
+      <h1>自定义标题</h1>
+    </template>
+    
+    <!-- 默认插槽 -->
+    <p>这是卡片内容</p>
+    
+    <!-- 作用域插槽 -->
+    <template #footer="{ data, loading }">
+      <div v-if="!loading">
+        总计: {{ data.total }}
+      </div>
+    </template>
+  </Card>
+</template>
+```
+
+## 动态组件
+
+```vue
+<script setup lang="ts">
+import ComponentA from './ComponentA.vue'
+import ComponentB from './ComponentB.vue'
+import { Component } from 'vue'
+
+const currentTab = ref('a')
+
+// ✅ 组件映射
+const componentMap: Record<string, Component> = {
+  a: ComponentA,
+  b: ComponentB
+}
+
+const currentComponent = computed(() => componentMap[currentTab.value])
+</script>
+
+<template>
+  <div>
+    <button @click="currentTab = 'a'">组件 A</button>
+    <button @click="currentTab = 'b'">组件 B</button>
+    
+    <!-- 动态组件 -->
+    <component :is="currentComponent" />
+    
+    <!-- 带缓存的动态组件 -->
+    <keep-alive>
+      <component :is="currentComponent" />
+    </keep-alive>
+  </div>
+</template>
+```
+
+## 异步组件
+
+```vue
+<script setup lang="ts">
+// ✅ 路由级别的懒加载（在路由配置中）
+const routes = [
+  {
+    path: '/user',
+    component: () => import('@views/system/user/index.vue')
+  }
+]
+
+// ✅ 组件级别的懒加载
+const HeavyComponent = defineAsyncComponent(() => 
+  import('./HeavyComponent.vue')
+)
+
+// ✅ 带加载状态的异步组件
+const AsyncComponent = defineAsyncComponent({
+  loader: () => import('./AsyncComponent.vue'),
+  loadingComponent: LoadingSpinner,
+  errorComponent: ErrorDisplay,
+  delay: 200,
+  timeout: 3000
+})
+</script>
+
+<template>
+  <Suspense>
+    <template #default>
+      <AsyncComponent />
+    </template>
+    <template #fallback>
+      <div>加载中...</div>
+    </template>
+  </Suspense>
+</template>
+```
+
+## 组件命名
+
+```vue
+<!-- ✅ 单文件组件名使用 PascalCase -->
+<!-- UserList.vue -->
+<!-- DataTable.vue -->
+<!-- FormDialog.vue -->
+
+<script setup lang="ts">
+// ✅ 组件导入使用 PascalCase
+import UserList from './UserList.vue'
+import DataTable from './DataTable.vue'
+
+// ❌ 避免
+import userList from './user-list.vue'
+</script>
+
+<template>
+  <!-- ✅ 模板中使用 PascalCase 或 kebab-case -->
+  <UserList />
+  <user-list />
+  
+  <!-- 推荐使用 PascalCase -->
+  <DataTable />
+</template>
+```
+
+## 注意事项
+
+1. **组件名称**: 可以是单词（已禁用 `vue/multi-word-component-names`）
+2. **自动导入**: Vue API（ref, computed, watch 等）无需手动导入
+3. **Element Plus 组件**: 已配置自动导入
+4. **v-model 双向绑定**: 优先使用 `defineModel`（Vue 3.4+），避免手动创建 computed + emit
+5. **避免在模板中使用复杂逻辑**: 使用计算属性代替
+6. **合理拆分组件**: 单个组件不超过 300 行
+7. **使用 TypeScript**: 为 props、emits 和 defineModel 提供完整类型
+
+## 最佳实践总结
+
+### v-model 双向绑定优先级
+
+1. ✅ **最优**: 使用 `defineModel`（Vue 3.4+，简洁高效）
+   ```ts
+   const visible = defineModel<boolean>('visible', { default: false })
+   ```
+
+2. ⚠️ **次选**: 使用 `computed` + `emit`（仅在无法使用 defineModel 时）
+   ```ts
+   const localVisible = computed({
+     get: () => props.visible,
+     set: (val) => emit('update:visible', val)
+   })
+   ```
+
+3. ❌ **避免**: 直接在模板中 emit
+   ```vue
+   <!-- 不推荐 -->
+   <el-dialog :model-value="visible" @update:model-value="emit('update:visible', $event)">
+   ```

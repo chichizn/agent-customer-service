@@ -1,0 +1,522 @@
+---
+alwaysApply: false
+---
+# API 接口开发规范
+
+## API 函数命名规范
+
+### 请求方法命名
+
+统一使用 `fetch` 前缀：
+
+```typescript
+// ✅ GET 请求 - fetchGet + 资源名
+export function fetchGetUserList() {}
+export function fetchGetUserInfo() {}
+export function fetchGetRoleList() {}
+
+// ✅ POST 创建 - fetchCreate + 资源名
+export function fetchCreateUser() {}
+export function fetchCreateRole() {}
+
+// ✅ PUT/PATCH 更新 - fetchUpdate + 资源名
+export function fetchUpdateUser() {}
+export function fetchUpdateRole() {}
+
+// ✅ DELETE 删除 - fetchDelete + 资源名
+export function fetchDeleteUser() {}
+export function fetchDeleteRole() {}
+
+// ✅ 其他操作 - fetch + 动词 + 资源名
+export function fetchEnableUser() {}
+export function fetchDisableUser() {}
+export function fetchResetPassword() {}
+export function fetchBatchDeleteUsers() {}
+
+// ❌ 不推荐
+export function getUserList() {} // 缺少 fetch 前缀
+export function createUser() {} // 缺少 fetch 前缀
+export function apiGetUser() {} // 使用 api 前缀
+export function getUser() {} // 动词不明确
+```
+
+## API 文件组织
+
+### 按模块划分
+
+```
+src/api/
+├── auth.ts              # 认证相关接口
+├── system-manage.ts     # 系统管理接口
+├── user.ts              # 用户管理接口
+├── role.ts              # 角色管理接口
+├── menu.ts              # 菜单管理接口
+├── dashboard.ts         # 仪表盘接口
+└── model/               # 类型定义目录
+    ├── authModel.ts           # 认证类型定义
+    ├── systemManageModel.ts   # 系统管理类型定义
+    ├── userModel.ts           # 用户类型定义
+    ├── roleModel.ts           # 角色类型定义
+    ├── menuModel.ts           # 菜单类型定义
+    └── dashboardModel.ts      # 仪表盘类型定义
+```
+
+### API 文件结构
+
+```typescript
+// src/api/user.ts
+import request from '@/utils/http'
+import type {
+  UserList,
+  UserListItem,
+  UserSearchParams,
+  CreateUserParams,
+  UpdateUserParams
+} from './model/userModel'
+
+/**
+ * 获取用户列表
+ * @param params 搜索参数
+ * @returns 用户列表数据
+ */
+export function fetchGetUserList(params: UserSearchParams) {
+  return request.get<UserList>({
+    url: '/api/user/list',
+    params
+  })
+}
+
+/**
+ * 获取用户详情
+ * @param id 用户 ID
+ * @returns 用户详细信息
+ */
+export function fetchGetUserInfo(id: number) {
+  return request.get<UserListItem>({
+    url: `/api/user/${id}`
+  })
+}
+
+/**
+ * 创建用户
+ * @param data 用户信息
+ * @returns void
+ */
+export function fetchCreateUser(data: CreateUserParams) {
+  return request.post<void>({
+    url: '/api/user/create',
+    data
+  })
+}
+
+/**
+ * 更新用户
+ * @param id 用户 ID
+ * @param data 用户信息
+ * @returns void
+ */
+export function fetchUpdateUser(id: number, data: UpdateUserParams) {
+  return request.put<void>({
+    url: `/api/user/${id}`,
+    data
+  })
+}
+
+/**
+ * 删除用户
+ * @param id 用户 ID
+ * @returns void
+ */
+export function fetchDeleteUser(id: number) {
+  return request.delete<void>({
+    url: `/api/user/${id}`
+  })
+}
+
+/**
+ * 批量删除用户
+ * @param ids 用户 ID 数组
+ * @returns void
+ */
+export function fetchBatchDeleteUsers(ids: number[]) {
+  return request.delete<void>({
+    url: '/api/user/batch',
+    data: { ids }
+  })
+}
+```
+
+## API 类型定义
+
+### 在 model 目录中定义
+
+```typescript
+// src/api/model/userModel.ts
+import type { PaginatedResponse, CommonSearchParams } from '@/types/common/response'
+
+/** 用户列表响应 */
+export type UserList = PaginatedResponse<UserListItem>
+
+/** 用户列表项 */
+export interface UserListItem {
+  id: number
+  userName: string
+  nickName: string
+  email: string
+  phone: string
+  avatar?: string
+  status: '1' | '2' // 1-启用 2-禁用
+  userGender: '1' | '2' // 1-男 2-女
+  userRoles: string[]
+  createBy: string
+  createTime: string
+  updateBy: string
+  updateTime: string
+}
+
+/** 用户搜索参数 */
+export type UserSearchParams = Partial<
+  Pick<UserListItem, 'userName' | 'email' | 'phone' | 'status'> &
+    CommonSearchParams
+>
+
+/** 创建用户参数 */
+export interface CreateUserParams {
+  userName: string
+  password: string
+  nickName: string
+  email: string
+  phone: string
+  userGender: '1' | '2'
+  roleIds: number[]
+}
+
+/** 更新用户参数 */
+export type UpdateUserParams = Partial<Omit<CreateUserParams, 'password'>> & {
+  status?: '1' | '2'
+}
+```
+
+```typescript
+// src/api/model/roleModel.ts
+import type { PaginatedResponse, CommonSearchParams } from '@/types/common/response'
+
+/** 角色列表响应 */
+export type RoleList = PaginatedResponse<RoleListItem>
+
+/** 角色列表项 */
+export interface RoleListItem {
+  roleId: number
+  roleName: string
+  roleCode: string
+  description: string
+  enabled: boolean
+  createTime: string
+  updateTime: string
+}
+
+/** 角色搜索参数 */
+export type RoleSearchParams = Partial<
+  Pick<RoleListItem, 'roleName' | 'roleCode' | 'enabled'> &
+    CommonSearchParams
+>
+
+/** 创建角色参数 */
+export interface CreateRoleParams {
+  roleName: string
+  roleCode: string
+  description?: string
+  menuIds: number[]
+}
+
+/** 更新角色参数 */
+export type UpdateRoleParams = Partial<CreateRoleParams>
+```
+
+## HTTP 请求封装
+
+### request 工具使用
+
+```typescript
+import request from '@/utils/http'
+
+// ✅ GET 请求
+export function fetchGetUserList(params: UserSearchParams) {
+  return request.get<UserList>({
+    url: '/api/user/list',
+    params // 查询参数
+  })
+}
+
+// ✅ POST 请求
+export function fetchCreateUser(data: CreateUserParams) {
+  return request.post<void>({
+    url: '/api/user/create',
+    data // 请求体
+  })
+}
+
+// ✅ PUT 请求
+export function fetchUpdateUser(id: number, data: UpdateUserParams) {
+  return request.put<void>({
+    url: `/api/user/${id}`,
+    data
+  })
+}
+
+// ✅ DELETE 请求
+export function fetchDeleteUser(id: number) {
+  return request.delete<void>({
+    url: `/api/user/${id}`
+  })
+}
+
+// ✅ 文件上传
+export function fetchUploadAvatar(file: File) {
+  const formData = new FormData()
+  formData.append('file', file)
+  
+  return request.post<{ url: string }>({
+    url: '/api/upload/avatar',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+// ✅ 文件下载
+export function fetchDownloadFile(id: number) {
+  return request.get({
+    url: `/api/file/download/${id}`,
+    responseType: 'blob'
+  })
+}
+
+// ✅ 自定义请求配置
+export function fetchGetUserWithTimeout(id: number) {
+  return request.get<UserInfo>({
+    url: `/api/user/${id}`,
+    timeout: 5000, // 超时时间
+    headers: {
+      'Custom-Header': 'value'
+    }
+  })
+}
+```
+
+## 组件中使用 API
+
+### 基础使用
+
+```vue
+<script setup lang="ts">
+import { fetchGetUserList, fetchDeleteUser } from '@/api/user'
+import type { UserListItem, UserSearchParams } from '@/api/model/userModel'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+const loading = ref(false)
+const tableData = ref<UserListItem[]>([])
+const total = ref(0)
+
+const searchParams = reactive<UserSearchParams>({
+  current: 1,
+  size: 20,
+  userName: '',
+  status: undefined
+})
+
+// ✅ 获取列表数据
+const fetchData = async () => {
+  try {
+    loading.value = true
+    const response = await fetchGetUserList(searchParams)
+    tableData.value = response.records
+    total.value = response.total
+  } catch (error) {
+    console.error('获取用户列表失败:', error)
+    ElMessage.error('获取用户列表失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+// ✅ 删除数据
+const handleDelete = async (id: number) => {
+  try {
+    await ElMessageBox.confirm('确定要删除该用户吗？', '提示', {
+      type: 'warning'
+    })
+    
+    await fetchDeleteUser(id)
+    ElMessage.success('删除成功')
+    await fetchData() // 刷新列表
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.error('删除用户失败:', error)
+      ElMessage.error('删除用户失败')
+    }
+  }
+}
+
+// 初始化加载
+onMounted(() => {
+  fetchData()
+})
+</script>
+```
+
+## 错误处理
+
+### 业务错误处理
+
+```vue
+<script setup lang="ts">
+import { fetchCreateUser } from '@/api/user'
+import type { CreateUserParams } from '@/api/model/userModel'
+
+const handleSubmit = async (formData: CreateUserParams) => {
+  try {
+    await fetchCreateUser(formData)
+    ElMessage.success('创建成功')
+  } catch (error: any) {
+    // ✅ 根据错误类型进行不同处理
+    if (error.code === 'USER_EXISTS') {
+      ElMessage.error('用户名已存在')
+    } else if (error.code === 'INVALID_EMAIL') {
+      ElMessage.error('邮箱格式不正确')
+    } else {
+      ElMessage.error(error.message || '创建失败')
+    }
+  }
+}
+</script>
+```
+
+## 请求取消
+
+### 使用 AbortController
+
+```vue
+<script setup lang="ts">
+import { fetchGetUserList } from '@/api/user'
+
+let abortController: AbortController | null = null
+
+const fetchData = async () => {
+  // 取消之前的请求
+  if (abortController) {
+    abortController.abort()
+  }
+
+  abortController = new AbortController()
+
+  try {
+    const response = await fetchGetUserList({
+      current: 1,
+      size: 20,
+      signal: abortController.signal
+    })
+    console.log(response)
+  } catch (error: any) {
+    if (error.name === 'AbortError') {
+      console.log('请求已取消')
+    } else {
+      console.error(error)
+    }
+  }
+}
+
+// 组件卸载时取消请求
+onUnmounted(() => {
+  if (abortController) {
+    abortController.abort()
+  }
+})
+</script>
+```
+
+## 请求防抖和节流
+
+```vue
+<script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
+import { fetchGetUserList } from '@/api/user'
+
+const keyword = ref('')
+
+// ✅ 防抖搜索
+const debouncedSearch = useDebounceFn(async (value: string) => {
+  const response = await fetchGetUserList({
+    userName: value,
+    current: 1,
+    size: 20
+  })
+  tableData.value = response.records
+}, 300)
+
+watch(keyword, (val) => {
+  debouncedSearch(val)
+})
+</script>
+```
+
+## 并发请求
+
+```vue
+<script setup lang="ts">
+import { fetchGetUserInfo, fetchGetUserRoles, fetchGetUserPermissions } from '@/api/user'
+
+// ✅ 并发请求
+const loadUserData = async (userId: number) => {
+  try {
+    loading.value = true
+    
+    const [userInfo, roles, permissions] = await Promise.all([
+      fetchGetUserInfo(userId),
+      fetchGetUserRoles(userId),
+      fetchGetUserPermissions(userId)
+    ])
+    
+    // 处理数据
+    console.log(userInfo, roles, permissions)
+  } catch (error) {
+    ElMessage.error('加载用户数据失败')
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+```
+
+## 文件命名规范
+
+### API 文件和 Model 文件配对
+
+| API 文件 | Model 文件 | 说明 |
+|---------|-----------|------|
+| `auth.ts` | `authModel.ts` | 认证相关 |
+| `user.ts` | `userModel.ts` | 用户管理 |
+| `role.ts` | `roleModel.ts` | 角色管理 |
+| `menu.ts` | `menuModel.ts` | 菜单管理 |
+| `system-manage.ts` | `systemManageModel.ts` | 系统管理 |
+| `dashboard.ts` | `dashboardModel.ts` | 仪表盘 |
+
+**命名规则：**
+- API 文件：kebab-case（如 `system-manage.ts`）
+- Model 文件：camelCase + Model 后缀（如 `systemManageModel.ts`）
+- 转换规则：将 API 文件的 kebab-case 转为 camelCase，然后添加 Model 后缀
+
+## 最佳实践
+
+1. **统一命名**: 所有 API 函数使用 `fetch` 前缀
+2. **类型安全**: 为请求参数和响应数据定义完整类型
+3. **模块对应**: API 文件和 Model 文件一一对应，便于维护
+4. **类型隔离**: 每个模块的类型定义独立，避免类型污染
+5. **错误处理**: 在组件中处理业务错误，全局错误由 HTTP 层处理
+6. **加载状态**: 使用 loading 状态提升用户体验
+7. **请求取消**: 在组件卸载时取消未完成的请求
+8. **防抖节流**: 对搜索等高频操作进行防抖处理
+9. **并发优化**: 使用 Promise.all 并发请求独立数据
+10. **代码复用**: 使用 hooks 封装通用请求逻辑
+11. **避免循环依赖**: Model 文件只导入通用类型，不导入其他 API 或 Model

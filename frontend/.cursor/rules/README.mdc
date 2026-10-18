@@ -1,0 +1,222 @@
+---
+title: Vue 3 + TypeScript + Element Plus 项目开发规范
+description: 中后台管理系统项目的完整开发规范和最佳实践
+tags: [项目规范, Vue 3, TypeScript, Element Plus]
+---
+
+# Vue 3 + TypeScript + Element Plus 项目开发规范
+
+## 项目概述
+
+这是一个基于 Vue 3 + TypeScript + Vite + Element Plus + Pinia 的中后台管理系统项目。
+
+## 技术栈
+
+- **框架**: Vue 3.5+ (Composition API)
+- **构建工具**: Vite 7+
+- **语言**: TypeScript 5.6+
+- **UI 框架**: Element Plus 2.11+
+- **状态管理**: Pinia 3+
+- **路由**: Vue Router 4.5+
+- **样式**: SCSS + Tailwind CSS 4+
+- **包管理器**: pnpm 10+
+- **Node 版本**: >=20.19.0
+
+## 规范文档结构
+
+本项目的开发规范已拆分为多个模块化文件，便于维护和查阅：
+
+### 核心规范
+
+- **[code-style.mdc](./code-style.mdc)** - 代码风格和命名规范
+  - 文件命名规范
+  - 变量和函数命名
+  - CSS 类命名
+  - 代码组织和导入顺序
+
+- **[typescript.mdc](./typescript.mdc)** - TypeScript 开发规范
+  - 类型定义和泛型使用
+  - API 类型定义规范
+  - Vue 3 类型定义
+  - 工具类型和类型守卫
+
+- **[vue-component.mdc](./vue-component.mdc)** - Vue 组件开发规范
+  - 组件基本结构和代码组织
+  - Props 和 Emits 定义
+  - 响应式数据和计算属性
+  - 组件通信和生命周期
+
+### 功能开发规范
+
+- **[api-development.mdc](./api-development.mdc)** - API 接口开发规范
+  - API 函数命名规范
+  - 文件组织和类型定义
+  - HTTP 请求封装
+  - 错误处理和请求优化
+
+- **[state-management.mdc](./state-management.mdc)** - 状态管理规范
+  - Pinia Store 定义
+  - Store 使用和持久化
+  - 常见 Store 模式
+  - Store 之间的通信
+
+- **[router.mdc](./router.mdc)** - 路由开发规范
+  - 路由文件组织
+  - 静态和动态路由定义
+  - 路由守卫和导航
+  - 路由懒加载和缓存
+
+- **[style-development.mdc](./style-development.mdc)** - 样式开发规范
+  - Tailwind CSS 使用
+  - SCSS 和 BEM 命名
+  - Element Plus 样式定制
+  - 主题切换和动画
+
+### 最佳实践
+
+- **[performance.mdc](./performance.mdc)** - 性能优化建议
+  - 组件和列表优化
+  - 图片和请求优化
+  - 打包和内存优化
+  - CSS 和性能监控
+
+- **[git-commit.mdc](./git-commit.mdc)** - Git 提交规范
+  - Conventional Commits 规范
+  - Commit Message 格式
+  - Commitizen 使用
+  - 分支管理规范
+
+- **[best-practices.mdc](./best-practices.mdc)** - 最佳实践和注意事项
+  - 项目配置和代码质量
+  - 组件开发和 API 使用
+  - 安全性和常见问题
+  - 开发工具和审查清单
+
+- **[troubleshooting.mdc](./troubleshooting.mdc)** - 常见问题排查
+  - 开发环境问题
+  - 类型错误和路由问题
+  - API 请求问题
+  - 状态管理和构建部署问题
+
+## 快速开始
+
+### 查阅规范
+
+根据你当前的开发场景，参考对应的规范文档：
+
+- **编写新组件** → 查看 [vue-component.mdc](./vue-component.mdc)
+- **定义 API 接口** → 查看 [api-development.mdc](./api-development.mdc)
+- **添加路由** → 查看 [router.mdc](./router.mdc)
+- **编写样式** → 查看 [style-development.mdc](./style-development.mdc)
+- **类型定义** → 查看 [typescript.mdc](./typescript.mdc)
+- **状态管理** → 查看 [state-management.mdc](./state-management.mdc)
+- **代码风格** → 查看 [code-style.mdc](./code-style.mdc)
+- **提交代码** → 查看 [git-commit.mdc](./git-commit.mdc)
+- **性能优化** → 查看 [performance.mdc](./performance.mdc)
+- **遇到问题** → 查看 [troubleshooting.mdc](./troubleshooting.mdc)
+
+### 开发流程
+
+1. **环境准备**
+   ```bash
+   # 确保 Node 版本 >=20.19.0
+   node -v
+   
+   # 安装依赖
+   pnpm install
+   
+   # 启动开发服务器
+   pnpm dev
+   ```
+
+2. **开发阶段**
+   - 遵循代码风格规范
+   - 使用 TypeScript 类型定义
+   - 编写符合规范的组件和 API
+   - 使用 Tailwind CSS 优先
+
+3. **提交代码**
+   ```bash
+   # 使用 commitizen 生成规范的 commit message
+   pnpm commit
+   ```
+
+4. **构建部署**
+   ```bash
+   # 构建生产版本
+   pnpm build
+   
+   # 预览构建结果
+   pnpm preview
+   ```
+
+## 核心原则
+
+### 代码规范
+
+1. **统一风格**: 使用 ESLint 和 Prettier 保持代码风格一致
+2. **类型安全**: 充分利用 TypeScript 的类型系统
+3. **组件化**: 合理拆分组件，单一职责原则
+4. **性能优先**: 使用懒加载、虚拟滚动等优化手段
+
+### 命名规范
+
+1. **组件**: PascalCase (UserList.vue)
+2. **文件**: camelCase (useTable.ts)
+3. **API 函数**: fetch 前缀 (fetchGetUserList)
+4. **常量**: UPPER_SNAKE_CASE (MAX_COUNT)
+
+### 开发规范
+
+1. **自动导入**: Vue API 和 Element Plus 组件自动导入
+2. **路径别名**: 使用 `@/` 或 `@stores/` 等别名
+3. **类型定义**: 统一在 `Api` 命名空间下定义
+4. **样式优先**: Tailwind CSS > SCSS 自定义样式
+
+## 工具支持
+
+### VSCode 插件推荐
+
+- Vue Language Features (Volar)
+- TypeScript Vue Plugin (Volar)
+- ESLint
+- Prettier
+- Tailwind CSS IntelliSense
+
+### 代码检查
+
+```bash
+# ESLint 检查
+pnpm lint
+
+# TypeScript 类型检查
+pnpm type-check
+
+# 格式化代码
+pnpm format
+```
+
+## 项目维护
+
+### 更新规范
+
+当项目规范需要更新时，请：
+
+1. 修改对应的 `.mdc` 文件
+2. 更新本 README 的索引
+3. 通知团队成员规范变更
+
+### 反馈建议
+
+如果你发现规范中的问题或有改进建议，请：
+
+1. 在团队会议上提出
+2. 或通过项目管理工具提交
+3. 参与规范的持续优化
+
+---
+
+**最后更新**: 2025-11-19  
+**维护者**: 
+
+**版本**: v1.0.0
