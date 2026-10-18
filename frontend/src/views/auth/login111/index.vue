@@ -371,7 +371,7 @@ const handleSubmit = async () => {
           // 直接登录成功
           if (token) {
             userStore.setToken(token)
-            await userStore.initUserInfo()
+            userStore.setLoginStatus(true)
 
             // 清除错误状态
             isClickPass.value = false
@@ -446,7 +446,7 @@ const handleMobileVerificationSuccess = async (otpCode: string) => {
 
       if (token) {
         userStore.setToken(token)
-        await userStore.initUserInfo()
+        userStore.setLoginStatus(true)
 
         // 关闭验证码弹窗
         showMobileVerification.value = false

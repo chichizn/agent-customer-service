@@ -303,10 +303,10 @@
       userStore.setUserInfo({
         userId: 0,
         userName: 'Guest',
-        nickName: t('login.guestSuccess.title'),
+        email: '',
         avatar: '',
         roles: ['R_GUEST'],
-        permissions: []
+        buttons: []
       })
 
       // 游客登录成功提示

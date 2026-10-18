@@ -11,6 +11,19 @@ import { AppRouteRecordRaw } from '@/utils/router'
  * 2、静态路由不管是否登录都可以访问
  */
 export const staticRoutes: AppRouteRecordRaw[] = [
+  {
+    path: '/customer-simulator',
+    name: 'CustomerSimulator',
+    component: () => import('@views/customer-service/simulator/index.vue'),
+    meta: { title: '顾客模拟入口', isHideTab: true }
+  },
+  // B 独立开发和双端演示入口，真实接口的权限由后端校验。
+  {
+    path: '/customer-workbench-preview',
+    name: 'CustomerWorkbenchPreview',
+    component: () => import('@views/customer-service/chat/index.vue'),
+    meta: { title: '客服工作台演示', isHideTab: true }
+  },
   // 不需要登录就能访问的路由示例
   // {
   //   path: '/welcome',

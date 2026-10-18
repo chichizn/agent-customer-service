@@ -2,13 +2,15 @@
 
 > LLM 大模型 + 知识库检索 + 规则兜底，双引擎架构保证系统永远可用。
 
+当前 Demo 目标与四人分工见 [功能需求说明](docs/requirements/README.md)；B 成员可独立运行的 Vue 工作台、顾客入口及 A/D 联调契约见 [B 前端交付说明](docs/frontend/B-WORKBENCH.md)。
+
 ## 环境要求
 
 | 环境 | 版本 | 必须 |
 |------|------|:----:|
 | JDK | 17+ | ✅ |
 | Maven | 3.8+ | ✅ |
-| Node.js | 18+ | ✅ |
+| Node.js | >=20.19.0 | ✅ |
 | pnpm | 8+ | ✅ |
 | MySQL | 8.0+ | ✅ |
 | Redis | 6.0+ | 可选（项目内置降级） |
@@ -54,7 +56,7 @@ spring:
 llm:
   enabled: true                          # 改为 true 启用大模型
   api-url: https://api.onerouter.top/v1/chat/completions
-  api-key: sk-V7WbCIDXHDa3XSJkwRWHt9VH6IscJkoFHPYaZa8TInPpTwVf                 # OneRouter API Key
+  api-key: YOUR_API_KEY                     # 在本地填写，勿提交真实密钥
   model: gpt-4o-mini
 ```
 
@@ -101,7 +103,7 @@ pnpm install
 pnpm dev
 ```
 
-前端运行在 http://localhost:3100，API 请求自动代理到后端。
+前端运行在 http://localhost:20002，API 请求配置以 frontend/.env.development 为准。
 
 ## 6. 验证
 
