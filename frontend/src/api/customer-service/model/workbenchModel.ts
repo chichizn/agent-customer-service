@@ -18,6 +18,7 @@ export interface DemoCustomer {
 }
 
 export interface DemoCatalog {
+  merchantId: string
   shops: DemoShop[]
   customers: DemoCustomer[]
 }
@@ -54,6 +55,7 @@ export interface OrderItem {
 
 export interface CommerceOrder {
   orderId: string
+  orderNumber?: string
   shopId: string
   customerId: string
   items: OrderItem[]
@@ -72,6 +74,8 @@ export interface OrderLogistics {
 
 export interface ServiceTicket {
   ticketId: string
+  ticketNumber?: string
+  orderNumber?: string
   sessionId: string
   orderId: string
   shopId: string
@@ -82,6 +86,16 @@ export interface ServiceTicket {
   processingNote: string
   createdAt: string
   updatedAt: string
+  history?: TicketHandlingRecord[]
+}
+
+export interface TicketHandlingRecord {
+  historyId: string
+  fromStatus: TicketStatus | null
+  toStatus: TicketStatus
+  note: string
+  operatorId: string
+  occurredAt: string
 }
 
 export interface KnowledgeReference {
@@ -126,8 +140,11 @@ export interface SendWorkbenchMessageParams {
 }
 
 export interface UpdateTicketParams {
+  merchantId?: string
+  shopId?: string
   sessionId: string
   ticketId: string
+  expectedStatus?: TicketStatus
   status: TicketStatus
   processingNote: string
 }

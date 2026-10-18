@@ -37,6 +37,7 @@ export interface MockWorkspace {
 
 export function createMockWorkspace(): MockWorkspace {
   const catalog: DemoCatalog = {
+    merchantId: 'demo-merchant',
     shops: [
       { shopId: 'shop-tb', platform: 'TAOBAO', name: '拾光生活 · 淘宝店' },
       { shopId: 'shop-dy', platform: 'DOUYIN', name: '拾光生活 · 抖店' }

@@ -15,6 +15,12 @@
 
 **这是 B 的可独立运行前端版本。默认 `mock`，回复由前端规则模拟，不调用 LLM、Java、MySQL 或平台 API。模拟工单、执行记录和接管校验不等于 A/D 后端已经实现对应需求。**
 
+## D 接口联调状态
+
+真实模式已接入 D 的 commerce 接口：从 `/api/commerce/demo/identities` 读取商家、店铺和顾客；按当前会话身份查询订单、物流和该顾客的全部工单；更新工单时提交 `expectedStatus`、处理说明和操作人。工作台展示后端的订单号、工单号及工单处理历史。首次演示前需调用 `/api/commerce/demo/load` 加载演示数据。
+
+这不代表真实模式已端到端可用。当前仓库的 A 会话后端仍未提供工作台约定的 `session/snapshot`、`session/open`、人工消息和接待模式更新接口；已有 ChatController 的会话 DTO 也不包含店铺、接待模式等工作台字段。等 A 的接口实现合入后，真实模式才能完成会话、人工接待和消息闭环。API 请求失败会直接显示错误，不会回退到 mock。
+
 前端模拟数据：两家店、四个顾客、每店六笔订单；三个预置会话。固定数据用于开发和演示，C 的正式演示数据可后续替换。
 
 ## 启动与页面入口
@@ -60,14 +66,14 @@ pnpm dev
 
 | 所属 | 路径                                 | 请求                                                           | data                                                           |
 | ---- | ------------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
-| A/D  | `/api/demo/catalog`                  | `{}`                                                           | `DemoCatalog`，可选择的店铺与顾客                              |
+| D    | `/api/commerce/demo/identities`      | `{}`                                                           | `merchantId`、店铺及各店顾客                                    |
 | A    | `/api/chat/session/list`             | `{}`                                                           | `WorkbenchSession[]`，包括平台、店铺、顾客、接待模式与最后消息 |
 | A    | `/api/chat/session/snapshot`         | `{ sessionId }`                                                | `SessionSnapshot`，当前会话及其业务资料                        |
 | A    | `/api/chat/session/open`             | `{ shopId, customerId, forceNew }`                             | `SessionSnapshot`；false 恢复最近 active 会话，true 显式新建   |
 | A    | `/api/chat/message/send`             | `{ sessionId, clientMessageId, content, messageType: "text" }` | 处理后的 `SessionSnapshot`，包含真实持久化消息                 |
 | A    | `/api/chat/message/human/send`       | `{ sessionId, clientMessageId, content }`                      | `SessionSnapshot`；仅 HUMAN 模式允许                           |
 | A    | `/api/chat/session/reception/update` | `{ sessionId, receptionMode: "HUMAN" 或 "AI" }`                | `SessionSnapshot`                                              |
-| D/A  | `/api/commerce/ticket/update`        | `{ sessionId, ticketId, status, processingNote }`              | `SessionSnapshot`；D 更新工单，A 协调快照与执行记录            |
+| D    | `/api/commerce/tickets/update`       | `{ merchantId, shopId, ticketId, expectedStatus, status, note, operatorId }` | 更新后的 commerce 工单 |
 | A    | `/api/demo/reset`                    | `{}`                                                           | `null`；只恢复指定演示空间                                     |
 
 快照结构：

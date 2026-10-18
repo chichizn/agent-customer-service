@@ -49,6 +49,7 @@
     emit('updateTicket', {
       sessionId: props.snapshot.session.sessionId,
       ticketId: editingTicket.value.ticketId,
+      expectedStatus: editingTicket.value.status,
       status: targetStatus.value,
       processingNote: note.value.trim()
     })
@@ -100,7 +101,7 @@
             :class="{ selected: snapshot.selectedOrderId === order.orderId }"
           >
             <div class="cs-card-top"
-              ><span class="cs-mono">{{ order.orderId }}</span
+              ><span class="cs-mono">{{ order.orderNumber || order.orderId }}</span
               ><span class="cs-badge" :class="order.status === 'DELIVERED' ? 'green' : 'neutral'">{{
                 orderLabels[order.status]
               }}</span></div
@@ -153,11 +154,25 @@
               ><strong>{{ ticket.type === 'RETURN' ? '退货诉求' : '异常 / 补偿诉求' }}</strong
               ><span class="cs-badge neutral">{{ ticketLabels[ticket.status] }}</span></div
             >
-            <p class="cs-mono">{{ ticket.ticketId }}</p
-            ><p class="cs-muted">关联订单 {{ ticket.orderId }}</p
+            <p class="cs-mono">{{ ticket.ticketNumber || ticket.ticketId }}</p
+            ><p class="cs-muted">关联订单 {{ ticket.orderNumber || ticket.orderId }}</p
             ><p>{{ ticket.reason }}</p
             ><p v-if="ticket.processingNote" class="cs-note"
               >处理说明：{{ ticket.processingNote }}</p
+            ><details v-if="ticket.history?.length" class="cs-logistics"
+              ><summary>处理历史 <span>↓</span></summary
+              ><ol class="cs-timeline"
+                ><li v-for="record in ticket.history" :key="record.historyId"
+                  ><span
+                    ><strong>{{
+                      record.fromStatus
+                        ? `${ticketLabels[record.fromStatus]} → ${ticketLabels[record.toStatus]}`
+                        : `创建工单 · ${ticketLabels[record.toStatus]}`
+                    }}</strong
+                    ><br />{{ record.note }}</span
+                  ><time>{{ formatTime(record.occurredAt) }}</time></li
+                ></ol
+              ></details
             ><small class="cs-muted">更新于 {{ formatTime(ticket.updatedAt) }}</small>
             <button
               v-if="ticketTransitions[ticket.status].length"

@@ -16,7 +16,7 @@ interface PendingMessage extends SendWorkbenchMessageParams {
 }
 
 export function useWorkbench(autoSelect = true) {
-  const catalog = ref<DemoCatalog>({ shops: [], customers: [] })
+  const catalog = ref<DemoCatalog>({ merchantId: '', shops: [], customers: [] })
   const sessions = ref<WorkbenchSession[]>([])
   const selectedId = ref('')
   const snapshot = ref<SessionSnapshot>()
@@ -176,8 +176,20 @@ export function useWorkbench(autoSelect = true) {
     const id = selectedId.value
     return runAction(() => workbenchApi.setReceptionMode(id, mode))
   }
-  const updateTicket = (params: UpdateTicketParams) =>
-    runAction(() => workbenchApi.updateTicket(params))
+  const updateTicket = (params: UpdateTicketParams) => {
+    const session = snapshot.value?.session
+    if (!session || !catalog.value.merchantId) {
+      actionError.value = '会话身份未加载，请刷新后重试。'
+      return Promise.resolve(false)
+    }
+    return runAction(() =>
+      workbenchApi.updateTicket({
+        ...params,
+        merchantId: catalog.value.merchantId,
+        shopId: session.shopId
+      })
+    )
+  }
   const resetDemo = () =>
     runAction(async () => {
       await workbenchApi.resetDemo()
