@@ -1,6 +1,6 @@
 # B 成员前端交付与联调说明
 
-更新：2026-10-18。范围依据 `docs/requirements/README.md` 中 B 的 Vue 分工。
+更新：2026-10-19。范围依据 `docs/requirements/README.md` 中 B 的 Vue 分工。
 
 ## 当前实现
 
@@ -19,7 +19,7 @@
 
 真实模式已接入 D 的 commerce 接口：从 `/api/commerce/demo/identities` 读取商家、店铺和顾客；按当前会话身份查询订单、物流和该顾客的全部工单；更新工单时提交 `expectedStatus`、处理说明和操作人。工作台展示后端的订单号、工单号及工单处理历史。首次演示前需调用 `/api/commerce/demo/load` 加载演示数据。
 
-这不代表真实模式已端到端可用。当前仓库的 A 会话后端仍未提供工作台约定的 `session/snapshot`、`session/open`、人工消息和接待模式更新接口；已有 ChatController 的会话 DTO 也不包含店铺、接待模式等工作台字段。等 A 的接口实现合入后，真实模式才能完成会话、人工接待和消息闭环。API 请求失败会直接显示错误，不会回退到 mock。
+本次已补齐 A 的 `session/snapshot`、`session/open`、人工消息和接待模式更新接口，以及消息编排、范围知识、确认 guard 和统一重置。前端列表显式提交 `workbench: true`，重置提交 `confirmed: true`。接口与后端自动化验证见 [A 后端集成交付](../backend/A-INTEGRATION.md)；真实 MySQL、实际模型和浏览器端到端验收仍待执行。API 请求失败会直接显示错误，不会回退到 mock。
 
 前端模拟数据：两家店、四个顾客、每店六笔订单；三个预置会话。固定数据用于开发和演示，C 的正式演示数据可后续替换。
 
@@ -56,32 +56,32 @@ pnpm dev
 5. 工作台选中周雨晴 → 工单 → 更新处理状态 → 处理中，填写说明并保存。顾客发送“刚才的工单进度怎么样了？”。
 6. 顾客发送“我要转人工”，工作台筛选等待人工，接管并发送人工回复；顾客端看到同一回复。
 7. 交回 AI 后，由新的顾客消息触发回复；工作台刷新仍保留模拟历史。
-8. 工作台“重置演示”恢复初始数据；不触及其他项目的 localStorage 数据和后端数据。
+8. 工作台“重置演示”恢复初始数据；mock 只重置当前浏览器的独立模拟数据，api 经确认请求后端统一重置已标记的演示空间。
 
-## 给 A/D 的接口草案（待双方确认）
+## A/D 联调接口
 
-现有后端的 SessionVO/SendMessageVO 没有店铺、接待模式和快照字段。下表是 B 为并行开发定义的**拟议契约，不代表后端已提供**。A/D 确认后，可统一修改 `src/api/customer-service/workbench.ts` 的映射，无需散改页面。
+工作台使用新增会话快照接口，保留原聊天 DTO 的兼容路径。下表已由本次后端实现对接；自动化接口验证通过不等于真实环境验收完成。
 
 接口统一 POST，外层沿用 `{ code: 200, msg: "", data: ... }`（也兼容 `code: 0`）。ID 使用字符串，时间为 ISO 8601，金额数值单位元。统一类型见 `src/api/customer-service/model/workbenchModel.ts`。
 
 | 所属 | 路径                                 | 请求                                                           | data                                                           |
 | ---- | ------------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
 | D    | `/api/commerce/demo/identities`      | `{}`                                                           | `merchantId`、店铺及各店顾客                                    |
-| A    | `/api/chat/session/list`             | `{}`                                                           | `WorkbenchSession[]`，包括平台、店铺、顾客、接待模式与最后消息 |
+| A    | `/api/chat/session/list`             | `{ workbench: true }`                                          | `WorkbenchSession[]`，包括平台、店铺、顾客、接待模式与最后消息 |
 | A    | `/api/chat/session/snapshot`         | `{ sessionId }`                                                | `SessionSnapshot`，当前会话及其业务资料                        |
 | A    | `/api/chat/session/open`             | `{ shopId, customerId, forceNew }`                             | `SessionSnapshot`；false 恢复最近 active 会话，true 显式新建   |
 | A    | `/api/chat/message/send`             | `{ sessionId, clientMessageId, content, messageType: "text" }` | 处理后的 `SessionSnapshot`，包含真实持久化消息                 |
 | A    | `/api/chat/message/human/send`       | `{ sessionId, clientMessageId, content }`                      | `SessionSnapshot`；仅 HUMAN 模式允许                           |
 | A    | `/api/chat/session/reception/update` | `{ sessionId, receptionMode: "HUMAN" 或 "AI" }`                | `SessionSnapshot`                                              |
 | D    | `/api/commerce/tickets/update`       | `{ merchantId, shopId, ticketId, expectedStatus, status, note, operatorId }` | 更新后的 commerce 工单 |
-| A    | `/api/demo/reset`                    | `{}`                                                           | `null`；只恢复指定演示空间                                     |
+| A    | `/api/demo/reset`                    | `{ confirmed: true }`                                         | `null`；只恢复指定演示空间                                     |
 
 快照结构：
 
 ```typescript
 interface SessionSnapshot {
   session: WorkbenchSession;
-  messages: WorkbenchMessage[]; // 按时间升序；role = customer / ai / human / system
+  messages: WorkbenchMessage[]; // 按持久消息序号升序；role = customer / ai / human / system
   orders: CommerceOrder[]; // 仅当前店铺、当前顾客
   logistics: OrderLogistics[];
   tickets: ServiceTicket[]; // 当前店铺、当前顾客的工单，允许来自其历史会话

@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@RestControllerAdvice(assignableTypes = CommerceController.class)
+@RestControllerAdvice(assignableTypes = {CommerceController.class,
+    com.anjing.module.chat.ChatController.class, com.anjing.module.chat.workbench.WorkbenchController.class})
 public class CommerceExceptionHandler {
     public record ErrorDetail(String errorCode) {}
     @ExceptionHandler(CommerceException.class)

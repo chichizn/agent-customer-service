@@ -30,6 +30,13 @@ public class ChatMessage {
 
     private LocalDateTime createdAt;
 
+    @Column(length = 64) private String clientMessageId;
+    @Column(columnDefinition = "TEXT") private String orderIdsJson;
+    @Column(length = 64) private String ticketId;
+    @Column(length = 16) private String deliveryState;
+    private Long messageSequence;
+    private Long processingVersion;
+
     @PrePersist
     public void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();

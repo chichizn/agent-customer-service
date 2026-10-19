@@ -4,6 +4,8 @@
 
 当前 Demo 目标与四人分工见 [功能需求说明](docs/requirements/README.md)；B 成员可独立运行的 Vue 工作台、顾客入口及 A/D 联调契约见 [B 前端交付说明](docs/frontend/B-WORKBENCH.md)。
 
+A 的会话、订单/工单编排、人工接管、范围知识及统一重置已补充本地实现，接口、启动步骤与验证范围见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。完整 MySQL/实际模型业务验收仍待执行。
+
 ## 环境要求
 
 | 环境 | 版本 | 必须 |

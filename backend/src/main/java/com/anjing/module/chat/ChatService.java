@@ -139,6 +139,8 @@ public class ChatService {
      */
     @Transactional
     public void deleteSession(String sessionId) {
+        if (sessionRepository.findById(sessionId).map(s -> s.getMerchantId()!=null).orElse(false))
+            throw new com.anjing.module.commerce.CommerceException("INVALID_TRANSITION", "业务会话请使用统一演示重置，不能从旧接口删除");
         messageRepository.deleteBySessionId(sessionId);
         sessionRepository.deleteById(sessionId);
         log.info("删除会话成功: sessionId={}", sessionId);
@@ -149,6 +151,8 @@ public class ChatService {
      */
     @Transactional
     public ChatVO.SendMessageVO sendMessage(ChatDTO.SendMessageDTO dto) {
+        if (sessionRepository.findById(dto.getSessionId()).map(s -> s.getMerchantId()!=null).orElse(false))
+            throw new com.anjing.module.commerce.CommerceException("INVALID_TRANSITION", "业务会话必须通过工作台消息接口处理");
         String sessionId = dto.getSessionId();
         String userContent = dto.getContent();
         log.info("========== 对话链路开始 ==========");

@@ -1,6 +1,6 @@
 # 演示运行与操作手册
 
-更新：2026-10-19，main `99b5a48`。[最新结果](../acceptance/RESULTS-2026-10-19.md) 记录实际执行情况。当前 B 前端模拟可独立运行，D 已有 commerce 接口；A 会话、Agent、人工协作和统一重置尚未接入，完整故事仍待联调。
+更新：2026-10-19。B 前端模拟可独立运行，D 已有 commerce 接口；本轮已补 A 会话、业务编排、人工协作和统一重置，实现与自动化验证见 [A 集成交付](../backend/A-INTEGRATION.md)。[C 验收结果](../acceptance/RESULTS-2026-10-19.md) 保留其当时记录，完整 MySQL/实际模型故事仍待联调。
 
 ## 1. 选择运行方式
 
@@ -8,7 +8,7 @@
 |---|---|---|
 | B 前端 mock | 浏览器 localStorage、前端规则回复，不调用 Java/MySQL/LLM | 页面、模拟多单、模拟工单、人工切换、同源双标签同步 |
 | D commerce 检查 | Java/MySQL 订单、物流、工单接口 | 真实模块查询；不能代表聊天已调用工具 |
-| 完整 api 模式 | B 页面 + A 会话/Agent + D commerce + 实际模型 | 下方三个业务故事；当前 A 接口缺失，尚不能完成 |
+| 完整 api 模式 | B 页面 + A 会话编排 + D commerce + 实际模型 | 接口实现已补，下方三个业务故事仍需真实环境验收 |
 
 mock 的姓名/ID/商品另有一套，以 [B 说明](../frontend/B-WORKBENCH.md) 为准，不能在 mock 中输入下方 D 单号并声称查到数据库。
 
@@ -35,7 +35,7 @@ mock 可按 B 说明选择淘宝林小满、抖店周雨晴，展示页面内的
 
 本机曾因 pnpm11 的依赖构建审批规则导致安装退出1，已用已安装依赖的直接 Node 入口完成测试与打包。团队复现先使用仓库指定版本；不要把安装器退出失败写成业务失败。初次类型检查若缺自动导入声明，可先运行 Vite 生成，再检查；完整构建仍必须包含类型检查。
 
-后端需 JDK17+、Maven3.8+、MySQL8，Redis 按项目配置。现会话 Java/Maven 不在 PATH，未启动后端。按 A 的实际环境配置启动，避免覆盖已有本地文件：
+后端需 JDK17+、Maven3.8+、MySQL8，Redis 按项目配置。本机已使用安装目录中的 JDK17/Maven 完成后端自动化测试；未启动真实 MySQL 业务环境。按 A 的实际环境配置启动，避免覆盖已有本地文件：
 
 ```powershell
 if (!(Test-Path backend/src/main/resources/application-local.yml)) {
@@ -47,7 +47,7 @@ mvn spring-boot:run
 
 启动前填写本地数据库/模型配置；不要把密钥写入验收文件或录像。D 数据不是自动启动加载，由操作者在正确数据库按 [commerce 契约](../commerce-contract.md) 调用 `POST /api/commerce/demo/load`。它补缺、不清除已有工单，不是完整重置。
 
-A 接口就绪后把 Vite 的 `VITE_CUSTOMER_SERVICE_MODE` 改为 `api` 并重启。当前 api 失败会显示错误，不会回退模拟。根目录运行：
+把 Vite 的 `VITE_CUSTOMER_SERVICE_MODE` 改为 `api` 并重启。当前 api 失败会显示错误，不会回退模拟。根目录运行：
 
 ```powershell
 node demo-data/scripts/check-integration.mjs

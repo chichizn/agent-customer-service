@@ -36,6 +36,7 @@ public class ChatDTO {
      */
     @Data
     public static class QuerySessionDTO {
+        private Boolean workbench;
         /** 用户ID */
         private String userId;
         /** 会话状态 */
@@ -51,6 +52,7 @@ public class ChatDTO {
      */
     @Data
     public static class SendMessageDTO {
+        private String clientMessageId;
         /** 会话ID */
         private String sessionId;
         /** 消息内容 */

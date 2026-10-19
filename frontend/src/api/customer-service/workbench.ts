@@ -21,7 +21,7 @@ async function post<T>(url: string, data: unknown = {}, signal?: AbortSignal): P
 
 const remoteApi: WorkbenchApi = {
   fetchCatalog: async (signal) => toDemoCatalog(await loadIdentities(signal)),
-  fetchSessions: (signal) => post('/api/chat/session/list', {}, signal),
+  fetchSessions: (signal) => post('/api/chat/session/list', { workbench: true }, signal),
   fetchSession: (sessionId, signal) => loadSession(sessionId, signal),
   openSession: async (params) => hydrateSnapshot(await post('/api/chat/session/open', params)),
   sendCustomerMessage: async (params) =>
@@ -45,7 +45,8 @@ const remoteApi: WorkbenchApi = {
     return loadSession(params.sessionId)
   },
   resetDemo: async () => {
-    throw new Error('API 模式尚未接入 A 的统一演示重置接口，暂不能安全重置。')
+    await post('/api/demo/reset', { confirmed: true })
+    identityCache = undefined
   }
 }
 

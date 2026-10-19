@@ -32,6 +32,23 @@ public class ChatSession {
 
     private LocalDateTime updatedAt;
 
+    // null merchantId identifies an original, non-commerce chat session.
+    @Column(length = 64) private String merchantId;
+    @Column(length = 64) private String shopId;
+    @Column(length = 64) private String customerId;
+    @Column(length = 20) private String receptionMode;
+    @Column(length = 64) private String selectedOrderId;
+    @Column(length = 20) private String pendingAction;
+    @Column(length = 1000) private String pendingReason;
+    private Boolean awaitingConfirmation;
+    @Column(length = 64) private String confirmationMessageId;
+    @Column(length = 64) private String inFlightMessageId;
+    private Long turnVersion;
+    private LocalDateTime inFlightAt;
+    @Column(columnDefinition = "TEXT") private String handoffSummary;
+    private Boolean demoData;
+    @Column(columnDefinition = "TEXT") private String knowledgeIdsJson;
+
     @PrePersist
     public void prePersist() {
         if (createdAt == null) createdAt = LocalDateTime.now();

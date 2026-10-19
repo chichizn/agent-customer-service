@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.anjing.module.chat.workbench.*;
 
 /**
  * 对话中心控制器
@@ -18,6 +19,7 @@ import java.util.List;
 public class ChatController {
 
     private final ChatService chatService;
+    private final WorkbenchService workbench;
 
     // ==================== 会话管理 ====================
 
@@ -34,7 +36,8 @@ public class ChatController {
      * 获取会话列表
      */
     @PostMapping(ApiConstants.Chat.LIST_SESSIONS)
-    public R<List<ChatVO.SessionVO>> listSessions(@RequestBody ChatDTO.QuerySessionDTO dto) {
+    public R<?> listSessions(@RequestBody ChatDTO.QuerySessionDTO dto) {
+        if (Boolean.TRUE.equals(dto.getWorkbench())) return R.ok(workbench.list());
         log.info("查询会话列表: {}", dto);
         return R.ok(chatService.listSessions(dto));
     }
@@ -65,7 +68,10 @@ public class ChatController {
      * 用户发送消息 -> 意图识别 -> 知识检索 -> LLM生成回复 -> 返回响应
      */
     @PostMapping(ApiConstants.Chat.SEND_MESSAGE)
-    public R<ChatVO.SendMessageVO> sendMessage(@RequestBody ChatDTO.SendMessageDTO dto) {
+    public R<?> sendMessage(@RequestBody ChatDTO.SendMessageDTO dto) {
+        if (workbench.isWorkbench(dto.getSessionId()) || dto.getClientMessageId()!=null) {
+            return R.ok(workbench.send(new WorkbenchDTO.Send(dto.getSessionId(),dto.getClientMessageId(),dto.getContent())));
+        }
         log.info("发送消息: sessionId={}, content={}", dto.getSessionId(), dto.getContent());
         return R.ok(chatService.sendMessage(dto));
     }

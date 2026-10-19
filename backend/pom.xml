@@ -121,6 +121,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource><directory>src/main/resources</directory></resource>
+            <resource>
+                <directory>../demo-data</directory>
+                <targetPath>chat</targetPath>
+                <includes><include>knowledge.integration.v1.json</include></includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
