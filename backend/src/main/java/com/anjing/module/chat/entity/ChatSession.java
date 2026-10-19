@@ -48,6 +48,9 @@ public class ChatSession {
     @Column(columnDefinition = "TEXT") private String handoffSummary;
     private Boolean demoData;
     @Column(columnDefinition = "TEXT") private String knowledgeIdsJson;
+    @Column(columnDefinition = "TEXT") private String selectedProductsJson;
+    @Column(columnDefinition = "TEXT") private String selectedActivitiesJson;
+    @Column(columnDefinition = "TEXT") private String userProfileJson;
 
     @PrePersist
     public void prePersist() {

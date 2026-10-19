@@ -6,6 +6,8 @@ import com.anjing.module.chat.repository.ChatMessageRepository;
 import com.anjing.module.chat.repository.ChatSessionRepository;
 import com.anjing.module.knowledge.entity.*;
 import com.anjing.module.knowledge.repository.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +31,7 @@ public class ChatService {
     private final ProductRepository productRepository;
     private final ActivityRepository activityRepository;
     private final FaqRepository faqRepository;
+    private final ObjectMapper objectMapper;
 
     /**
      * 创建会话
@@ -129,7 +132,7 @@ public class ChatService {
                 messageVOs.add(mv);
             }
             detail.setMessages(messageVOs);
-            detail.setContext(new ChatVO.ContextVO());
+            detail.setContext(contextFrom(s));
             return detail;
         }).orElse(null);
     }
@@ -286,17 +289,61 @@ public class ChatService {
     }
 
     /**
-     * 更新上下文（暂存内存，后续可扩展为Redis缓存）
+     * 更新会话上下文并持久化到会话记录。
+     * null 字段表示保留原值，空列表/空对象可用于清空对应上下文。
      */
+    @Transactional
     public void updateContext(ChatDTO.UpdateContextDTO dto) {
-        log.info("更新上下文: sessionId={}", dto.getSessionId());
+        ChatSession session = sessionRepository.findById(dto.getSessionId())
+                .orElseThrow(() -> new com.anjing.module.commerce.CommerceException(
+                        "NOT_FOUND", "会话不存在: " + dto.getSessionId()));
+        if (dto.getSelectedProducts() != null) {
+            session.setSelectedProductsJson(writeJson(dto.getSelectedProducts()));
+        }
+        if (dto.getSelectedActivities() != null) {
+            session.setSelectedActivitiesJson(writeJson(dto.getSelectedActivities()));
+        }
+        if (dto.getUserProfile() != null) {
+            session.setUserProfileJson(writeJson(dto.getUserProfile()));
+        }
+        sessionRepository.save(session);
+        log.info("更新上下文成功: sessionId={}", dto.getSessionId());
     }
 
     /**
      * 获取上下文
      */
     public ChatVO.ContextVO getContext(String sessionId) {
-        return new ChatVO.ContextVO();
+        return sessionRepository.findById(sessionId)
+                .map(this::contextFrom)
+                .orElseThrow(() -> new com.anjing.module.commerce.CommerceException(
+                        "NOT_FOUND", "会话不存在: " + sessionId));
+    }
+
+    private ChatVO.ContextVO contextFrom(ChatSession session) {
+        ChatVO.ContextVO context = new ChatVO.ContextVO();
+        context.setSelectedProducts(readJson(session.getSelectedProductsJson(), new TypeReference<List<String>>() {}));
+        context.setSelectedActivities(readJson(session.getSelectedActivitiesJson(), new TypeReference<List<String>>() {}));
+        context.setUserProfile(readJson(session.getUserProfileJson(), new TypeReference<Map<String, Object>>() {}));
+        return context;
+    }
+
+    private String writeJson(Object value) {
+        try {
+            return objectMapper.writeValueAsString(value);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("会话上下文序列化失败", e);
+        }
+    }
+
+    private <T> T readJson(String json, TypeReference<T> type) {
+        if (json == null || json.isBlank()) return null;
+        try {
+            return objectMapper.readValue(json, type);
+        } catch (Exception e) {
+            log.warn("会话上下文反序列化失败，将返回空值: {}", e.getMessage());
+            return null;
+        }
     }
 
     // ==================== 关键词兜底分析（LLM 不可用时使用） ====================
