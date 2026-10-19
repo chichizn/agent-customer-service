@@ -1,0 +1,32 @@
+{
+  "version": "1.0.0",
+  "seedPath": "backend/src/main/resources/commerce/demo-data.json",
+  "knowledgePath": "demo-data/knowledge.integration.v1.json",
+  "expectedKnowledgeCount": 10,
+  "merchantId": "demo-merchant",
+  "expectedCounts": { "shops": 2, "customers": 4, "products": 3, "orders": 12, "logistics": 7 },
+  "referenceTime": "2026-10-18T12:00:00+08:00",
+  "knowledgeShopMap": {
+    "demo-shop-taobao": "demo-shop-tb",
+    "demo-shop-douyin": "demo-shop-dy"
+  },
+  "actors": {
+    "TB1": { "shopId": "demo-shop-tb", "customerId": "demo-customer-tb-1" },
+    "TB2": { "shopId": "demo-shop-tb", "customerId": "demo-customer-tb-2" },
+    "DY1": { "shopId": "demo-shop-dy", "customerId": "demo-customer-dy-1" },
+    "DY2": { "shopId": "demo-shop-dy", "customerId": "demo-customer-dy-2" }
+  },
+  "scenarios": {
+    "multiOrder": { "actor": "TB1", "productClue": "杯", "orderIds": ["demo-order-tb-01", "demo-order-tb-02"], "selectedOrderId": "demo-order-tb-01" },
+    "singleOrder": { "actor": "TB2", "productClue": "杯", "orderIds": ["demo-order-tb-05"] },
+    "return": { "actor": "DY1", "orderId": "demo-order-dy-01", "ticketType": "RETURN_REQUEST" },
+    "handoff": { "actor": "TB2", "orderId": "demo-order-tb-05", "ticketType": "EXCEPTION_COMPENSATION" },
+    "pendingShipment": { "actor": "TB1", "orderId": "demo-order-tb-02" },
+    "cancelled": { "actor": "TB1", "orderId": "demo-order-tb-04" }
+  },
+  "gaps": [
+    "No seeded customer without orders; AC-05 empty-customer branch needs an A/D fixture addition.",
+    "Scoped knowledge import/search, A session integration and unified reset are not implemented in current main.",
+    "The original extended C draft has 6 customers and 8 logistics; the runtime D seed has 4 customers and 7 logistics. Empty-customer coverage is still missing."
+  ]
+}

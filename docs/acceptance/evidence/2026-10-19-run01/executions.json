@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-10-19T06:15:06.268Z",
+  "revision": "99b5a48a9f2dfda958eca86a055dac6dd62fdef8",
+  "scope": "RECORDED_LOCAL_TOOL_EXECUTIONS_NOT_END_TO_END_ACCEPTANCE",
+  "workspaceChanges": [
+    "demo-data/",
+    "docs/acceptance/",
+    "docs/demo/"
+  ],
+  "executions": [
+    {
+      "name": "B workbench and commerce adapter tests",
+      "cwd": "frontend",
+      "command": "node node_modules/tsx/dist/cli.mjs --test scripts/workbench.test.ts scripts/commerceAdapter.test.ts",
+      "exitCode": 0,
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "limitation": "Front-end mock and adapter tests; no Java, MySQL or LLM"
+    },
+    {
+      "name": "Initial type check before Vite declaration generation",
+      "cwd": "frontend",
+      "command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit",
+      "exitCode": 1,
+      "result": "Missing generated auto-import declarations caused errors such as Cannot find name ref/storeToRefs"
+    },
+    {
+      "name": "Vite production bundle",
+      "cwd": "frontend",
+      "command": "node node_modules/vite/bin/vite.js build",
+      "exitCode": 0,
+      "modulesTransformed": 2949,
+      "durationSeconds": 36.12,
+      "limitation": "Bundle with repository defaults; no browser or backend validation"
+    },
+    {
+      "name": "Type check after Vite declaration generation",
+      "cwd": "frontend",
+      "command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit",
+      "exitCode": 0,
+      "result": "No diagnostic output"
+    },
+    {
+      "name": "C integration seed, knowledge and checker regression tests",
+      "cwd": ".",
+      "command": "node --test docs/acceptance/scripts/integration.test.mjs",
+      "exitCode": 0,
+      "tests": 25,
+      "passed": 25,
+      "failed": 0,
+      "limitation": "Native Node tests with in-memory query transport; not live backend evidence"
+    },
+    {
+      "name": "Dependency installation",
+      "cwd": "frontend",
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 1,
+      "result": "Local pnpm 11.25.0 differs from project pnpm 10.10.0; ERR_PNPM_IGNORED_BUILDS. Dependencies were installed sufficiently for direct Node executions above. No shared package configuration change retained."
+    }
+  ],
+  "externalClaimsNotRerun": [
+    {
+      "source": "docs/commerce-handoff.md",
+      "claim": "D reports 18 backend tests passed",
+      "verifiedLocally": false
+    }
+  ],
+  "notExecuted": [
+    "Java/Maven backend tests",
+    "MySQL persistence or concurrency acceptance",
+    "Real model requests",
+    "Browser business flows",
+    "Live ticket creation",
+    "Unified reset",
+    "Video recording"
+  ]
+}

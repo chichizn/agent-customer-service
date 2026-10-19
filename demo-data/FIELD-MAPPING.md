@@ -1,52 +1,58 @@
-# 演示交换格式与 A/D 接入说明
+# C 与当前集成数据的映射
 
-版本 `1.0.0`；这是 C 编制的数据格式草案，**不是已实现的 API 契约**。A/D 的真实字段模板到位后，以映射方式调整数据；本次不修改后端和公共配置。
+2026-10-19，基于 main `99b5a48`。已实现 commerce 契约见 [commerce-contract.md](../docs/commerce-contract.md)，B 对 A 的待实现约定见 [B-WORKBENCH.md](../docs/frontend/B-WORKBENCH.md)。
 
-## 通用约定
+## 数据来源与字段
 
-| 字段 | 约定 |
-|---|---|
-| `id` | 稳定字符串；`demo-` 前缀；重复导入按此键更新/复用，不能每次产生新业务对象 |
-| `demoNamespace` | 固定 `customer-service-demo-v1`，标记受统一重置管理的演示空间 |
-| `merchantId` / `shopId` / `customerId` | 外键必须真实存在且归属一致；服务端从已验证会话取得工具的实际身份 |
-| `platform` | `TAOBAO` / `DOUYIN`；展示为淘宝/抖店；如最终枚举不同，由 A/D 显式映射 |
-| 金额 | `*Cents` 为整数分，币种 CNY；当前 Product DTO 的 `price` 为元，仅基线加载器除以 100 |
-| 日期 | ISO 8601，明确 `+08:00`；后端 LocalDateTime 按 Asia/Shanghai 解析后存储，不保留偏移字符串 |
+| 项目 | 当前 D 种子/接口 | C 历史草案 | 当前处理 |
+|---|---|---|---|
+| 商家 | demo-merchant | demo-merchant-01 | 使用 D 身份列表 |
+| 店铺 | demo-shop-tb / demo-shop-dy | demo-shop-taobao / demo-shop-douyin | 新知识显式映射；旧包不直接加载 |
+| 顾客 | demo-customer-tb-1/2、dy-1/2 | tb-01/02/03、dy-01/02/03 | 按真实身份读取，不能仅按姓名替换 |
+| 商品 | cup、box、towel | cup、box、cloth、bag | 清洁布/帆布袋不等于毛巾，不作自动映射 |
+| 杯子规格 | 白色500ml、黑色750ml | 原知识只写500ml | 新知识列出两规格；先选订单/规格再回答 |
+| 订单 | demo-order-tb-01；TB202610100001 等 | demo-order-tb-001；DEMO-TB-20261018-001 等 | 使用下表，单号与 ID 分开 |
+| 金额 | actualPaid、unitPrice：元，取消订单可为0 | paidAmountCents、unitPriceCents：整数分 | 映射时除以100 |
+| 时间 | orderedAt、occurredAt 为无偏移 LocalDateTime | 明确 +08:00 | 统一解释 Asia/Shanghai；HTTP可用T或空格分隔 |
+| 物流 | orders[].logistics，7条；status为中文描述 | 独立数组8条及英文状态 | 依照 available/原始节点，不编造运单或 ETA |
+| 平台售后 | 工单为 NOT_SUBMITTED_TO_PLATFORM | 初始 NONE | 使用 D 实际枚举，本地完成不表示退款 |
+| 知识 | D 不加载；A 范围检索待接入 | 10条 | 用 knowledge.integration.v1.json 交换，不灌全局接口 |
 
-`demoNamespace` 及 ID 前缀不能成为任意客户端可修改的“授权”。演示加载/重置入口的访问控制由 A 实现；不能根据用户输入的 merchantId 清库。
+`demoNamespace` 是 C 草案字段；D 使用实体的 `demoData` 标记。不要假设传入 namespace 就有权限操作数据。当前 scope 用于单商家演示，A 工具须从已校验会话构造身份。
 
-## 对象字段
+## 订单速查
 
-| 数组 | 主要字段 | 加载责任与现状 |
-|---|---|---|
-| `merchants` | id, name | A/D 演示基础数据；待最终契约 |
-| `shops` | merchantId, platform, name | D 基础数据，A 用于会话身份校验 |
-| `customers` | merchantId, shopId, platformUserId, displayName | A/D 映射；唯一身份组合至少包括店铺 |
-| `products` | productCode, productName, listPriceCents, description, specifications, features | D 保持字符串 fixture ID 到现有数字商品主键的映射；不可强占原项目主键 |
-| `orders` | orderNumber, 身份归属, items, discountCents, paidAmountCents, currency, status, orderedAt | D 新增订单业务；单价×数量之和减优惠等于实付 |
-| `orders.items` | productId, productName, quantity, unitPriceCents | 商品引用是 fixture ID，D 使用映射表替换；历史单价不受当前活动修改 |
-| `orders.platformAfterSaleStatus` | 初始 NONE | 仅演示平台状态；本地建工单不能改成平台退款成功 |
-| `logistics` | orderId, 身份归属, carrier, trackingNumber, status, estimatedDeliveryAt, nodes | D；无物流的订单没有此行，不能生成运单 |
-| `logistics.nodes` | occurredAt, description | 时间升序；`estimatedDeliveryAt:null` 表示未知，不承诺 ETA |
-| `knowledge` | merchantId, scope, shopId, kind, topic, title, content, source, productIds, policy, status | A/D 映射到现有知识及店铺规则；SHOP 只能当前店使用，MERCHANT 为明确共用 |
-| `sessions/messages/serviceTickets/executionRecords` | 初始空数组 | A/D 运行时创建，不预填“工单成功”等结果 |
+| 简称 / 顾客 | fixture ID | 实际订单号 | 状态与内容 |
+|---|---|---|---|
+| TB01 / TB1 | demo-order-tb-01 | TB202610100001 | SHIPPED；白色500ml杯59元；10-12 08:30杭州转运 |
+| TB02 / TB1 | demo-order-tb-02 | TB202610110002 | PENDING_SHIPMENT；黑色750ml杯69元，无物流 |
+| TB03 / TB1 | demo-order-tb-03 | TB202610090003 | DELIVERED；盒2件78元 |
+| TB04 / TB1 | demo-order-tb-04 | TB202610080004 | CANCELLED；毛巾，实付0，无物流 |
+| TB05 / TB2 | demo-order-tb-05 | TB202610120005 | SHIPPED；杯59元；10-14 16:00转运异常，无ETA |
+| TB06 / TB2 | demo-order-tb-06 | TB202610130006 | PENDING_SHIPMENT；盒39元 |
+| DY01 / DY1 | demo-order-dy-01 | DY202610100001 | DELIVERED；杯49元；10-13 14:00签收，退货故事 |
+| DY02 / DY1 | demo-order-dy-02 | DY202610110002 | SHIPPED；盒35元 |
+| DY03 / DY1 | demo-order-dy-03 | DY202610120003 | PENDING_SHIPMENT；毛巾18元 |
+| DY04 / DY2 | demo-order-dy-04 | DY202610090004 | DELIVERED；杯+盒84元 |
+| DY05 / DY2 | demo-order-dy-05 | DY202610130005 | CANCELLED；盒，实付0 |
+| DY06 / DY2 | demo-order-dy-06 | DY202610140006 | SHIPPED；毛巾18元，运输中 |
 
-商品是商家共用目录；每家店的订单引用相同商品 ID，体现同名商品不能替代店铺归属。`knowledge.policy` 是便于校验的结构化补充，正文 `content` 同时保留可引用的完整规则。kind 为 PRODUCT / FAQ / SHOP_RULE / ACTIVITY，不强制成为最终数据库枚举。
+日期均为2026年固定种子时间。[integration.v1.json](integration.v1.json) 引用 D 种子，校验场景归属、状态与候选，不另复制订单数据。
 
-订单状态与需求文档一致；物流状态采用 IN_TRANSIT / DELIVERED / DELAYED，是 fixture 约定，需要 D 映射。`scenario` 只用于数据说明，不能作为 Agent 硬编码路由条件。
+## 知识交换约定
 
-## 时间与重复恢复
+[knowledge.integration.v1.json](knowledge.integration.v1.json) 标记 `WAITING_FOR_A_SCOPED_IMPORT`，保留稳定知识 ID。MERCHANT 项的 shopId 为 null，SHOP 项必须属于当前商家店铺；productIds 只能引用 D 商品。
 
-1. 取实际演示时刻 T，计算 `T - meta.referenceTime`。把下单时间、所有物流节点、活动开始及结束时间统一平移相同毫秒数。或者由 A 提供固定 referenceTime 的演示时钟，并在 UI 标明。二者选一，记录到验收环境。
-2. 同一次加载中，数据库和应用必须使用同一演示基准。金额、相对时间、ID、店铺规则不随重置改变。
-3. 同一 demoNamespace 重置由 A 统一协调：处理中的 AI 先失效，A 清理该空间会话/消息/上下文/执行记录，D 清理该空间工单并恢复基础数据。按实际外键顺序处理，不能跨模块随意删表。
-4. 重复导入或重置后仍是 12 个订单、8 份物流、10 条演示知识；原项目知识等非演示数据保留。C 需先记录非演示数据的 ID 与内容快照，再比较。
+共用杯子知识列出实际两种规格；收纳盒资料只用种子已有规格，不从旧草案推断尺寸/材质。6条店铺规则/活动为 C 编制的演示规则，需 A 接入后才能用于真实回答，不能跨店复用。活动不修改历史实付。
 
-## 最终联调前待 A/D 补齐的契约
+A 的加载结果应提供稳定 ID 到真实知识主键的映射、范围、启用/有效期处理。C 再以 AC-13/14 验证，文件自洽不等于检索隔离已实现。
 
-- 完整数据加载和统一重置入口、返回统计、失败处理、日期平移方式、影响范围。
-- 顾客身份列表、会话恢复/新建、增量消息轮询、接待模式与版本字段。
-- 订单/物流/工单查询及写入 DTO、错误格式、去重键与订单确认/提交确认方式。
-- 工具超时、处理中接管的取消/版本校验、失败注入方式、持久执行记录读取入口。
+## 尚待联调
 
-C 不预先编造这些 URL；联调时在验收记录中填写实际值，再执行 AC 用例。
+- A 会话开通/恢复、快照、人工消息、接待模式、持久上下文及真实执行记录。
+- A 实现 AgentTicketGuard，AI 走 createAgentTicket；不能用商家直建接口绕过确认/接管。
+- A 统一重置：使旧轮次失效，再协调会话/消息/上下文/记录和 D commerce；D restore 只处理本模块。
+- A/D 补合法无订单顾客。每店至少2顾客已有，AC-05 空顾客分支仍缺数据。
+- 固定演示时钟或整体平移下单、物流、签收与活动日期，记录策略；目前加载器未实现平移。
+
+10月18日原始设计及计数保留在 dataset.v1.json 和历史结果，不能直接作为当前数据库计数。

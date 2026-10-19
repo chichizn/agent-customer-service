@@ -1,20 +1,24 @@
-# 问题与依赖清单
+# 问题与推进清单
 
-检查日期：2026-10-18。源码基线 `c86f6645406306b41e0f7bd9bba6326ff1a40004`。下表除 ENV-01 外均为**静态检查发现/需求缺口，尚未运行复现**。责任人是按需求分工建议，未发送给其他成员。
+更新：2026-10-19，main `99b5a48a9f2dfda958eca86a055dac6dd62fdef8`。运行观察见 [本次结果](RESULTS-2026-10-19.md)。下列功能缺口来自源码检查，不能说成实际业务复现失败。建议责任按需求分工，未向他人发送消息。
 
-| 编号 | 优先级 / 建议负责 | 证据及影响 | 集成后最小复验 |
+| 编号 | 状态 / 建议负责 | 当前证据及影响 | 下一步 / 复验 |
 |---|---|---|---|
-| ENV-01 | 阻塞 / A 配合环境 | [预检证据](evidence/preflight-2026-10-18.json)：Java/Maven 不在 PATH；本机10002、20002、3100、5173均拒绝连接；前端未安装 node_modules。MySQL 命令未发现不能单独证明 MySQL 服务不存在 | 配齐路径及数据库后启动前后端，重跑预检；再实际创建会话、发送消息 |
-| DATA-01 | 阻塞 / A、D | 尚无 commerce 模块、A/D 字段模板、完整数据加载/统一重置契约。C 的 fixture 为待映射格式 | 加载完整包两次，核对归属与计数；按 AC-22 验证非演示数据保留 |
-| GAP-01 | P0 / A、B、D | 当前 [ChatSession](../../backend/src/main/java/com/anjing/module/chat/entity/ChatSession.java) 没有商家、店铺、顾客和接待模式字段；[API](../../backend/src/main/java/com/anjing/model/constants/ApiConstants.java) 未见订单/物流/工单完整端点 | AC-01～12：实际查询/写入后核对业务记录，完成同店/跨店隔离 |
-| GAP-02 | P0 / B、A | [ChatInterface.vue](../../frontend/src/views/customer-service/chat/components/ChatInterface.vue) 第56～83行：挂载即创建 `user_demo` 会话；创建失败改用 local_ ID；没有历史切换和身份入口 | AC-02/21：刷新恢复同一会话；失败明确提示，不能伪造可用服务端会话 |
-| GAP-03 | P0 / A | [ChatService.java](../../backend/src/main/java/com/anjing/module/chat/ChatService.java) 第287～295行：更新上下文仅日志、读取返回空对象 | AC-04/11/21：选择订单、待确认诉求持久化，刷新/重启仍正确 |
-| GAP-04 | P0 / A、D | 同文件第377/404/417行全局 findAll 检索；活动触发时读取所有活动；现有知识实体无店铺范围，未见状态/有效期统一过滤 | AC-06/07/13/14：相似身份与同名商品不串店；禁用/过期知识按最终契约处理 |
-| GAP-05 | P0 / A、B | 当前主流程未见 WAITING_HUMAN/HUMAN 切换、人工消息接口、处理中接管版本校验；物流卡片类型不等于工具已执行 | AC-15～18：接管后连续输入不触发AI或写工单，迟到回复被阻止 |
-| GAP-06 | P0 / A | [LlmService.java](../../backend/src/main/java/com/anjing/module/chat/LlmService.java) 第33行直接 new RestTemplate，未见请求超时；前端 [http/index.ts](../../frontend/src/utils/http/index.ts) 第25行15秒超时；单次聊天有两次串行LLM请求 | AC-19：明确后端总耗时界限、降级标记；前端超时后不伪称服务端已取消 |
-| GAP-07 | P0 / A、D、B | [ChatService.java](../../backend/src/main/java/com/anjing/module/chat/ChatService.java) 第545行起固定构造步骤；第237/555行以分析调用是否成功决定“生成回复”引擎标签，而回复调用可能另行失败；未见持久工具执行记录 | AC-19/20/21：展示实际动作和实际回复引擎，失败不标成功，刷新后记录可查 |
-| DOC-01 | P1 / C 记录，A/B 修复公共配置 | 根 README 写前端3100、需求写20002；实际 [vite.config.ts](../../frontend/vite.config.ts) 读取 VITE_PORT，但已跟踪 `.env.development` 未设置；VITE_ACCESS_MODE 同样未设置，游客菜单可能走后端菜单路径 | 用 [演示手册](../demo/RUNBOOK.md) 的命令显式指定 frontend 模式和20002；检查实际终端端口，再更新主说明 |
-| OUT-01 | 本版不验收 / A、B 评估 | [KnowledgeService.java](../../backend/src/main/java/com/anjing/module/knowledge/KnowledgeService.java) 第717行起向量化仅标记状态，导入/导出返回固定结果；不算真实业务能力 | 演示不展示为已完成；基线数据使用真实 CRUD 脚本 |
-| OUT-02 | P1 / A、B | [SceneService.java](../../backend/src/main/java/com/anjing/module/scene/SceneService.java) 第286～303行渲染模板但未把内容传给模型；[IntentConfig.vue](../../frontend/src/views/customer-service/scene/tabs/IntentConfig.vue) 第58行仅提示切换成功 | 本版不演示为动态规则引擎；若纳入范围，验证实际保存、实际注入及刷新恢复 |
+| C-DATA-01 | 本轮已修正 / C | 旧C身份、单号、8物流与D实际4顾客/7物流不一致；退货/延迟故事选错订单 | 新 integration 配置直接引用D种子，25项检查器回归通过；后续改种子必跑检查 |
+| C-KNOW-01 | 材料已修正，待接入 / C、A | 旧杯子知识只有500ml，D另有750ml；旧全局加载器不能表达店铺范围 | 新10条知识对齐身份/规格，A接scope加载/查询；AC-13/14 |
+| ENV-01 | 后端运行阻塞 / A配合 | Node/pnpm可用；Java/Maven/MySQL命令不在PATH，10002不可达。本次前端依赖已安装、13项测试及打包/类型检查通过 | 配置Java/Maven/数据库并启动，重跑只读检查；工具未在PATH不等于整机未安装 |
+| GAP-01 | P0待接入 / A | ChatSession仍无店铺/顾客/接待模式；B请求的session/open、snapshot、human/send、reception/update未实现 | 按B约定和D scope实现端到端会话；AC-01/02/06/07 |
+| GAP-02 | B前端已推进，A仍阻塞 / B、A | B工作台/顾客入口、Hash路由、轮询和commerce适配已合入；API失败明确报错，默认mock不调用后端 | 不再沿用“无B入口”的旧结论；接A后实测切换、双端同步和刷新 |
+| GAP-03 | P0待实现 / A | ChatService.updateContext只记日志，getContext返回空对象 | 持久选单、待确认诉求及关联工单；AC-04/08/11/21 |
+| GAP-04 | P0待实现 / A | 知识仍全局findAll，缺范围过滤；C新知识文件尚非已落库 | 会话店铺过滤、有效期/状态处理；AC-13/14及跨店规则 |
+| GAP-05 | P0待实现 / A，D接入点已有 | D有AgentTicketGuard接口但当前未见实现；createAgentTicket缺guard应拒绝。A人工模式/迟到轮次控制未接入 | 同一会话锁核验身份、确认和接管版本；AC-08～10、15～18，不能绕用商家直建 |
+| GAP-06 | P0待复验 / A | LlmService直接new RestTemplate，未见业务总超时；前端超时不代表服务器取消 | 可控关闭/500/超时/坏输出，明确降级；AC-19 |
+| GAP-07 | P0待实现 / A | 旧ChatService仍构造固定推理步骤，未见持久实际工具记录及与写操作一致性链路 | 展示实际执行、失败、编号；AC-20/21 |
+| DATA-01 | D模块已实现，系统重置待A / A、D | D有load/restore、归属/幂等/状态迁移；不再是“没有commerce”。restore仅本模块，不处理A会话/知识 | A统一协调、旧任务失效、两次恢复保留非演示；AC-22 |
+| DATA-02 | 待补 / A、D | 4位种子顾客都有订单，AC-05的无订单顾客分支没有合法身份 | 补入合法空顾客并版本化更新配置/计数，再实测；不存在单号不能代替空顾客 |
+| DATA-03 | 待统一 / A、D、C | 固定2026年种子；D加载器未整体平移，后续演示可能超退货/活动窗口 | 固定时钟或整体平移，明确显示，按AC-08/13/22复验 |
+| VIDEO-01 | 阻塞 / C | 没有完整业务可操作链路及实测证据，未录MP4 | 接A后先跑三故事/完整验收，再按录像脚本录制 |
 
-优先修复 ENV-01、DATA-01 和 GAP-01～07，才能执行 P0 业务验收。C 不在本次任务中修改这些成员负责的业务代码或公共配置。
+建议先由 A 补齐会话绑定、guard、工具调用和人工协作，让三故事闭环；随后验证知识范围、失败/并发、持久恢复与统一重置。C继续执行证据记录和录像，不改其他成员的业务实现。
+
+10月18日问题所对应的历史阻塞见 [原验收记录](RESULTS-2026-10-18.md)，不能据其中旧结论否认 B/D 的新交付。D文档自报18项后端测试通过，本机未重跑，不作为本次实测PASS。

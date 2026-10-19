@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: current commerce seed supports C stories, including cancelled zero payment
+ok 1 - current commerce seed supports C stories, including cancelled zero payment
+  ---
+  duration_ms: 3.2764
+  type: 'test'
+  ...
+# Subtest: prepared knowledge uses current identities and both cup variants
+ok 2 - prepared knowledge uses current identities and both cup variants
+  ---
+  duration_ms: 0.4771
+  type: 'test'
+  ...
+# Subtest: reject knowledge regression: old merchant
+ok 3 - reject knowledge regression: old merchant
+  ---
+  duration_ms: 0.3501
+  type: 'test'
+  ...
+# Subtest: reject knowledge regression: global shop rule
+ok 4 - reject knowledge regression: global shop rule
+  ---
+  duration_ms: 0.2887
+  type: 'test'
+  ...
+# Subtest: reject knowledge regression: old shop ID
+ok 5 - reject knowledge regression: old shop ID
+  ---
+  duration_ms: 0.2224
+  type: 'test'
+  ...
+# Subtest: reject knowledge regression: unknown product
+ok 6 - reject knowledge regression: unknown product
+  ---
+  duration_ms: 0.1802
+  type: 'test'
+  ...
+# Subtest: reject knowledge regression: missing 750ml variant
+ok 7 - reject knowledge regression: missing 750ml variant
+  ---
+  duration_ms: 0.1725
+  type: 'test'
+  ...
+# Subtest: reject knowledge regression: expired activity
+ok 8 - reject knowledge regression: expired activity
+  ---
+  duration_ms: 0.1717
+  type: 'test'
+  ...
+# Subtest: reject seed regression: cross-customer ownership
+ok 9 - reject seed regression: cross-customer ownership
+  ---
+  duration_ms: 0.5104
+  type: 'test'
+  ...
+# Subtest: reject seed regression: payment over item subtotal
+ok 10 - reject seed regression: payment over item subtotal
+  ---
+  duration_ms: 0.4025
+  type: 'test'
+  ...
+# Subtest: reject seed regression: fractional cent payment
+ok 11 - reject seed regression: fractional cent payment
+  ---
+  duration_ms: 0.4226
+  type: 'test'
+  ...
+# Subtest: reject seed regression: reversed logistics timeline
+ok 12 - reject seed regression: reversed logistics timeline
+  ---
+  duration_ms: 0.2064
+  type: 'test'
+  ...
+# Subtest: reject seed regression: invalid calendar date
+ok 13 - reject seed regression: invalid calendar date
+  ---
+  duration_ms: 0.1816
+  type: 'test'
+  ...
+# Subtest: reject seed regression: duplicate order
+ok 14 - reject seed regression: duplicate order
+  ---
+  duration_ms: 0.3845
+  type: 'test'
+  ...
+# Subtest: reject seed regression: missing items
+ok 15 - reject seed regression: missing items
+  ---
+  duration_ms: 0.2337
+  type: 'test'
+  ...
+# Subtest: reject C story drift to another customer or a non-delayed order
+ok 16 - reject C story drift to another customer or a non-delayed order
+  ---
+  duration_ms: 0.2596
+  type: 'test'
+  ...
+# Subtest: checker covers all seed orders and uses only four query endpoints
+ok 17 - checker covers all seed orders and uses only four query endpoints
+  ---
+  duration_ms: 2.2412
+  type: 'test'
+  ...
+# Subtest: unavailable service is BLOCKED; business rejection is FAIL
+ok 18 - unavailable service is BLOCKED; business rejection is FAIL
+  ---
+  duration_ms: 0.7288
+  type: 'test'
+  ...
+# Subtest: wrong merchant identity stops before querying customer resources
+ok 19 - wrong merchant identity stops before querying customer resources
+  ---
+  duration_ms: 0.7778
+  type: 'test'
+  ...
+# Subtest: checker detects foreign order leak
+ok 20 - checker detects foreign order leak
+  ---
+  duration_ms: 0.7943
+  type: 'test'
+  ...
+# Subtest: checker detects wrong item specification
+ok 21 - checker detects wrong item specification
+  ---
+  duration_ms: 1.3762
+  type: 'test'
+  ...
+# Subtest: checker detects zero cancellation amount changed
+ok 22 - checker detects zero cancellation amount changed
+  ---
+  duration_ms: 0.6158
+  type: 'test'
+  ...
+# Subtest: checker detects foreign ticket
+ok 23 - checker detects foreign ticket
+  ---
+  duration_ms: 1.327
+  type: 'test'
+  ...
+# Subtest: checker detects fabricated logistics
+ok 24 - checker detects fabricated logistics
+  ---
+  duration_ms: 1.048
+  type: 'test'
+  ...
+# Subtest: equivalent Jackson wall-time serialization is accepted
+ok 25 - equivalent Jackson wall-time serialization is accepted
+  ---
+  duration_ms: 0.6309
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 106.5599

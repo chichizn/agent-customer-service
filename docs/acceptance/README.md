@@ -1,41 +1,56 @@
 # C 成员验收入口
 
-按以下顺序使用：
+最新状态见 [2026-10-19 验收记录](RESULTS-2026-10-19.md)；保留 [10月18日记录](RESULTS-2026-10-18.md)。
 
-1. `node demo-data/scripts/validate.mjs` 检查数据。
-2. `node docs/acceptance/scripts/preflight.mjs docs/acceptance/evidence/preflight-latest.json` 检查本机环境。只读访问知识总览与前端页面，不创建会话、不调用模型。
-3. 由 A/D 加载完整数据并提供真实接口，由 B 提供工作台和顾客入口。使用 [测试用例](TEST-CASES.md) 执行业务验收。
-4. 在 [验收记录](RESULTS-2026-10-18.md) 中逐项记录；修复后新建带日期的运行记录，保留原记录。
-5. 问题按 [问题清单](ISSUES.md) 复验；完整验收通过后按 [录像脚本](../demo/RECORDING.md) 录制。
+## 执行顺序
 
-状态定义：
+1. 同步 main，记录 commit 与本地改动。以 `demo-data/integration.v1.json` 对应 D 种子，不混用 C 旧草案或 B mock 身份。
+2. 根目录运行离线检查，无需第三方依赖。
+3. 启动后端，由操作者加载 D 数据后运行预检和 commerce 只读检查。前端 API 模式需 A 会话实现；前端模拟可单独预览。
+4. 按 [TEST-CASES.md](TEST-CASES.md) 执行22条业务验收，保存真实会话、消息、工单、执行记录及前后状态。
+5. 新建带日期结果，按 [ISSUES.md](ISSUES.md) 复验；三个故事连续可操作后按 [录像脚本](../demo/RECORDING.md) 录制。
+
+```powershell
+node demo-data/scripts/check-integration.mjs docs/acceptance/evidence/integration-latest.json
+node --test docs/acceptance/scripts/integration.test.mjs
+node docs/acceptance/scripts/preflight.mjs docs/acceptance/evidence/preflight-latest.json
+node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/commerce-latest.json
+```
+
+接口脚本只访问本机10002的4类 POST 查询：身份、订单、物流、工单；检查四位顾客归属、订单/物流内容、多单/单号匹配、外店/外顾客/不存在订单不可见。不加载/重置、不创建工单、不调用模型。工单为空时只能证明查询可用，不能计为建单或工单隔离已验收。显式 scope 也不能代替 A 会话身份校验。
+
+| 检查 | 退出码 | 通过含义 |
+|---|---|---|
+| check-integration | 0 / 1 | 离线数据与 C 场景/知识一致 / 有错 |
+| integration.test | 0 / 非0 | 检查器自身回归通过 / 失败，使用替身 |
+| preflight | 0 / 2 | 前后端基线可访问 / 未就绪，响应详情见报告 |
+| commerce-readonly | 0 / 1 / 2 | 查询响应符合种子 / 响应不符 / 不可达或超时 |
+
+旧数据/加载器回归用 `node demo-data/scripts/verify-package.mjs`；不传输出路径可避免覆盖历史证据。
+
+## 业务结果定义
 
 | 状态 | 含义 |
 |---|---|
-| PASS | 在实际运行系统上完成步骤，所有预期均满足，证据可回查 |
-| FAIL | 在实际运行系统上执行后观察到与预期不符，附最小复现与证据 |
-| BLOCKED | 前置环境/功能不具备，不能执行或完成；不能算作已通过 |
+| PASS | 在实际系统完成步骤，全部预期满足，证据可回查 |
+| FAIL | 执行后观察到与预期不符，有最小复现 |
+| BLOCKED | 前置环境/功能不足，无法执行或完成 |
 | NOT_RUN | 条件具备但尚未执行 |
 
-源码检查只写入“静态发现”，不能据此把 AC 标成 PASS 或运行失败。数据校验通过只证明 fixture 自洽。
+源码发现、模块单测、B mock、离线校验分别记录，不能据此将完整 AC 标成 PASS。
 
-## 证据命名
+## 证据与记录模板
 
-每次验收创建独立目录 `evidence/YYYY-MM-DD-runNN/`。记录 Git commit、未提交变更范围、测试者、Asia/Shanghai 时间、LLM 模式与模型名、实际前后端地址、数据包版本/摘要、演示时间策略。
+每轮创建 `evidence/YYYY-MM-DD-runNN/`，记录 commit、本地改动、测试者、Asia/Shanghai时间、LLM模式/模型名、地址、种子摘要、日期策略。链接对应证据，不覆盖历史。
 
-建议每条证据以 `AC-08-create-response.json` / `AC-08-ticket-detail.png` 等命名。保存会话 ID、消息请求 ID、实际工单号、工具执行记录与前后状态快照。只保留必要的演示数据；HTTP 证据剔除 Authorization 和配置密钥。
-
-## 结果记录模板
-
-| 项目 | 填写内容 |
+| 字段 | 必填 |
 |---|---|
-| 用例 / 运行时间 / 测试者 | AC-xx / yyyy-MM-dd HH:mm:ss +08:00 / 姓名 |
-| 版本 / 环境 | commit、脏工作区说明、地址、LLM 模式 |
-| 数据前置 | 店铺、顾客、订单 ID、实际会话 ID |
-| 实际操作 | 原始消息、请求去重键、人工操作、刷新/重启步骤 |
-| 预期 / 实际 | 分别记录，不能复制预期作为实际 |
-| 状态 | PASS / FAIL / BLOCKED / NOT_RUN |
-| 证据 / 问题 | 相对路径、工单号、问题编号 |
-| 复验 | 修复版本、复验时间、复验结果 |
+| 用例 / 时间 / 测试者 | AC-xx、时间与人员 |
+| 版本 / 环境 | commit、本地变更、地址、LLM模式 |
+| 数据前置 | 店铺/顾客/订单、真实会话 ID |
+| 实际操作 | 消息、去重键、人工操作、刷新/重启 |
+| 预期 / 实际 | 分开记录，不能复制预期充当结果 |
+| 状态 / 证据 / 问题 | 实际状态、路径、真实编号、问题号 |
+| 复验 | 修复版本、时间及结果 |
 
-本目录脚本退出码：`preflight` 为 0（前后端基线可访问）/2（未就绪）；异常脚本故障为非零。预检成功仍需执行全部业务用例。
+HTTP 证据不保存 Authorization、密码或模型密钥。执行记录不能用模型推理文字代替。

@@ -1,63 +1,50 @@
-# C 成员演示数据交付
+# C 成员数据与联调交付
 
-交付日期：2026-10-18。业务需求依据：[`docs/requirements/README.md`](../docs/requirements/README.md)。
+更新：2026-10-19。当前集成基线为 main `99b5a48`；需求依据见 [需求 v0.2](../docs/requirements/README.md)。
 
-## 数据包内容
+## 当前使用的数据
 
-[`dataset.v1.json`](dataset.v1.json) 是完整、可解析的演示交换数据，包含 1 个商家、2 家店铺、6 位顾客、4 种商品、12 笔订单、8 份物流、10 条知识。会话、消息、工单和执行记录初始为空，必须由真实操作产生。
+真实 commerce 加载器读取 D 的 [demo-data.json](../backend/src/main/resources/commerce/demo-data.json)。C 的 [integration.v1.json](integration.v1.json) 直接引用它，记录身份、数量及三个故事，避免再维护一套不同订单。商家为 `demo-merchant`。
 
-| 平台 | 店铺 ID | 顾客 ID 后缀 | 用途 |
-|---|---|---|---|
-| 淘宝 | `demo-shop-taobao` | `tb-01` 小林 | 多笔保温杯订单，测试先选单再查物流 |
-| 淘宝 | 同上 | `tb-02` 小周 | 仅一笔杯子订单，另有延迟的收纳盒订单 |
-| 淘宝 | 同上 | `tb-03` 小陈 | 无订单 |
-| 抖店 | `demo-shop-douyin` | `dy-01` 小林 | 同名顾客、多笔订单及跨店隔离 |
-| 抖店 | 同上 | `dy-02` 小周 | 杯子退货建单与进度查询、收纳盒异常赔偿转人工 |
-| 抖店 | 同上 | `dy-03` 小陈 | 无订单 |
+| 代号 | 店铺 / 顾客 ID | 数据与用途 |
+|---|---|---|
+| TB1 淘宝小林 | demo-shop-tb / demo-customer-tb-1 | tb-01/02 两笔杯子；tb-02 未发货；tb-04 已取消 |
+| TB2 淘宝小周 | demo-shop-tb / demo-customer-tb-2 | tb-05 杯子延迟，单匹配及转人工；tb-06 收纳盒未发货 |
+| DY1 抖店小林 | demo-shop-dy / demo-customer-dy-1 | dy-01 杯子已签收，退货故事；dy-02/03 |
+| DY2 抖店小陈 | demo-shop-dy / demo-customer-dy-2 | dy-04/05/06；dy-06 毛巾运输中，不能用作延迟故事 |
 
-完整顾客 ID 为 `demo-customer-` 加表中后缀。两平台刻意复用 `buyer_001` 等平台侧标识及展示姓名；这些字段不能作为跨店查单的唯一身份。
+订单 ID 为 `demo-order-` 加表中后缀；真实单号见 [字段与订单对照](FIELD-MAPPING.md)。同名“小林”和平台侧 `buyer-001` 不能作为跨店唯一身份。
 
-两店都有同名“保温杯”和“收纳盒”；共用商品事实，售后规则及活动独立。淘宝退货申请窗口为 15 天，抖店为 7 天。这些都是虚构演示店规则，不代表平台政策。
+种子包含 2 店、4 顾客、3 种订单商品、12 订单、7 物流。商品统计来自订单中的不同 productId，**不代表知识商品表已加载 3 行**。4 位顾客都有订单，无订单顾客分支仍需 A/D 补种子。
+
+[knowledge.integration.v1.json](knowledge.integration.v1.json) 提供与 D 身份及商品 ID 对齐的 10 条知识材料，修正杯子同时有 500ml / 750ml 的事实。规则与活动为虚构演示店规则。A 尚未提供范围检索/加载契约，该文件是待接入交换数据，不能算作已启用的数据库知识。
 
 ## 校验与使用
 
-在仓库根目录，用 Node.js 20.19+ 执行，无第三方依赖：
+在仓库根目录使用 Node.js 20.19+，新脚本无需第三方依赖：
+
+```powershell
+node demo-data/scripts/check-integration.mjs
+node --test docs/acceptance/scripts/integration.test.mjs
+node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/commerce-latest.json
+```
+
+前两条分别检查离线数据、检查器回归（内存替身），通过不代表业务验收通过。第三条在 D 数据加载后仅访问本机10002的身份、订单、物流、工单查询接口；不加载/重置、不建单、不调用模型。退出码 0=PASS、1=响应与契约不符、2=不可达/超时。详见 [验收入口](../docs/acceptance/README.md)。
+
+D 的加载入口为 `POST /api/commerce/demo/load`，补齐缺失数据但不覆盖已有订单/工单；由操作者按 [D 契约](../docs/commerce-contract.md) 在正确数据库执行。C 的只读脚本不会自动写入。
+
+## 历史扩展草案
+
+2026-10-18 的 [dataset.v1.json](dataset.v1.json) 保留了 6 顾客、4 商品、12 订单、8 物流、10 知识的原始扩展设计。它的身份和订单与 D 不同，**不是当前加载器输入**。不要混用其中的 `demo-shop-taobao`、`demo-customer-tb-01` 或 `DEMO-TB-20261018-001`。
 
 ```powershell
 node demo-data/scripts/validate.mjs
-# 重复执行离线数据负例、加载器防重/冲突校验，并保存证据
-node demo-data/scripts/verify-package.mjs docs/acceptance/evidence/deliverable-checks-latest.json
-```
-
-校验订单归属、金额、商品引用、物流时序、双平台数据量、多订单/无订单案例和店铺规则差异。退出码 0 表示数据一致性校验通过，不代表系统功能验收通过。
-
-### 当前原项目可加载的子集
-
-现有接口只有商品/FAQ 等全局知识，缺少店铺归属。脚本仅映射 4 个商品和 2 条共用 FAQ，**不会导入两店不同的规则或活动**，防止把店铺专属政策混入全局检索。
-
-```powershell
-# 预览请求，不联网、不写库
+node demo-data/scripts/verify-package.mjs
 node demo-data/scripts/load-current-knowledge.mjs
-
-# 后端启动后，显式执行本地写入
-node demo-data/scripts/load-current-knowledge.mjs --apply
 ```
 
-目标固定为本机 `http://localhost:10002`。通过现有 CRUD 接口创建，自动取得数字主键；商品稳定编码为 `C-DEMO-*`，FAQ 标题带 `[C-DEMO-V1]`。再次执行会跳过相同记录；遇重复编码或内容冲突即停止，不覆盖已有数据。先完成全部冲突检查，再开始写入。
+这些旧检查仍可离线复验。旧知识加载器只预览原草案4商品、2共用FAQ；`--apply` 会写入全局知识，既不接 D 商品映射，也不支持店铺范围。当前真实集成不要用它导入新知识或店铺规则。10月18日原始数据和证据保持原样。
 
-创建状态沿用当前接口默认值（商品/FAQ 为草稿），脚本不擅自发布。当前 ChatService 未按发布状态过滤，不能把“草稿”理解为已经被检索排除。需要展示上架/启用状态时由 A/D 按实际接口处理。
+日期基准为 **2026-10-18 12:00，Asia/Shanghai**，所有日期是固定演示数据。当前加载器不平移日期；后续需 A/D 统一日期策略，不能只延长活动而让签收时间过期。
 
-网络超时可能发生在服务端写入之后；先检查记录，再重跑。该脚本不具备跨进程并发去重能力，**只由一位操作者串行运行**。它不提供删除或重置功能，不使用当前返回模拟结果的 `/import` 接口。
-
-### 新版完整数据接入
-
-完整包的 `contractStatus` 为 `DRAFT_FOR_A_D_MAPPING`。仓库尚无 A/D 的字段模板、commerce 实体和导入接口，不能把本包当成已落库的数据。A/D 按 [`FIELD-MAPPING.md`](FIELD-MAPPING.md) 映射到最终 DTO/实体，完成统一加载和重置；C 负责复验数据和演示。
-
-日期基准为 **2026-10-18 12:00:00，Asia/Shanghai**。后续演示必须整体平移日期或使用后端演示时钟，详见字段说明；不能仅改活动结束时间而让签收时间过期。
-
-## 关联交付物
-
-- [`验收用例`](../docs/acceptance/TEST-CASES.md)：AC-01～AC-22 的数据、操作与判定标准。
-- [`当前验收记录`](../docs/acceptance/RESULTS-2026-10-18.md)：真实执行结果与阻塞。
-- [`演示手册`](../docs/demo/RUNBOOK.md)：三个演示故事和启动步骤。
-- [`录像脚本`](../docs/demo/RECORDING.md)：待系统可用时录制的镜头与核对项。
+关联材料：[最新验收记录](../docs/acceptance/RESULTS-2026-10-19.md)、[用例](../docs/acceptance/TEST-CASES.md)、[演示手册](../docs/demo/RUNBOOK.md)、[录像准备](../docs/demo/RECORDING.md)。

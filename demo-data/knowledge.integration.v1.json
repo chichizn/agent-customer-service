@@ -1,0 +1,184 @@
+{
+  "version": "1.1.0",
+  "contractStatus": "WAITING_FOR_A_SCOPED_IMPORT",
+  "merchantId": "demo-merchant",
+  "referenceTime": "2026-10-18T12:00:00+08:00",
+  "knowledge": [
+    {
+      "id": "demo-knowledge-cup",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "PRODUCT",
+      "topic": "MATERIAL",
+      "title": "保温杯规格与容量",
+      "content": "演示订单的保温杯有白色500ml和黑色750ml两种规格。先确认具体订单或规格，再回答容量；未选规格不能一律答500ml。未提供材质检测报告或保温时长，不作相关保证。",
+      "productIds": [
+        "demo-product-cup"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1",
+      "specifications": [
+        "白色 500ml",
+        "黑色 750ml"
+      ]
+    },
+    {
+      "id": "demo-knowledge-box",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "PRODUCT",
+      "topic": "DIMENSIONS",
+      "title": "收纳盒规格",
+      "content": "演示订单收纳盒规格为透明中号。当前集成资料未提供长宽高、材质或微波适用性，不从旧草案推断。",
+      "productIds": [
+        "demo-product-box"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-ticket",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "TICKET_SCOPE",
+      "title": "本地服务工单的含义",
+      "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-logistics",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "NO_ETA",
+      "title": "物流时效说明",
+      "content": "物流以演示订单的实际节点为准。未提供预计送达时间时不能承诺明天到货；未发货和已取消订单没有运单。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-tb-return",
+      "merchantId": "demo-merchant",
+      "scope": "SHOP",
+      "shopId": "demo-shop-tb",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_WINDOW",
+      "title": "淘宝演示店退货期限",
+      "content": "本演示店普通商品签收后15天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非淘宝官方政策。",
+      "productIds": [],
+      "policy": {
+        "returnWindowDays": 15
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-dy-return",
+      "merchantId": "demo-merchant",
+      "scope": "SHOP",
+      "shopId": "demo-shop-dy",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_WINDOW",
+      "title": "抖店演示店退货期限",
+      "content": "本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+      "productIds": [],
+      "policy": {
+        "returnWindowDays": 7
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-tb-fee",
+      "merchantId": "demo-merchant",
+      "scope": "SHOP",
+      "shopId": "demo-shop-tb",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_SHIPPING",
+      "title": "淘宝演示店退货运费",
+      "content": "个人原因退货由顾客承担寄回运费；质量问题需商家审核后决定承担方式。不得自动承诺赔偿金额。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-dy-fee",
+      "merchantId": "demo-merchant",
+      "scope": "SHOP",
+      "shopId": "demo-shop-dy",
+      "kind": "SHOP_RULE",
+      "topic": "RETURN_SHIPPING",
+      "title": "抖店演示店退货运费",
+      "content": "本演示店个人原因退货可申请一次最高10元寄回运费补贴，需商家审核；额外赔偿需人工决定，不自动批准。",
+      "productIds": [],
+      "policy": {
+        "shippingSubsidyCapCents": 1000
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-tb-activity",
+      "merchantId": "demo-merchant",
+      "scope": "SHOP",
+      "shopId": "demo-shop-tb",
+      "kind": "ACTIVITY",
+      "topic": "DISCOUNT",
+      "title": "淘宝演示店收纳盒活动",
+      "content": "仅淘宝演示店收纳盒新订单单件9折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+      "productIds": [
+        "demo-product-box"
+      ],
+      "policy": {
+        "discountRate": 0.9,
+        "startsAt": "2026-10-01T00:00:00+08:00",
+        "endsAt": "2026-10-31T23:59:59+08:00"
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    },
+    {
+      "id": "demo-knowledge-dy-activity",
+      "merchantId": "demo-merchant",
+      "scope": "SHOP",
+      "shopId": "demo-shop-dy",
+      "kind": "ACTIVITY",
+      "topic": "DISCOUNT",
+      "title": "抖店演示店保温杯活动",
+      "content": "仅抖店演示店保温杯新订单单件95折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+      "productIds": [
+        "demo-product-cup"
+      ],
+      "policy": {
+        "discountRate": 0.95,
+        "startsAt": "2026-10-01T00:00:00+08:00",
+        "endsAt": "2026-10-31T23:59:59+08:00"
+      },
+      "status": "ACTIVE",
+      "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+      "demoNamespace": "customer-service-demo-v1"
+    }
+  ]
+}

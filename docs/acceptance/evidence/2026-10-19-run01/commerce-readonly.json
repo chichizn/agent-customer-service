@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-10-19T06:13:24.752Z",
+  "revision": "99b5a48a9f2dfda958eca86a055dac6dd62fdef8",
+  "scope": "READ_ONLY_COMMERCE_HTTP_NOT_CHAT_OR_FULL_ACCEPTANCE",
+  "baseUrl": "http://localhost:10002",
+  "status": "BLOCKED",
+  "checks": [
+    {
+      "name": "demo-identities",
+      "status": "BLOCKED",
+      "reason": "ECONNREFUSED"
+    }
+  ]
+}

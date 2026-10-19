@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-10-19T06:13:24.743Z",
+  "localTime": "2026-10-19 14:13:24 Asia/Shanghai",
+  "revision": "99b5a48a9f2dfda958eca86a055dac6dd62fdef8",
+  "scope": "READ_ONLY_ENVIRONMENT_CHECK; NOT AC-01–AC-22 acceptance",
+  "tools": {
+    "node": {
+      "availableInPath": true,
+      "version": "v24.19.0"
+    },
+    "java": {
+      "availableInPath": false
+    },
+    "mvn": {
+      "availableInPath": false
+    },
+    "pnpm": {
+      "availableInPath": true
+    },
+    "mysql": {
+      "availableInPath": false
+    },
+    "ffmpeg": {
+      "availableInPath": false
+    }
+  },
+  "files": {
+    "frontend/node_modules": true,
+    "backend/target": false,
+    "backend/src/main/resources/application-local.yml": false,
+    "frontend/.env": false,
+    "frontend/.env.local": false
+  },
+  "services": [
+    {
+      "name": "backend-knowledge-overview",
+      "url": "http://localhost:10002/api/knowledge/overview",
+      "method": "POST",
+      "reachable": false,
+      "status": "BLOCKED",
+      "reason": "ECONNREFUSED"
+    },
+    {
+      "name": "frontend-20002",
+      "url": "http://localhost:20002/",
+      "method": "GET",
+      "reachable": false,
+      "status": "BLOCKED",
+      "reason": "ECONNREFUSED"
+    },
+    {
+      "name": "frontend-3100",
+      "url": "http://localhost:3100/",
+      "method": "GET",
+      "reachable": false,
+      "status": "BLOCKED",
+      "reason": "ECONNREFUSED"
+    },
+    {
+      "name": "frontend-5173",
+      "url": "http://localhost:5173/",
+      "method": "GET",
+      "reachable": false,
+      "status": "BLOCKED",
+      "reason": "ECONNREFUSED"
+    }
+  ]
+}
