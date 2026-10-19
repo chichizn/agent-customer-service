@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-10-19T17:02:08.221Z",
+  "revision": "bf37d962eb6cbb7c74f1c1ed6b91c0568a8cff9d",
+  "workspaceDirty": true,
+  "scope": "ISOLATED_MYSQL_WORKBENCH_HTTP_SMOKE_WRITES_SESSIONS_AND_MESSAGES",
+  "baseUrl": "http://127.0.0.1:10002",
+  "backendDatabase": "agent_customer_service_acceptance_20261019",
+  "model": "disabled",
+  "resetCalled": false,
+  "createdSessionIds": {
+    "TB3": "aeeaa4ff-6c24-4cb9-8af0-232c66ce7408",
+    "TB1": "dd9646a6-cb62-4f7c-8dac-86b924f3ab44",
+    "policy-tb": "40bfec6b-005f-47a9-abf3-d9d9594ccb34",
+    "policy-dy": "8787a702-49d4-461d-bbb9-adee0aa05822",
+    "handoff": "e712a7a2-0501-4e7f-ac2c-e7fe9eab66d0"
+  },
+  "generatedMessageIds": [
+    "smoke-2dbac309-58f9-43d2-9073-d6eaab8fe1bc",
+    "idempotency-a15daec1-66c7-445a-941b-26c8421d8f20",
+    "smoke-8d07d79e-a7f8-4bc3-ac7c-65bdd77b0fab",
+    "smoke-f1e11b13-d667-42a1-8d59-92aa7ff4e41a",
+    "smoke-c29cdc09-c026-4fe4-a2ff-5b70901b3295",
+    "smoke-0b409276-0f76-487b-bfb1-c65e8f1be872",
+    "smoke-12398cb6-8f08-4cae-bf54-e0b4536056a1",
+    "smoke-6a711b39-3f7c-4ea5-ad60-715b7894e355",
+    "smoke-4486ecb6-74c2-4e1a-b168-0ae202ded66c",
+    "smoke-5eb19354-0dec-4ad3-9ef2-f0f982e2f69f",
+    "human-73bc0050-b8ff-4051-9a36-64b630268098",
+    "smoke-1b189005-bf72-4ed9-9771-b2392228c009"
+  ],
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "TB3 valid identity has no orders or logistics",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "aeeaa4ff-6c24-4cb9-8af0-232c66ce7408",
+        "orderCount": 0,
+        "logisticsCount": 0
+      }
+    },
+    {
+      "name": "same customer message id is idempotent and immutable",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "aeeaa4ff-6c24-4cb9-8af0-232c66ce7408",
+        "messageCount": 5,
+        "changedContentStatus": 409
+      }
+    },
+    {
+      "name": "multi-order clarification, owned logistics and scope isolation",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "dd9646a6-cb62-4f7c-8dac-86b924f3ab44",
+        "clarifiedOrders": [
+          "demo-order-tb-01",
+          "demo-order-tb-02"
+        ],
+        "selectedOrderId": "demo-order-tb-01",
+        "logistics": "DEMO-TB-0001 / 杭州",
+        "crossShop": "not found",
+        "crossCustomer": "not found"
+      }
+    },
+    {
+      "name": "return policy knowledge stays within each shop",
+      "status": "PASS",
+      "evidence": {
+        "taobao": "15天",
+        "douyin": "7天"
+      }
+    },
+    {
+      "name": "model-disabled return request hands off without creating a ticket",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "e712a7a2-0501-4e7f-ac2c-e7fe9eab66d0",
+        "receptionMode": "WAITING_HUMAN",
+        "handoffSummary": "转交原因：模型不可用，写入诉求需商家处理；订单 DY202610100001；订单：demo-order-dy-01；诉求：RETURN；原因：不喜欢颜色；顾客最近消息：我想退货 DY202610100001，原因是不喜欢颜色；已有工单：无；待决定：请商家核实并回复，不代表已执行平台退款。",
+        "ticketCount": 0
+      }
+    },
+    {
+      "name": "human takeover, manual message idempotency and explicit AI return",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "e712a7a2-0501-4e7f-ac2c-e7fe9eab66d0",
+        "preservedHandoffSummary": "转交原因：模型不可用，写入诉求需商家处理；订单 DY202610100001；订单：demo-order-dy-01；诉求：RETURN；原因：不喜欢颜色；顾客最近消息：我想退货 DY202610100001，原因是不喜欢颜色；已有工单：无；待决定：请商家核实并回复，不代表已执行平台退款。",
+        "customerMessageRole": "customer",
+        "humanMessageCount": 1,
+        "aiReturn": "next customer message only",
+        "restored": true
+      }
+    }
+  ]
+}

@@ -134,14 +134,20 @@ await check('model-disabled return request hands off without creating a ticket',
   assert.equal(result.session.receptionMode, 'WAITING_HUMAN')
   assert.equal(result.awaitingConfirmation, false)
   assert.equal(result.tickets.length, 0)
+  assert.ok(result.session.handoffSummary.includes('我想退货 DY202610100001，原因是不喜欢颜色'))
+  assert.ok(result.session.handoffSummary.includes('诉求：RETURN'))
   assert.ok(result.executions.some(e => e.action === 'handoff_to_human' && e.status === 'SUCCESS'))
-  return { sessionId: s.session.sessionId, receptionMode: result.session.receptionMode, ticketCount: result.tickets.length }
+  return { sessionId: s.session.sessionId, receptionMode: result.session.receptionMode,
+    handoffSummary: result.session.handoffSummary, ticketCount: result.tickets.length }
 })
 
 await check('human takeover, manual message idempotency and explicit AI return', async () => {
   const sessionId = sessions.handoff
   assert.ok(sessionId, 'handoff prerequisite session was not created')
+  const waiting = await post('/api/chat/session/snapshot', { sessionId })
   const taken = await post('/api/chat/session/reception/update', { sessionId, receptionMode: 'HUMAN' })
+  assert.equal(taken.session.handoffSummary, waiting.session.handoffSummary)
+  assert.equal(taken.awaitingConfirmation, false)
   const before = taken.messages.length
   const customer = await send(sessionId, '查询退货规则')
   assert.equal(customer.session.receptionMode, 'HUMAN')
@@ -165,7 +171,8 @@ await check('human takeover, manual message idempotency and explicit AI return',
   const restored = await post('/api/chat/session/open', { shopId: 'demo-shop-dy', customerId: 'demo-customer-dy-1', forceNew: false })
   assert.equal(restored.session.sessionId, sessionId)
   assert.equal(restored.messages.length, resumed.messages.length)
-  return { sessionId, customerMessageRole: customer.messages.at(-1).role,
+  return { sessionId, preservedHandoffSummary: taken.session.handoffSummary,
+    customerMessageRole: customer.messages.at(-1).role,
     humanMessageCount: 1, aiReturn: 'next customer message only', restored: true }
 })
 

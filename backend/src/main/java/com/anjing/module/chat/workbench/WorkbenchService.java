@@ -277,9 +277,12 @@ public class WorkbenchService {
         return tx(() -> {
             ChatSession s = lockSession(request.sessionId());
             if (!request.receptionMode().equals(s.getReceptionMode())) {
+                // Capture pending details before invalidation, and keep the existing transfer brief when accepting it.
+                if ("HUMAN".equals(request.receptionMode()) && (!"WAITING_HUMAN".equals(s.getReceptionMode()) ||
+                    s.getHandoffSummary()==null || s.getHandoffSummary().isBlank()))
+                    s.setHandoffSummary(summary(s,"商家主动接管"));
                 invalidate(s); clearPending(s);
                 s.setReceptionMode(request.receptionMode());
-                if ("HUMAN".equals(request.receptionMode())) s.setHandoffSummary(summary(s,"商家主动接管"));
                 messages.save(addMessage(s,"system","HUMAN".equals(request.receptionMode())?"商家已接管会话。":"已交回 AI，由下一条顾客消息触发处理。",null,List.of(),null));
                 execution(s,"handoff_to_human","SUCCESS","接待模式切换为 "+request.receptionMode(),null); touch(s);
             }
@@ -376,8 +379,11 @@ public class WorkbenchService {
     }
     private String summary(ChatSession s,String reason) {
         var tickets = commerce.getServiceTicket(new TicketQuery(scope(s),null,null,null));
+        String latestCustomerMessage = history(s).stream().filter(m -> "customer".equals(m.getRole()))
+            .reduce((previous,current) -> current).map(ChatMessage::getContent).orElse("未提供");
         return "转交原因："+reason+"；订单："+Objects.toString(s.getSelectedOrderId(),"未确认")+
             "；诉求："+Objects.toString(s.getPendingAction(),"待补充")+"；原因："+Objects.toString(s.getPendingReason(),"待补充")+
+            "；顾客最近消息："+latestCustomerMessage+
             "；已有工单："+tickets.stream().map(t -> t.ticketNumber()+"/"+t.status()).reduce((a,b)->a+"、"+b).orElse("无")+
             "；待决定：请商家核实并回复，不代表已执行平台退款。";
     }

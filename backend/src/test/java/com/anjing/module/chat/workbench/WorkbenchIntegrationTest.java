@@ -208,6 +208,41 @@ class WorkbenchIntegrationTest {
         assertThat(last(write)).contains("等待人工");
     }
 
+    @Test void waitingHumanSummarySurvivesTakeoverAndRepeatedReception() {
+        when(llm.analyzeUserInput(anyString())).thenReturn(null);
+        String id = open("dy").session().sessionId();
+        String complaint = "订单 DY202610100001 的杯子漏水，想退货";
+        var waiting = send(id,"summary-1",complaint);
+        String summary = waiting.session().handoffSummary();
+        assertThat(summary).contains(complaint,"RETURN","demo-order-dy-01");
+
+        var taken = service.reception(new WorkbenchDTO.Reception(id,"HUMAN"));
+        assertThat(taken.session().handoffSummary()).isEqualTo(summary);
+        assertThat(taken.awaitingConfirmation()).isFalse();
+        var repeated = service.reception(new WorkbenchDTO.Reception(id,"HUMAN"));
+        assertThat(repeated.messages()).hasSize(taken.messages().size());
+        assertThat(fetch(id).session().handoffSummary()).isEqualTo(summary);
+        assertThat(tickets.count()).isZero();
+    }
+
+    @Test void directTakeoverCapturesPendingRequestBeforeClearingAndRebuildsForLaterRound() {
+        String id = open("dy").session().sessionId();
+        String complaint = "想退货 DY202610100001，原因是杯盖漏水";
+        assertThat(send(id,"direct-1",complaint).awaitingConfirmation()).isTrue();
+
+        var taken = service.reception(new WorkbenchDTO.Reception(id,"HUMAN"));
+        assertThat(taken.session().handoffSummary()).contains(complaint,"诉求：RETURN","原因：杯盖漏水");
+        assertThat(taken.awaitingConfirmation()).isFalse();
+        assertThat(sessions.findById(id).orElseThrow().getPendingAction()).isNull();
+
+        service.reception(new WorkbenchDTO.Reception(id,"AI"));
+        String query = "查询 DY202610100001 物流";
+        send(id,"direct-2",query);
+        var later = service.reception(new WorkbenchDTO.Reception(id,"HUMAN"));
+        assertThat(later.session().handoffSummary()).contains(query).doesNotContain(complaint,"原因：杯盖漏水");
+        assertThat(tickets.count()).isZero();
+    }
+
     @Test void scopedKnowledgeIsPersistedAndCannotCrossShops() {
         var tb = send(open("tb").session().sessionId(),"k1","退货期限几天");
         var dy = send(open("dy").session().sessionId(),"k2","退货期限几天");

@@ -1,0 +1,41 @@
+{
+  "executedAt": "2026-10-19T17:07:14.098Z",
+  "revision": "bf37d962eb6cbb7c74f1c1ed6b91c0568a8cff9d",
+  "workspaceDirty": true,
+  "scope": "PARTIAL_DUAL_BROWSER_HANDOFF_SMOKE",
+  "database": "agent_customer_service_acceptance_20261019",
+  "model": "disabled",
+  "customerUrl": "http://127.0.0.1:20002/#/customer-simulator",
+  "workbenchUrl": "http://127.0.0.1:20002/#/customer-workbench-preview",
+  "sessionId": "a4d154e7-4d9a-41a4-a3a3-47433d43e3a3",
+  "beforeFixSessionId": "d87da00c-219a-45cd-ae66-86562c27c6aa",
+  "initialComplaint": "订单 DY202610100001 的杯子漏水，想退货",
+  "waitingSummary": "转交原因：模型不可用，写入诉求需商家处理；订单 DY202610100001；订单：demo-order-dy-01；诉求：RETURN；原因：待补充；顾客最近消息：订单 DY202610100001 的杯子漏水，想退货；已有工单：无；待决定：请商家核实并回复，不代表已执行平台退款。",
+  "takenSummary": "转交原因：模型不可用，写入诉求需商家处理；订单 DY202610100001；订单：demo-order-dy-01；诉求：RETURN；原因：待补充；顾客最近消息：订单 DY202610100001 的杯子漏水，想退货；已有工单：无；待决定：请商家核实并回复，不代表已执行平台退款。",
+  "checks": {
+    "summaryPreserved": true,
+    "humanCustomerMessages": [
+      "有人吗",
+      "现在处理了吗",
+      "再帮我提交退货申请"
+    ],
+    "humanReply": "已收到，我来核实杯子漏水情况。售后诉求需商家审核。",
+    "manualReplyVisibleOnCustomer": true,
+    "aiReplyLabelsBeforeReturn": 1,
+    "aiReplyLabelsAfterReturnBeforeNewMessage": 1,
+    "newMessageAfterAiReturn": "店铺的退货规则是什么？",
+    "newReplyUsesRulesFallback": true,
+    "customerRestore": {
+      "action": "reload then explicitly click 恢复最近会话 ↗",
+      "sameSession": true,
+      "sameMessageText": true
+    },
+    "workbenchReloadPreservesSummary": true,
+    "ticketPanel": "暂无本地服务工单"
+  },
+  "fullAcceptanceStatus": {
+    "pass": 0,
+    "fail": 0,
+    "blocked": 22
+  }
+}
