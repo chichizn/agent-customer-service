@@ -18,6 +18,15 @@ node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/comm
 node docs/acceptance/scripts/workbench-smoke.mjs --allow-write --database agent_customer_service_acceptance_20261019 docs/acceptance/evidence/workbench-latest.json
 ```
 
+统一重置 API 验收会先保存完整前置快照，验证未确认请求不改数据，再连续确认重置两次、核对演示会话/消息/工单/执行记录清空及10条范围知识恢复，最后再次重置清理验收会话。种子文件按脚本位置解析，可从任意工作目录启动。先运行只读快照并检查 API 实际连接的库，再运行写入流程：
+
+```powershell
+node docs/acceptance/scripts/demo-reset-smoke.mjs --capture-only --database agent_customer_service_acceptance_20261019 docs/acceptance/evidence/reset-before.json
+node docs/acceptance/scripts/demo-reset-smoke.mjs --allow-write --database agent_customer_service_acceptance_20261019 docs/acceptance/evidence/reset-smoke.json
+```
+
+`--capture-only` 只读并保存完整快照；`--allow-write` 会调用统一重置并创建临时知识验证会话，结束时再次重置。脚本固定本机 `127.0.0.1:10002` 和隔离库名称，但这不能证明服务当前连接的数据库；执行写入前必须由操作者核实数据源。严禁对日常开发库或真实业务库执行。该脚本只测 API，不覆盖 UI 弹窗取消、另一标签页刷新提示或非演示会话保留；这些边界仍需按 AC-22 用浏览器验收。
+
 `commerce-readonly.mjs` 只访问本机10002的4类 POST 查询：身份、订单、物流、工单；检查5位顾客归属（含 TB3 空订单身份）、订单/物流内容、多单/单号匹配、外店/外顾客/不存在订单不可见。不加载/重置、不创建工单、不调用模型。工单为空时只能证明查询可用，不能计为建单或工单隔离已验收。显式 scope 也不能代替 A 会话身份校验。
 
 工作台冒烟脚本会创建并保留会话及消息，不重置数据、不建工单，也不调用模型。它只接受回环地址，并固定记录名为 `agent_customer_service_acceptance_20261019` 的目标；运行前仍须核实 10002 后端实际连接的库确为本轮隔离库。不要对日常开发库或真实业务库运行。
@@ -38,6 +47,7 @@ node docs/acceptance/scripts/workbench-restart-check.mjs verify docs/acceptance/
 | commerce-readonly | 0 / 1 / 2 | 查询响应符合种子 / 响应不符 / 不可达或超时 |
 | workbench-smoke | 0 / 非0 | 六组有限工作台 HTTP 检查通过 / 失败，写入会话和消息 |
 | workbench-restart-check | 0 / 非0 | 重启前快照捕获或重启后完整快照一致 / 失败，仅查询 |
+| demo-reset-smoke | 0 / 1 / 2 | 隔离库重置流程及知识恢复通过 / 断言失败 / 参数不符；`--allow-write` 会清理演示数据 |
 
 旧数据/加载器回归用 `node demo-data/scripts/verify-package.mjs`；不传输出路径可避免覆盖历史证据。
 

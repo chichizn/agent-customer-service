@@ -1,0 +1,972 @@
+{
+  "generatedAt": "2026-10-19T19:00:55.072Z",
+  "revision": "9cd4c582657d390ce8564bec4d1d0d17759c908a",
+  "workspaceDirty": true,
+  "scope": "READ_ONLY_COMMERCE_HTTP_NOT_CHAT_OR_FULL_ACCEPTANCE",
+  "baseUrl": "http://localhost:10002",
+  "assertionNote": "Node REPL module arrays normalized via JSON for cross-context comparison",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "demo-identities",
+      "status": "PASS",
+      "evidence": {
+        "merchantId": "demo-merchant",
+        "merchantName": "安静生活演示商家",
+        "shops": [
+          {
+            "shopId": "demo-shop-dy",
+            "name": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customers": [
+              {
+                "customerId": "demo-customer-dy-1",
+                "platformUserId": "buyer-001",
+                "name": "小林"
+              },
+              {
+                "customerId": "demo-customer-dy-2",
+                "platformUserId": "buyer-002",
+                "name": "小陈"
+              }
+            ]
+          },
+          {
+            "shopId": "demo-shop-tb",
+            "name": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customers": [
+              {
+                "customerId": "demo-customer-tb-1",
+                "platformUserId": "buyer-001",
+                "name": "小林"
+              },
+              {
+                "customerId": "demo-customer-tb-2",
+                "platformUserId": "buyer-002",
+                "name": "小周"
+              },
+              {
+                "customerId": "demo-customer-tb-3",
+                "platformUserId": "buyer-empty-003",
+                "name": "小许（无订单测试）"
+              }
+            ]
+          }
+        ],
+        "businessTime": {
+          "mode": "fixed",
+          "effectiveAt": "2026-10-18T12:00:00+08:00",
+          "timeZone": "Asia/Shanghai"
+        }
+      }
+    },
+    {
+      "name": "TB1: order scope and amounts",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NEED_SELECTION",
+        "orders": [
+          {
+            "orderId": "demo-order-tb-02",
+            "orderNumber": "TB202610110002",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "itemId": "demo-order-tb-02-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "黑色 750ml",
+                "quantity": 1,
+                "unitPrice": 69
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 69,
+            "status": "PENDING_SHIPMENT",
+            "orderedAt": "2026-10-11T10:00:00"
+          },
+          {
+            "orderId": "demo-order-tb-01",
+            "orderNumber": "TB202610100001",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "itemId": "demo-order-tb-01-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 59
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 59,
+            "status": "SHIPPED",
+            "orderedAt": "2026-10-10T09:00:00"
+          },
+          {
+            "orderId": "demo-order-tb-03",
+            "orderNumber": "TB202610090003",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "itemId": "demo-order-tb-03-item-1",
+                "productId": "demo-product-box",
+                "productName": "收纳盒",
+                "specification": "透明中号",
+                "quantity": 2,
+                "unitPrice": 39
+              }
+            ],
+            "totalQuantity": 2,
+            "actualPaid": 78,
+            "status": "DELIVERED",
+            "orderedAt": "2026-10-09T11:00:00"
+          },
+          {
+            "orderId": "demo-order-tb-04",
+            "orderNumber": "TB202610080004",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "itemId": "demo-order-tb-04-item-1",
+                "productId": "demo-product-towel",
+                "productName": "纯棉毛巾",
+                "specification": "蓝色",
+                "quantity": 1,
+                "unitPrice": 19
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 0,
+            "status": "CANCELLED",
+            "orderedAt": "2026-10-08T12:00:00"
+          }
+        ],
+        "message": "找到多笔订单，请顾客选择后再继续"
+      }
+    },
+    {
+      "name": "TB1: ticket ownership",
+      "status": "PASS",
+      "evidence": []
+    },
+    {
+      "name": "demo-order-tb-01: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-tb-01",
+        "available": true,
+        "unavailableReason": null,
+        "carrier": "演示快递",
+        "trackingNumber": "DEMO-TB-0001",
+        "status": "运输中",
+        "nodes": [
+          {
+            "nodeId": "demo-order-tb-01-node-1",
+            "occurredAt": "2026-10-11T10:00:00",
+            "description": "商家已交寄"
+          },
+          {
+            "nodeId": "demo-order-tb-01-node-2",
+            "occurredAt": "2026-10-12T08:30:00",
+            "description": "到达杭州转运中心"
+          }
+        ]
+      }
+    },
+    {
+      "name": "demo-order-tb-02: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-tb-02",
+        "available": false,
+        "unavailableReason": "订单尚未发货，暂无物流",
+        "carrier": null,
+        "trackingNumber": null,
+        "status": null,
+        "nodes": []
+      }
+    },
+    {
+      "name": "demo-order-tb-03: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-tb-03",
+        "available": true,
+        "unavailableReason": null,
+        "carrier": "演示快递",
+        "trackingNumber": "DEMO-TB-0003",
+        "status": "已签收",
+        "nodes": [
+          {
+            "nodeId": "demo-order-tb-03-node-1",
+            "occurredAt": "2026-10-10T09:00:00",
+            "description": "商家已交寄"
+          },
+          {
+            "nodeId": "demo-order-tb-03-node-2",
+            "occurredAt": "2026-10-12T15:00:00",
+            "description": "顾客已签收"
+          }
+        ]
+      }
+    },
+    {
+      "name": "demo-order-tb-04: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-tb-04",
+        "available": false,
+        "unavailableReason": "订单已取消，暂无可查询物流",
+        "carrier": null,
+        "trackingNumber": null,
+        "status": null,
+        "nodes": []
+      }
+    },
+    {
+      "name": "TB2: order scope and amounts",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NEED_SELECTION",
+        "orders": [
+          {
+            "orderId": "demo-order-tb-06",
+            "orderNumber": "TB202610130006",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-2",
+            "items": [
+              {
+                "itemId": "demo-order-tb-06-item-1",
+                "productId": "demo-product-box",
+                "productName": "收纳盒",
+                "specification": "透明中号",
+                "quantity": 1,
+                "unitPrice": 39
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 39,
+            "status": "PENDING_SHIPMENT",
+            "orderedAt": "2026-10-13T14:00:00"
+          },
+          {
+            "orderId": "demo-order-tb-05",
+            "orderNumber": "TB202610120005",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-2",
+            "items": [
+              {
+                "itemId": "demo-order-tb-05-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 59
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 59,
+            "status": "SHIPPED",
+            "orderedAt": "2026-10-12T13:00:00"
+          }
+        ],
+        "message": "找到多笔订单，请顾客选择后再继续"
+      }
+    },
+    {
+      "name": "TB2: ticket ownership",
+      "status": "PASS",
+      "evidence": []
+    },
+    {
+      "name": "demo-order-tb-05: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-tb-05",
+        "available": true,
+        "unavailableReason": null,
+        "carrier": "演示快递",
+        "trackingNumber": "DEMO-TB-0005",
+        "status": "运输延迟，待核实",
+        "nodes": [
+          {
+            "nodeId": "demo-order-tb-05-node-1",
+            "occurredAt": "2026-10-13T10:00:00",
+            "description": "商家已交寄"
+          },
+          {
+            "nodeId": "demo-order-tb-05-node-2",
+            "occurredAt": "2026-10-14T16:00:00",
+            "description": "转运异常，需联系承运商核实；未提供预计送达时间"
+          }
+        ]
+      }
+    },
+    {
+      "name": "demo-order-tb-06: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-tb-06",
+        "available": false,
+        "unavailableReason": "订单尚未发货，暂无物流",
+        "carrier": null,
+        "trackingNumber": null,
+        "status": null,
+        "nodes": []
+      }
+    },
+    {
+      "name": "TB3: order scope and amounts",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NOT_FOUND",
+        "orders": [],
+        "message": "当前店铺和顾客下未找到匹配订单"
+      }
+    },
+    {
+      "name": "TB3: ticket ownership",
+      "status": "PASS",
+      "evidence": []
+    },
+    {
+      "name": "DY1: order scope and amounts",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NEED_SELECTION",
+        "orders": [
+          {
+            "orderId": "demo-order-dy-03",
+            "orderNumber": "DY202610120003",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-1",
+            "items": [
+              {
+                "itemId": "demo-order-dy-03-item-1",
+                "productId": "demo-product-towel",
+                "productName": "纯棉毛巾",
+                "specification": "蓝色",
+                "quantity": 1,
+                "unitPrice": 18
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 18,
+            "status": "PENDING_SHIPMENT",
+            "orderedAt": "2026-10-12T11:00:00"
+          },
+          {
+            "orderId": "demo-order-dy-02",
+            "orderNumber": "DY202610110002",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-1",
+            "items": [
+              {
+                "itemId": "demo-order-dy-02-item-1",
+                "productId": "demo-product-box",
+                "productName": "收纳盒",
+                "specification": "透明中号",
+                "quantity": 1,
+                "unitPrice": 35
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 35,
+            "status": "SHIPPED",
+            "orderedAt": "2026-10-11T10:00:00"
+          },
+          {
+            "orderId": "demo-order-dy-01",
+            "orderNumber": "DY202610100001",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-1",
+            "items": [
+              {
+                "itemId": "demo-order-dy-01-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 49
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 49,
+            "status": "DELIVERED",
+            "orderedAt": "2026-10-10T09:00:00"
+          }
+        ],
+        "message": "找到多笔订单，请顾客选择后再继续"
+      }
+    },
+    {
+      "name": "DY1: ticket ownership",
+      "status": "PASS",
+      "evidence": [
+        {
+          "ticketId": "7a533a11-ace2-41cd-9334-2c91d77aa875",
+          "ticketNumber": "ST5C8D8B98E7DB4E9BBB62AAA90DDE538B",
+          "merchantId": "demo-merchant",
+          "shopId": "demo-shop-dy",
+          "customerId": "demo-customer-dy-1",
+          "orderId": "demo-order-dy-01",
+          "orderNumber": "DY202610100001",
+          "sessionId": "cd86a458-a327-4d83-9b7d-22bf05ec1728",
+          "ticketType": "RETURN_REQUEST",
+          "reason": "run08 isolated status lifecycle test rejection",
+          "status": "REJECTED",
+          "platformAfterSaleStatus": "NOT_SUBMITTED_TO_PLATFORM",
+          "createdAt": "2026-10-20T02:57:21.334375",
+          "updatedAt": "2026-10-20T02:57:21.346396",
+          "history": [
+            {
+              "historyId": "f522886e-493c-4e4c-8f80-740f80aced9b",
+              "fromStatus": null,
+              "toStatus": "PENDING_REVIEW",
+              "note": "已记录诉求，待商家审核",
+              "operatorId": "demo-customer-dy-1",
+              "occurredAt": "2026-10-20T02:57:21.334375"
+            },
+            {
+              "historyId": "075234ed-d001-4d38-a0a0-5461e6ec60c0",
+              "fromStatus": "PENDING_REVIEW",
+              "toStatus": "REJECTED",
+              "note": "当前不符合退货处理条件，已说明原因",
+              "operatorId": "run08-test-operator",
+              "occurredAt": "2026-10-20T02:57:21.346396"
+            }
+          ]
+        },
+        {
+          "ticketId": "b9eb1ccc-b310-48a9-827b-776cb191c473",
+          "ticketNumber": "ST5415CDB1B08B4082B2F1C576AFA88362",
+          "merchantId": "demo-merchant",
+          "shopId": "demo-shop-dy",
+          "customerId": "demo-customer-dy-1",
+          "orderId": "demo-order-dy-01",
+          "orderNumber": "DY202610100001",
+          "sessionId": "21a2b396-bd01-49d1-9c66-454ad7a2096f",
+          "ticketType": "RETURN_REQUEST",
+          "reason": "run08 isolated status lifecycle test lifecycle",
+          "status": "COMPLETED",
+          "platformAfterSaleStatus": "NOT_SUBMITTED_TO_PLATFORM",
+          "createdAt": "2026-10-20T02:57:21.266972",
+          "updatedAt": "2026-10-20T02:57:21.302973",
+          "history": [
+            {
+              "historyId": "70bbc00e-78db-410f-8bad-9c99cc038752",
+              "fromStatus": null,
+              "toStatus": "PENDING_REVIEW",
+              "note": "已记录诉求，待商家审核",
+              "operatorId": "demo-customer-dy-1",
+              "occurredAt": "2026-10-20T02:57:21.266972"
+            },
+            {
+              "historyId": "4bf947cf-ba8e-42dd-b2f9-4f559f78e736",
+              "fromStatus": "PENDING_REVIEW",
+              "toStatus": "PROCESSING",
+              "note": "已联系顾客核实退货诉求",
+              "operatorId": "run08-test-operator",
+              "occurredAt": "2026-10-20T02:57:21.287973"
+            },
+            {
+              "historyId": "ab459da4-cd30-4340-9924-5995e1ad12f5",
+              "fromStatus": "PROCESSING",
+              "toStatus": "COMPLETED",
+              "note": "本地诉求已处理，平台结果另行确认",
+              "operatorId": "run08-test-operator",
+              "occurredAt": "2026-10-20T02:57:21.301972"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "demo-order-dy-01: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-dy-01",
+        "available": true,
+        "unavailableReason": null,
+        "carrier": "演示速运",
+        "trackingNumber": "DEMO-DY-0001",
+        "status": "已签收",
+        "nodes": [
+          {
+            "nodeId": "demo-order-dy-01-node-1",
+            "occurredAt": "2026-10-11T09:00:00",
+            "description": "商家已交寄"
+          },
+          {
+            "nodeId": "demo-order-dy-01-node-2",
+            "occurredAt": "2026-10-13T14:00:00",
+            "description": "顾客已签收"
+          }
+        ]
+      }
+    },
+    {
+      "name": "demo-order-dy-02: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-dy-02",
+        "available": true,
+        "unavailableReason": null,
+        "carrier": "演示速运",
+        "trackingNumber": "DEMO-DY-0002",
+        "status": "运输中",
+        "nodes": [
+          {
+            "nodeId": "demo-order-dy-02-node-1",
+            "occurredAt": "2026-10-12T10:00:00",
+            "description": "商家已交寄"
+          },
+          {
+            "nodeId": "demo-order-dy-02-node-2",
+            "occurredAt": "2026-10-13T11:00:00",
+            "description": "到达上海转运中心"
+          }
+        ]
+      }
+    },
+    {
+      "name": "demo-order-dy-03: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-dy-03",
+        "available": false,
+        "unavailableReason": "订单尚未发货，暂无物流",
+        "carrier": null,
+        "trackingNumber": null,
+        "status": null,
+        "nodes": []
+      }
+    },
+    {
+      "name": "DY2: order scope and amounts",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NEED_SELECTION",
+        "orders": [
+          {
+            "orderId": "demo-order-dy-06",
+            "orderNumber": "DY202610140006",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-2",
+            "items": [
+              {
+                "itemId": "demo-order-dy-06-item-1",
+                "productId": "demo-product-towel",
+                "productName": "纯棉毛巾",
+                "specification": "蓝色",
+                "quantity": 1,
+                "unitPrice": 18
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 18,
+            "status": "SHIPPED",
+            "orderedAt": "2026-10-14T14:00:00"
+          },
+          {
+            "orderId": "demo-order-dy-05",
+            "orderNumber": "DY202610130005",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-2",
+            "items": [
+              {
+                "itemId": "demo-order-dy-05-item-1",
+                "productId": "demo-product-box",
+                "productName": "收纳盒",
+                "specification": "透明中号",
+                "quantity": 1,
+                "unitPrice": 35
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 0,
+            "status": "CANCELLED",
+            "orderedAt": "2026-10-13T13:00:00"
+          },
+          {
+            "orderId": "demo-order-dy-04",
+            "orderNumber": "DY202610090004",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-2",
+            "items": [
+              {
+                "itemId": "demo-order-dy-04-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 49
+              },
+              {
+                "itemId": "demo-order-dy-04-item-2",
+                "productId": "demo-product-box",
+                "productName": "收纳盒",
+                "specification": "透明中号",
+                "quantity": 1,
+                "unitPrice": 35
+              }
+            ],
+            "totalQuantity": 2,
+            "actualPaid": 84,
+            "status": "DELIVERED",
+            "orderedAt": "2026-10-09T12:00:00"
+          }
+        ],
+        "message": "找到多笔订单，请顾客选择后再继续"
+      }
+    },
+    {
+      "name": "DY2: ticket ownership",
+      "status": "PASS",
+      "evidence": []
+    },
+    {
+      "name": "demo-order-dy-04: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-dy-04",
+        "available": true,
+        "unavailableReason": null,
+        "carrier": "演示速运",
+        "trackingNumber": "DEMO-DY-0004",
+        "status": "已签收",
+        "nodes": [
+          {
+            "nodeId": "demo-order-dy-04-node-1",
+            "occurredAt": "2026-10-10T08:00:00",
+            "description": "商家已交寄"
+          },
+          {
+            "nodeId": "demo-order-dy-04-node-2",
+            "occurredAt": "2026-10-12T12:00:00",
+            "description": "顾客已签收"
+          }
+        ]
+      }
+    },
+    {
+      "name": "demo-order-dy-05: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-dy-05",
+        "available": false,
+        "unavailableReason": "订单已取消，暂无可查询物流",
+        "carrier": null,
+        "trackingNumber": null,
+        "status": null,
+        "nodes": []
+      }
+    },
+    {
+      "name": "demo-order-dy-06: logistics",
+      "status": "PASS",
+      "evidence": {
+        "orderId": "demo-order-dy-06",
+        "available": true,
+        "unavailableReason": null,
+        "carrier": "演示速运",
+        "trackingNumber": "DEMO-DY-0006",
+        "status": "运输中",
+        "nodes": [
+          {
+            "nodeId": "demo-order-dy-06-node-1",
+            "occurredAt": "2026-10-15T09:00:00",
+            "description": "商家已交寄"
+          },
+          {
+            "nodeId": "demo-order-dy-06-node-2",
+            "occurredAt": "2026-10-16T15:00:00",
+            "description": "已离开始发地转运中心"
+          }
+        ]
+      }
+    },
+    {
+      "name": "emptyOrders: customer has no visible orders",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NOT_FOUND",
+        "orders": [],
+        "message": "当前店铺和顾客下未找到匹配订单"
+      }
+    },
+    {
+      "name": "multiOrder: product matching",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NEED_SELECTION",
+        "orders": [
+          {
+            "orderId": "demo-order-tb-02",
+            "orderNumber": "TB202610110002",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "itemId": "demo-order-tb-02-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "黑色 750ml",
+                "quantity": 1,
+                "unitPrice": 69
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 69,
+            "status": "PENDING_SHIPMENT",
+            "orderedAt": "2026-10-11T10:00:00"
+          },
+          {
+            "orderId": "demo-order-tb-01",
+            "orderNumber": "TB202610100001",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "itemId": "demo-order-tb-01-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 59
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 59,
+            "status": "SHIPPED",
+            "orderedAt": "2026-10-10T09:00:00"
+          }
+        ],
+        "message": "找到多笔订单，请顾客选择后再继续"
+      }
+    },
+    {
+      "name": "singleOrder: product matching",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "MATCHED",
+        "orders": [
+          {
+            "orderId": "demo-order-tb-05",
+            "orderNumber": "TB202610120005",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-2",
+            "items": [
+              {
+                "itemId": "demo-order-tb-05-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 59
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 59,
+            "status": "SHIPPED",
+            "orderedAt": "2026-10-12T13:00:00"
+          }
+        ],
+        "message": "已找到一笔匹配订单"
+      }
+    },
+    {
+      "name": "multiOrder: exact order number",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "MATCHED",
+        "orders": [
+          {
+            "orderId": "demo-order-tb-01",
+            "orderNumber": "TB202610100001",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-tb",
+            "shopName": "安静生活淘宝店（演示）",
+            "platform": "TAOBAO",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "itemId": "demo-order-tb-01-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 59
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 59,
+            "status": "SHIPPED",
+            "orderedAt": "2026-10-10T09:00:00"
+          }
+        ],
+        "message": "已找到一笔匹配订单"
+      }
+    },
+    {
+      "name": "return: exact order number",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "MATCHED",
+        "orders": [
+          {
+            "orderId": "demo-order-dy-01",
+            "orderNumber": "DY202610100001",
+            "merchantId": "demo-merchant",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-1",
+            "items": [
+              {
+                "itemId": "demo-order-dy-01-item-1",
+                "productId": "demo-product-cup",
+                "productName": "保温杯",
+                "specification": "白色 500ml",
+                "quantity": 1,
+                "unitPrice": 49
+              }
+            ],
+            "totalQuantity": 1,
+            "actualPaid": 49,
+            "status": "DELIVERED",
+            "orderedAt": "2026-10-10T09:00:00"
+          }
+        ],
+        "message": "已找到一笔匹配订单"
+      }
+    },
+    {
+      "name": "foreign-shop: order invisible",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NOT_FOUND",
+        "orders": [],
+        "message": "当前店铺和顾客下未找到匹配订单"
+      }
+    },
+    {
+      "name": "foreign-shop: logistics inaccessible",
+      "status": "PASS",
+      "evidence": {
+        "httpStatus": 404,
+        "payload": {
+          "code": 404,
+          "message": "当前范围内未找到资源",
+          "data": {
+            "errorCode": "NOT_FOUND"
+          },
+          "timestamp": 1792436455063,
+          "success": false
+        }
+      }
+    },
+    {
+      "name": "foreign-customer: order invisible",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NOT_FOUND",
+        "orders": [],
+        "message": "当前店铺和顾客下未找到匹配订单"
+      }
+    },
+    {
+      "name": "foreign-customer: logistics inaccessible",
+      "status": "PASS",
+      "evidence": {
+        "httpStatus": 404,
+        "payload": {
+          "code": 404,
+          "message": "当前范围内未找到资源",
+          "data": {
+            "errorCode": "NOT_FOUND"
+          },
+          "timestamp": 1792436455068,
+          "success": false
+        }
+      }
+    },
+    {
+      "name": "missing: order invisible",
+      "status": "PASS",
+      "evidence": {
+        "matchStatus": "NOT_FOUND",
+        "orders": [],
+        "message": "当前店铺和顾客下未找到匹配订单"
+      }
+    },
+    {
+      "name": "missing: logistics inaccessible",
+      "status": "PASS",
+      "evidence": {
+        "httpStatus": 404,
+        "payload": {
+          "code": 404,
+          "message": "当前范围内未找到资源",
+          "data": {
+            "errorCode": "NOT_FOUND"
+          },
+          "timestamp": 1792436455071,
+          "success": false
+        }
+      }
+    }
+  ]
+}

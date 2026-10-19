@@ -1,0 +1,248 @@
+{
+  "generatedAt": "2026-10-19T19:24:23.720Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "scope": "ISOLATED_DEMO_RESET_API_SMOKE; UI_CANCEL_AND_SECOND_TAB_NOT_COVERED",
+  "preResetSnapshot": "C:\\Users\\12345\\agent-customer-service\\docs\\acceptance\\evidence\\2026-10-20-run08\\reset-verification-rerun.before.json",
+  "before": {
+    "demoSessionCount": 0,
+    "messageCount": 0,
+    "executionCount": 0,
+    "workbenchTicketCount": 0,
+    "merchantTicketCount": 0,
+    "nonWorkbenchSessionCount": 0,
+    "legacyKnowledgeCounts": {
+      "products": 6,
+      "activities": 3,
+      "faqs": 12,
+      "industries": 1,
+      "solutions": 1
+    },
+    "referencedScopedKnowledgeCount": 0
+  },
+  "checks": [
+    {
+      "name": "unconfirmed reset is rejected without data mutation",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 400,
+        "code": 400,
+        "message": "参数缺失或格式不正确；提交工单前需明确确认"
+      },
+      "stateUnchanged": true
+    },
+    {
+      "name": "confirmed unified reset 1",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 200,
+        "code": 0,
+        "message": "操作成功"
+      }
+    },
+    {
+      "name": "confirmed unified reset 2",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 200,
+        "code": 0,
+        "message": "操作成功"
+      }
+    },
+    {
+      "name": "two consecutive resets clear demo sessions, messages, executions and tickets",
+      "status": "PASS",
+      "counts": {
+        "demoSessionCount": 0,
+        "messageCount": 0,
+        "executionCount": 0,
+        "workbenchTicketCount": 0,
+        "merchantTicketCount": 0,
+        "nonWorkbenchSessionCount": 0,
+        "legacyKnowledgeCounts": {
+          "products": 6,
+          "activities": 3,
+          "faqs": 12,
+          "industries": 1,
+          "solutions": 1
+        },
+        "referencedScopedKnowledgeCount": 0
+      }
+    },
+    {
+      "name": "two resets preserve non-workbench sessions",
+      "status": "PASS",
+      "beforeCount": 0,
+      "afterCount": 0,
+      "coverage": "No non-workbench sessions existed at baseline; equality is vacuous."
+    },
+    {
+      "name": "two resets preserve legacy knowledge IDs and content",
+      "status": "PASS",
+      "before": {
+        "products": 6,
+        "activities": 3,
+        "faqs": 12,
+        "industries": 1,
+        "solutions": 1
+      },
+      "after": {
+        "products": 6,
+        "activities": 3,
+        "faqs": 12,
+        "industries": 1,
+        "solutions": 1
+      }
+    },
+    {
+      "name": "all scoped knowledge is restored with seed IDs and content",
+      "status": "PASS",
+      "expectedCount": 10,
+      "actualCount": 10
+    },
+    {
+      "name": "cleanup reset removes knowledge verification sessions",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 200,
+        "code": 0,
+        "message": "操作成功"
+      }
+    },
+    {
+      "name": "isolated demo returns to a clean state after verification",
+      "status": "PASS",
+      "counts": {
+        "demoSessionCount": 0,
+        "messageCount": 0,
+        "executionCount": 0,
+        "workbenchTicketCount": 0,
+        "merchantTicketCount": 0,
+        "nonWorkbenchSessionCount": 0,
+        "legacyKnowledgeCounts": {
+          "products": 6,
+          "activities": 3,
+          "faqs": 12,
+          "industries": 1,
+          "solutions": 1
+        },
+        "referencedScopedKnowledgeCount": 0
+      }
+    },
+    {
+      "name": "cleanup reset preserves legacy knowledge IDs and content",
+      "status": "PASS"
+    }
+  ],
+  "afterTwoResets": {
+    "demoSessionCount": 0,
+    "messageCount": 0,
+    "executionCount": 0,
+    "workbenchTicketCount": 0,
+    "merchantTicketCount": 0,
+    "nonWorkbenchSessionCount": 0,
+    "legacyKnowledgeCounts": {
+      "products": 6,
+      "activities": 3,
+      "faqs": 12,
+      "industries": 1,
+      "solutions": 1
+    },
+    "referencedScopedKnowledgeCount": 0
+  },
+  "restoredScopedKnowledge": {
+    "status": "PASS",
+    "expectedCount": 10,
+    "actualCount": 10,
+    "matchesSeedContent": true,
+    "records": [
+      {
+        "knowledgeId": "demo-knowledge-box",
+        "title": "收纳盒规格",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "演示订单收纳盒规格为透明中号。当前集成资料未提供长宽高、材质或微波适用性，不从旧草案推断。",
+        "scope": "MERCHANT"
+      },
+      {
+        "knowledgeId": "demo-knowledge-cup",
+        "title": "保温杯规格与容量",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "演示订单的保温杯有白色500ml和黑色750ml两种规格。先确认具体订单或规格，再回答容量；未选规格不能一律答500ml。未提供材质检测报告或保温时长，不作相关保证。",
+        "scope": "MERCHANT"
+      },
+      {
+        "knowledgeId": "demo-knowledge-dy-activity",
+        "title": "抖店演示店保温杯活动",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "仅抖店演示店保温杯新订单单件95折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+        "scope": "SHOP"
+      },
+      {
+        "knowledgeId": "demo-knowledge-dy-fee",
+        "title": "抖店演示店退货运费",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "本演示店个人原因退货可申请一次最高10元寄回运费补贴，需商家审核；额外赔偿需人工决定，不自动批准。",
+        "scope": "SHOP"
+      },
+      {
+        "knowledgeId": "demo-knowledge-dy-return",
+        "title": "抖店演示店退货期限",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+        "scope": "SHOP"
+      },
+      {
+        "knowledgeId": "demo-knowledge-logistics",
+        "title": "物流时效说明",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "物流以演示订单的实际节点为准。未提供预计送达时间时不能承诺明天到货；未发货和已取消订单没有运单。",
+        "scope": "MERCHANT"
+      },
+      {
+        "knowledgeId": "demo-knowledge-tb-activity",
+        "title": "淘宝演示店收纳盒活动",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "仅淘宝演示店收纳盒新订单单件9折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+        "scope": "SHOP"
+      },
+      {
+        "knowledgeId": "demo-knowledge-tb-fee",
+        "title": "淘宝演示店退货运费",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "个人原因退货由顾客承担寄回运费；质量问题需商家审核后决定承担方式。不得自动承诺赔偿金额。",
+        "scope": "SHOP"
+      },
+      {
+        "knowledgeId": "demo-knowledge-tb-return",
+        "title": "淘宝演示店退货期限",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "本演示店普通商品签收后15天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非淘宝官方政策。",
+        "scope": "SHOP"
+      },
+      {
+        "knowledgeId": "demo-knowledge-ticket",
+        "title": "本地服务工单的含义",
+        "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+        "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+        "scope": "MERCHANT"
+      }
+    ]
+  },
+  "after": {
+    "demoSessionCount": 0,
+    "messageCount": 0,
+    "executionCount": 0,
+    "workbenchTicketCount": 0,
+    "merchantTicketCount": 0,
+    "nonWorkbenchSessionCount": 0,
+    "legacyKnowledgeCounts": {
+      "products": 6,
+      "activities": 3,
+      "faqs": 12,
+      "industries": 1,
+      "solutions": 1
+    },
+    "referencedScopedKnowledgeCount": 0
+  },
+  "status": "PASS"
+}

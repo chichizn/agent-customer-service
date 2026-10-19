@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-10-19T19:17:17.361Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "scope": "ISOLATED_DEMO_KNOWLEDGE_BASELINE_PRIME",
+  "checks": [
+    {
+      "name": "read scoped knowledge demo-knowledge-box",
+      "status": "PASS",
+      "content": [
+        {
+          "knowledgeId": "demo-knowledge-box",
+          "title": "收纳盒规格",
+          "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+          "content": "演示订单收纳盒规格为透明中号。当前集成资料未提供长宽高、材质或微波适用性，不从旧草案推断。",
+          "scope": "MERCHANT"
+        }
+      ],
+      "latestMessage": {
+        "messageId": "538136f7-7c9d-4880-b2a2-269f56d80177",
+        "sessionId": "759d148f-991d-486f-afad-3c1648f82d46",
+        "clientMessageId": null,
+        "role": "ai",
+        "content": "【模型不可用，规则降级】收纳盒规格：演示订单收纳盒规格为透明中号。当前集成资料未提供长宽高、材质或微波适用性，不从旧草案推断。",
+        "createdAt": "2026-10-20T03:17:17.320890100+08:00",
+        "orderIds": [],
+        "ticketId": null
+      },
+      "sessionId": "759d148f-991d-486f-afad-3c1648f82d46"
+    },
+    {
+      "name": "read scoped knowledge demo-knowledge-ticket",
+      "status": "PASS",
+      "content": [
+        {
+          "knowledgeId": "demo-knowledge-ticket",
+          "title": "本地服务工单的含义",
+          "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+          "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+          "scope": "MERCHANT"
+        }
+      ],
+      "latestMessage": {
+        "messageId": "f7dd53b0-5ea5-42a0-a715-783e7f136de2",
+        "sessionId": "759d148f-991d-486f-afad-3c1648f82d46",
+        "clientMessageId": null,
+        "role": "ai",
+        "content": "【模型不可用，规则降级】当前顾客未找到匹配工单。 本系统未执行平台退货或退款。",
+        "createdAt": "2026-10-20T03:17:17.350466800+08:00",
+        "orderIds": [],
+        "ticketId": null
+      },
+      "sessionId": "759d148f-991d-486f-afad-3c1648f82d46"
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,547 @@
+{
+  "database": "agent_customer_service_acceptance_20261019",
+  "capturedAt": "2026-10-19T19:24:23.718Z",
+  "state": {
+    "identity": {
+      "merchantId": "demo-merchant",
+      "merchantName": "安静生活演示商家",
+      "shops": [
+        {
+          "shopId": "demo-shop-dy",
+          "name": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customers": [
+            {
+              "customerId": "demo-customer-dy-1",
+              "platformUserId": "buyer-001",
+              "name": "小林"
+            },
+            {
+              "customerId": "demo-customer-dy-2",
+              "platformUserId": "buyer-002",
+              "name": "小陈"
+            }
+          ]
+        },
+        {
+          "shopId": "demo-shop-tb",
+          "name": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customers": [
+            {
+              "customerId": "demo-customer-tb-1",
+              "platformUserId": "buyer-001",
+              "name": "小林"
+            },
+            {
+              "customerId": "demo-customer-tb-2",
+              "platformUserId": "buyer-002",
+              "name": "小周"
+            },
+            {
+              "customerId": "demo-customer-tb-3",
+              "platformUserId": "buyer-empty-003",
+              "name": "小许（无订单测试）"
+            }
+          ]
+        }
+      ],
+      "businessTime": {
+        "mode": "fixed",
+        "effectiveAt": "2026-10-18T12:00:00+08:00",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    "demoSessions": [],
+    "nonWorkbenchSessions": [],
+    "tickets": [
+      {
+        "shopId": "demo-shop-dy",
+        "customerId": "demo-customer-dy-1",
+        "tickets": []
+      },
+      {
+        "shopId": "demo-shop-dy",
+        "customerId": "demo-customer-dy-2",
+        "tickets": []
+      },
+      {
+        "shopId": "demo-shop-tb",
+        "customerId": "demo-customer-tb-1",
+        "tickets": []
+      },
+      {
+        "shopId": "demo-shop-tb",
+        "customerId": "demo-customer-tb-2",
+        "tickets": []
+      },
+      {
+        "shopId": "demo-shop-tb",
+        "customerId": "demo-customer-tb-3",
+        "tickets": []
+      }
+    ],
+    "knowledge": {
+      "products": {
+        "total": 6,
+        "records": [
+          {
+            "id": 1,
+            "productName": "夏季清凉短袖T恤",
+            "productCode": "TSH-001",
+            "category": "服装",
+            "brand": "AJ时尚",
+            "price": 99,
+            "description": "纯棉透气短袖T恤，经典百搭",
+            "specifications": null,
+            "features": "纯棉透气,经典百搭,多色可选",
+            "imageUrl": null,
+            "tags": [],
+            "viewCount": 2848,
+            "status": "上架",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.060525",
+            "updatedAt": "2026-10-19T23:59:20.060525"
+          },
+          {
+            "id": 2,
+            "productName": "运动休闲裤",
+            "productCode": "PNT-002",
+            "category": "服装",
+            "brand": "AJ时尚",
+            "price": 149,
+            "description": "弹力运动面料，舒适修身",
+            "specifications": null,
+            "features": "弹力面料,舒适修身,速干",
+            "imageUrl": null,
+            "tags": [],
+            "viewCount": 2566,
+            "status": "上架",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.08438",
+            "updatedAt": "2026-10-19T23:59:20.08438"
+          },
+          {
+            "id": 3,
+            "productName": "透气网面跑步鞋",
+            "productCode": "SHO-003",
+            "category": "鞋类",
+            "brand": "AJ运动",
+            "price": 299,
+            "description": "轻量缓震跑步鞋，网面透气",
+            "specifications": null,
+            "features": "轻量设计,缓震科技,网面透气",
+            "imageUrl": null,
+            "tags": [],
+            "viewCount": 4875,
+            "status": "上架",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.08938",
+            "updatedAt": "2026-10-19T23:59:20.08938"
+          },
+          {
+            "id": 4,
+            "productName": "防晒遮阳帽",
+            "productCode": "HAT-004",
+            "category": "配饰",
+            "brand": "AJ户外",
+            "price": 49,
+            "description": "UPF50+防晒，可折叠收纳",
+            "specifications": null,
+            "features": "UPF50+,可折叠,轻便",
+            "imageUrl": null,
+            "tags": [],
+            "viewCount": 372,
+            "status": "上架",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.094165",
+            "updatedAt": "2026-10-19T23:59:20.094165"
+          },
+          {
+            "id": 5,
+            "productName": "智能运动手表",
+            "productCode": "WAT-005",
+            "category": "数码",
+            "brand": "AJ智能",
+            "price": 599,
+            "description": "运动心率监测，GPS定位，7天续航",
+            "specifications": null,
+            "features": "心率监测,GPS定位,防水50米",
+            "imageUrl": null,
+            "tags": [],
+            "viewCount": 3616,
+            "status": "上架",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.098167",
+            "updatedAt": "2026-10-19T23:59:20.098167"
+          },
+          {
+            "id": 6,
+            "productName": "真皮单肩包",
+            "productCode": "BAG-006",
+            "category": "箱包",
+            "brand": "AJ精品",
+            "price": 399,
+            "description": "头层牛皮，大容量通勤包",
+            "specifications": null,
+            "features": "头层牛皮,大容量,经典款",
+            "imageUrl": null,
+            "tags": [],
+            "viewCount": 2636,
+            "status": "上架",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.103857",
+            "updatedAt": "2026-10-19T23:59:20.103857"
+          }
+        ]
+      },
+      "activities": {
+        "total": 3,
+        "records": [
+          {
+            "id": 1,
+            "activityName": "新人首单立减",
+            "activityCode": "NEW-USER",
+            "activityType": "满减",
+            "description": "新用户首次下单立减20元，无门槛",
+            "startTime": null,
+            "endTime": null,
+            "rules": "满0减20，限首单",
+            "applicableProducts": [],
+            "discountRate": 0.85,
+            "usageCount": 8900,
+            "status": "进行中",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.108166",
+            "updatedAt": "2026-10-19T23:59:20.108166"
+          },
+          {
+            "id": 2,
+            "activityName": "满300减50",
+            "activityCode": "FULL-300",
+            "activityType": "满减",
+            "description": "全场商品满300减50，满600减120",
+            "startTime": null,
+            "endTime": null,
+            "rules": "满300减50，满600减120，上不封顶",
+            "applicableProducts": [],
+            "discountRate": 0.85,
+            "usageCount": 5600,
+            "status": "进行中",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.112668",
+            "updatedAt": "2026-10-19T23:59:20.112668"
+          },
+          {
+            "id": 3,
+            "activityName": "会员积分翻倍",
+            "activityCode": "VIP-POINTS",
+            "activityType": "积分",
+            "description": "会员日消费积分双倍，每周五",
+            "startTime": null,
+            "endTime": null,
+            "rules": "会员日双倍积分，可兑换优惠券",
+            "applicableProducts": [],
+            "discountRate": 0.85,
+            "usageCount": 3200,
+            "status": "进行中",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.117156",
+            "updatedAt": "2026-10-19T23:59:20.117156"
+          }
+        ]
+      },
+      "faqs": {
+        "total": 12,
+        "records": [
+          {
+            "id": 1,
+            "question": "这款商品有什么优惠活动吗？",
+            "answer": "当前有以下优惠活动：1. 新人首单立减20元 2. 满300减50 3. 会员日积分翻倍。您可以在结算页面查看可用优惠。",
+            "category": "售前咨询",
+            "relatedQuestions": [],
+            "tags": [
+              "优惠",
+              "活动",
+              "打折",
+              "促销"
+            ],
+            "hitCount": 8900,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.122728",
+            "updatedAt": "2026-10-19T23:59:20.122728"
+          },
+          {
+            "id": 10,
+            "question": "支持哪些快递公司？",
+            "answer": "我们与顺丰、中通、圆通、韵达、申通合作。默认随机分配，VIP会员可指定快递公司。部分大件商品走德邦物流。",
+            "category": "物流配送",
+            "relatedQuestions": [],
+            "tags": [
+              "快递",
+              "公司",
+              "顺丰",
+              "中通"
+            ],
+            "hitCount": 2800,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.16835",
+            "updatedAt": "2026-10-19T23:59:20.16835"
+          },
+          {
+            "id": 11,
+            "question": "支持哪些支付方式？",
+            "answer": "支持以下支付方式：1. 支付宝 2. 微信支付 3. 银行卡 4. 信用卡 5. 花呗/白条分期。大额订单推荐使用分期支付。",
+            "category": "支付问题",
+            "relatedQuestions": [],
+            "tags": [
+              "支付",
+              "方式",
+              "付款",
+              "怎么付"
+            ],
+            "hitCount": 6100,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.173385",
+            "updatedAt": "2026-10-19T23:59:20.173385"
+          },
+          {
+            "id": 12,
+            "question": "可以开发票吗？",
+            "answer": "可以，下单时选择【需要发票】。支持电子发票（实时开具）和纸质发票（7个工作日内邮寄）。如需修改发票信息，请在发货前联系客服。",
+            "category": "支付问题",
+            "relatedQuestions": [],
+            "tags": [
+              "发票",
+              "开票",
+              "报销"
+            ],
+            "hitCount": 3900,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.177386",
+            "updatedAt": "2026-10-19T23:59:20.177386"
+          },
+          {
+            "id": 2,
+            "question": "商品的尺码怎么选择？",
+            "answer": "建议参考商品详情页的尺码表：S码适合155-160cm，M码160-165cm，L码165-170cm，XL码170-175cm。如果您平时穿M码，建议选M码。",
+            "category": "售前咨询",
+            "relatedQuestions": [],
+            "tags": [
+              "尺码",
+              "大小",
+              "尺寸",
+              "选码"
+            ],
+            "hitCount": 6500,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.12727",
+            "updatedAt": "2026-10-19T23:59:20.12727"
+          },
+          {
+            "id": 3,
+            "question": "有没有类似款式推荐？",
+            "answer": "您可以在商品详情页底部查看【相似推荐】，或告诉我您的偏好（颜色、价位、风格），我来帮您推荐。",
+            "category": "售前咨询",
+            "relatedQuestions": [],
+            "tags": [
+              "推荐",
+              "类似",
+              "相似"
+            ],
+            "hitCount": 3200,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.132061",
+            "updatedAt": "2026-10-19T23:59:20.132061"
+          },
+          {
+            "id": 4,
+            "question": "商品什么时候发货？",
+            "answer": "下单后1-2个工作日内发货，大促期间可能延迟至3天。您可以在订单详情页查看预计发货时间。",
+            "category": "售前咨询",
+            "relatedQuestions": [],
+            "tags": [
+              "发货",
+              "时间",
+              "什么时候"
+            ],
+            "hitCount": 7200,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.138568",
+            "updatedAt": "2026-10-19T23:59:20.138568"
+          },
+          {
+            "id": 5,
+            "question": "如何申请退换货？",
+            "answer": "退换货步骤：1. 进入【我的订单】 2. 找到对应订单点击【申请售后】 3. 选择退货/换货原因 4. 提交申请等待审核。7天无理由退货，审核通过后3-5个工作日退款到账。",
+            "category": "售后服务",
+            "relatedQuestions": [],
+            "tags": [
+              "退货",
+              "换货",
+              "退款",
+              "售后"
+            ],
+            "hitCount": 12300,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.143568",
+            "updatedAt": "2026-10-19T23:59:20.143568"
+          },
+          {
+            "id": 6,
+            "question": "退款多久到账？",
+            "answer": "退款到账时间：1. 支付宝/微信：1-3个工作日 2. 银行卡：3-5个工作日 3. 信用卡：5-7个工作日。具体以银行处理速度为准。",
+            "category": "售后服务",
+            "relatedQuestions": [],
+            "tags": [
+              "退款",
+              "到账",
+              "多久"
+            ],
+            "hitCount": 8700,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.148568",
+            "updatedAt": "2026-10-19T23:59:20.148568"
+          },
+          {
+            "id": 7,
+            "question": "商品质量问题怎么处理？",
+            "answer": "如遇质量问题，请您拍照留证后申请售后，我们提供免费退换货服务。15天内质量问题可直接退货退款，超过15天可联系我们协商处理。",
+            "category": "售后服务",
+            "relatedQuestions": [],
+            "tags": [
+              "质量",
+              "问题",
+              "瑕疵",
+              "破损"
+            ],
+            "hitCount": 5400,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.153999",
+            "updatedAt": "2026-10-19T23:59:20.153999"
+          },
+          {
+            "id": 8,
+            "question": "我的快递到哪里了？",
+            "answer": "您可以在订单详情页点击【查看物流】实时跟踪快递位置。一般发货后2-3天送达，偏远地区3-5天。",
+            "category": "物流配送",
+            "relatedQuestions": [],
+            "tags": [
+              "快递",
+              "到哪",
+              "物流",
+              "查询"
+            ],
+            "hitCount": 15600,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.159002",
+            "updatedAt": "2026-10-19T23:59:20.159002"
+          },
+          {
+            "id": 9,
+            "question": "可以修改收货地址吗？",
+            "answer": "如果订单还未发货，您可以在订单详情页修改地址。如果已发货，请联系客服协助处理，可能需要快递拦截。",
+            "category": "物流配送",
+            "relatedQuestions": [],
+            "tags": [
+              "修改",
+              "地址",
+              "收货"
+            ],
+            "hitCount": 4300,
+            "priority": 1,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.164189",
+            "updatedAt": "2026-10-19T23:59:20.164189"
+          }
+        ]
+      },
+      "industries": {
+        "total": 1,
+        "records": [
+          {
+            "id": 1,
+            "title": "2025年智能家居行业趋势报告",
+            "industryType": "智能家居",
+            "content": "智能家居市场持续增长，AI技术驱动产品升级...",
+            "source": "艾瑞咨询",
+            "keywords": [
+              "智能家居",
+              "AI",
+              "物联网"
+            ],
+            "viewCount": 567,
+            "status": "启用",
+            "vectorized": false,
+            "createdAt": "2026-10-19T23:59:20.183386",
+            "updatedAt": "2026-10-19T23:59:20.183386"
+          }
+        ]
+      },
+      "solutions": {
+        "total": 1,
+        "records": [
+          {
+            "id": 1,
+            "solutionName": "退货退款标准流程",
+            "solutionCode": "REFUND-STANDARD",
+            "sceneType": "售后服务",
+            "description": "标准退货退款处理流程",
+            "triggerCondition": "用户意图=退货退款",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "stepName": "确认订单信息",
+                "stepAction": "查询用户订单，确认商品状态",
+                "expectedResult": "获取订单详情"
+              },
+              {
+                "stepOrder": 2,
+                "stepName": "了解退货原因",
+                "stepAction": "询问用户退货原因",
+                "expectedResult": "获取退货原因"
+              },
+              {
+                "stepOrder": 3,
+                "stepName": "指导提交申请",
+                "stepAction": "引导用户在APP提交退货申请",
+                "expectedResult": "用户成功提交申请"
+              }
+            ],
+            "expectedOutcome": "用户成功提交退货申请",
+            "usageCount": 3456,
+            "successRate": 0.92,
+            "status": "启用",
+            "vectorized": true,
+            "createdAt": "2026-10-19T23:59:20.208188",
+            "updatedAt": "2026-10-19T23:59:20.208188"
+          }
+        ]
+      }
+    },
+    "scopedKnowledge": []
+  }
+}

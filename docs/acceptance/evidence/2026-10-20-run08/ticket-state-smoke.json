@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-10-19T18:57:21.222Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "scope": "ISOLATED_MYSQL_TICKET_STATUS_API_SMOKE_ONLY_NOT_AC08_AGENT_CREATION",
+  "ticketCreationPath": "merchant demo endpoint used only to create isolated fixtures; this does not validate AgentTicketGuard",
+  "checks": [
+    {
+      "name": "ticket lifecycle PENDING_REVIEW to PROCESSING to COMPLETED",
+      "status": "PASS",
+      "sessionId": "21a2b396-bd01-49d1-9c66-454ad7a2096f",
+      "ticketId": "b9eb1ccc-b310-48a9-827b-776cb191c473",
+      "ticketNumber": "ST5415CDB1B08B4082B2F1C576AFA88362",
+      "statuses": [
+        "PENDING_REVIEW",
+        "PROCESSING",
+        "COMPLETED"
+      ],
+      "history": [
+        {
+          "fromStatus": null,
+          "toStatus": "PENDING_REVIEW",
+          "note": "已记录诉求，待商家审核"
+        },
+        {
+          "fromStatus": "PENDING_REVIEW",
+          "toStatus": "PROCESSING",
+          "note": "已联系顾客核实退货诉求"
+        },
+        {
+          "fromStatus": "PROCESSING",
+          "toStatus": "COMPLETED",
+          "note": "本地诉求已处理，平台结果另行确认"
+        }
+      ],
+      "platformAfterSaleStatus": "NOT_SUBMITTED_TO_PLATFORM"
+    },
+    {
+      "name": "stale expectedStatus rejected without mutation",
+      "status": "PASS",
+      "errorCode": "STALE_STATUS",
+      "persistedStatusAfterRetry": "PROCESSING"
+    },
+    {
+      "name": "completed ticket cannot reopen",
+      "status": "PASS",
+      "errorCode": "INVALID_TRANSITION",
+      "finalStatus": "COMPLETED"
+    },
+    {
+      "name": "other customer cannot query ticket",
+      "status": "PASS",
+      "ticketCount": 0
+    },
+    {
+      "name": "pending ticket can be rejected and rejected ticket cannot reopen",
+      "status": "PASS",
+      "sessionId": "cd86a458-a327-4d83-9b7d-22bf05ec1728",
+      "ticketId": "7a533a11-ace2-41cd-9334-2c91d77aa875",
+      "ticketNumber": "ST5C8D8B98E7DB4E9BBB62AAA90DDE538B",
+      "statuses": [
+        "PENDING_REVIEW",
+        "REJECTED"
+      ],
+      "reopenErrorCode": "INVALID_TRANSITION",
+      "history": [
+        {
+          "fromStatus": null,
+          "toStatus": "PENDING_REVIEW",
+          "note": "已记录诉求，待商家审核"
+        },
+        {
+          "fromStatus": "PENDING_REVIEW",
+          "toStatus": "REJECTED",
+          "note": "当前不符合退货处理条件，已说明原因"
+        }
+      ]
+    },
+    {
+      "name": "fixture scope",
+      "status": "PASS",
+      "ticketsBefore": 0,
+      "ticketsAdded": 2,
+      "fixtureSessions": [
+        "21a2b396-bd01-49d1-9c66-454ad7a2096f",
+        "cd86a458-a327-4d83-9b7d-22bf05ec1728"
+      ]
+    }
+  ],
+  "status": "PASS"
+}

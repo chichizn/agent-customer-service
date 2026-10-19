@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "name": "two demo shops and five customers remain loaded",
+      "shops": 2,
+      "customers": 5,
+      "status": "PASS"
+    },
+    {
+      "name": "twelve demo orders are visible within their owner scopes",
+      "uniqueOrderCount": 12,
+      "count": 12,
+      "status": "PASS"
+    },
+    {
+      "name": "all twelve orders have a logistics query result with seven records available",
+      "queried": 12,
+      "available": 7,
+      "status": "PASS"
+    },
+    {
+      "name": "demo tickets are empty after reset",
+      "count": 0,
+      "status": "PASS"
+    }
+  ],
+  "database": "agent_customer_service_acceptance_20261019",
+  "baseUrl": "http://127.0.0.1:10002",
+  "scope": "READ_ONLY_POST_RESET_IDENTITY_ORDER_LOGISTICS_AND_TICKET_CHECK",
+  "generatedAt": "2026-10-20T03:35:45.1958195+08:00",
+  "status": "PASS",
+  "revision": "9cd4c582657d390ce8564bec4d1d0d17759c908a"
+}

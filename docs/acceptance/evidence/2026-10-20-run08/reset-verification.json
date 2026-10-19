@@ -1,0 +1,187 @@
+{
+  "generatedAt": "2026-10-19T19:23:18.107Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "scope": "ISOLATED_DEMO_RESET_API_SMOKE; UI_CANCEL_AND_SECOND_TAB_NOT_COVERED",
+  "preResetSnapshot": "C:\\Users\\12345\\agent-customer-service\\docs\\acceptance\\evidence\\2026-10-20-run08\\reset-verification.before.json",
+  "before": {
+    "demoSessionCount": 31,
+    "messageCount": 160,
+    "executionCount": 104,
+    "workbenchTicketCount": 16,
+    "merchantTicketCount": 2,
+    "nonWorkbenchSessionCount": 0,
+    "legacyKnowledgeCounts": {
+      "products": 6,
+      "activities": 3,
+      "faqs": 12,
+      "industries": 1,
+      "solutions": 1
+    },
+    "referencedScopedKnowledgeCount": 9
+  },
+  "checks": [
+    {
+      "name": "unconfirmed reset is rejected without data mutation",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 400,
+        "code": 400,
+        "message": "参数缺失或格式不正确；提交工单前需明确确认"
+      },
+      "stateUnchanged": true
+    },
+    {
+      "name": "confirmed unified reset 1",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 200,
+        "code": 0,
+        "message": "操作成功"
+      }
+    },
+    {
+      "name": "confirmed unified reset 2",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 200,
+        "code": 0,
+        "message": "操作成功"
+      }
+    },
+    {
+      "name": "two consecutive resets clear demo sessions, messages, executions and tickets",
+      "status": "PASS",
+      "counts": {
+        "demoSessionCount": 0,
+        "messageCount": 0,
+        "executionCount": 0,
+        "workbenchTicketCount": 0,
+        "merchantTicketCount": 0,
+        "nonWorkbenchSessionCount": 0,
+        "legacyKnowledgeCounts": {
+          "products": 6,
+          "activities": 3,
+          "faqs": 12,
+          "industries": 1,
+          "solutions": 1
+        },
+        "referencedScopedKnowledgeCount": 0
+      }
+    },
+    {
+      "name": "two resets preserve non-workbench sessions",
+      "status": "PASS",
+      "beforeCount": 0,
+      "afterCount": 0
+    },
+    {
+      "name": "two resets preserve legacy knowledge IDs and content",
+      "status": "PASS",
+      "before": {
+        "products": 6,
+        "activities": 3,
+        "faqs": 12,
+        "industries": 1,
+        "solutions": 1
+      },
+      "after": {
+        "products": 6,
+        "activities": 3,
+        "faqs": 12,
+        "industries": 1,
+        "solutions": 1
+      }
+    },
+    {
+      "name": "all scoped knowledge is restored with seed IDs and content",
+      "status": "FAIL",
+      "error": "ENOENT: no such file or directory, open 'C:\\demo-data\\knowledge.integration.v1.json'"
+    },
+    {
+      "name": "cleanup reset removes knowledge verification sessions",
+      "status": "PASS",
+      "response": {
+        "httpStatus": 200,
+        "code": 0,
+        "message": "操作成功"
+      }
+    },
+    {
+      "name": "isolated demo returns to a clean state after verification",
+      "status": "PASS",
+      "counts": {
+        "demoSessionCount": 0,
+        "messageCount": 0,
+        "executionCount": 0,
+        "workbenchTicketCount": 0,
+        "merchantTicketCount": 0,
+        "nonWorkbenchSessionCount": 0,
+        "legacyKnowledgeCounts": {
+          "products": 6,
+          "activities": 3,
+          "faqs": 12,
+          "industries": 1,
+          "solutions": 1
+        },
+        "referencedScopedKnowledgeCount": 0
+      }
+    },
+    {
+      "name": "cleanup reset preserves legacy knowledge IDs and content",
+      "status": "PASS"
+    },
+    {
+      "name": "stale demo session cannot be read or written after reset",
+      "status": "PASS",
+      "staleSessionId": "05e72d81-1ff3-4396-bd06-bf36b25caad0",
+      "snapshot": {
+        "httpStatus": 404,
+        "code": 404,
+        "message": "演示会话或身份不存在，请重新加载演示数据和页面"
+      },
+      "write": {
+        "httpStatus": 404,
+        "code": 404,
+        "message": "演示会话或身份不存在，请重新加载演示数据和页面"
+      }
+    }
+  ],
+  "afterTwoResets": {
+    "demoSessionCount": 0,
+    "messageCount": 0,
+    "executionCount": 0,
+    "workbenchTicketCount": 0,
+    "merchantTicketCount": 0,
+    "nonWorkbenchSessionCount": 0,
+    "legacyKnowledgeCounts": {
+      "products": 6,
+      "activities": 3,
+      "faqs": 12,
+      "industries": 1,
+      "solutions": 1
+    },
+    "referencedScopedKnowledgeCount": 0
+  },
+  "restoredScopedKnowledge": {
+    "status": "FAIL",
+    "error": "ENOENT: no such file or directory, open 'C:\\demo-data\\knowledge.integration.v1.json'"
+  },
+  "after": {
+    "demoSessionCount": 0,
+    "messageCount": 0,
+    "executionCount": 0,
+    "workbenchTicketCount": 0,
+    "merchantTicketCount": 0,
+    "nonWorkbenchSessionCount": 0,
+    "legacyKnowledgeCounts": {
+      "products": 6,
+      "activities": 3,
+      "faqs": 12,
+      "industries": 1,
+      "solutions": 1
+    },
+    "referencedScopedKnowledgeCount": 0
+  },
+  "status": "FAIL"
+}

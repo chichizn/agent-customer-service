@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-10-19T19:17:29.778Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "scope": "READ_ONLY_RESET_BASELINE_CAPTURE",
+  "snapshot": "C:\\Users\\12345\\agent-customer-service\\docs\\acceptance\\evidence\\2026-10-20-run08\\reset-baseline-final.before.json",
+  "status": "CAPTURE_ONLY",
+  "counts": {
+    "demoSessionCount": 31,
+    "messageCount": 160,
+    "executionCount": 104,
+    "workbenchTicketCount": 16,
+    "merchantTicketCount": 2,
+    "nonWorkbenchSessionCount": 0,
+    "legacyKnowledgeCounts": {
+      "products": 6,
+      "activities": 3,
+      "faqs": 12,
+      "industries": 1,
+      "solutions": 1
+    },
+    "referencedScopedKnowledgeCount": 9
+  }
+}
