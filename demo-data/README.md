@@ -1,6 +1,6 @@
 # C 成员数据与联调交付
 
-更新：2026-10-19。当前集成基线为 main `99b5a48`；需求依据见 [需求 v0.2](../docs/requirements/README.md)。
+更新：2026-10-19。当前集成基线在 main `c2fac80` 之后加入 TB3 无订单顾客；需求依据见 [需求 v0.2](../docs/requirements/README.md)。
 
 ## 当前使用的数据
 
@@ -10,14 +10,15 @@
 |---|---|---|
 | TB1 淘宝小林 | demo-shop-tb / demo-customer-tb-1 | tb-01/02 两笔杯子；tb-02 未发货；tb-04 已取消 |
 | TB2 淘宝小周 | demo-shop-tb / demo-customer-tb-2 | tb-05 杯子延迟，单匹配及转人工；tb-06 收纳盒未发货 |
+| TB3 淘宝小许 | demo-shop-tb / demo-customer-tb-3 | 无订单身份，用于 AC-05 空订单结果；不增加订单 |
 | DY1 抖店小林 | demo-shop-dy / demo-customer-dy-1 | dy-01 杯子已签收，退货故事；dy-02/03 |
 | DY2 抖店小陈 | demo-shop-dy / demo-customer-dy-2 | dy-04/05/06；dy-06 毛巾运输中，不能用作延迟故事 |
 
 订单 ID 为 `demo-order-` 加表中后缀；真实单号见 [字段与订单对照](FIELD-MAPPING.md)。同名“小林”和平台侧 `buyer-001` 不能作为跨店唯一身份。
 
-种子包含 2 店、4 顾客、3 种订单商品、12 订单、7 物流。商品统计来自订单中的不同 productId，**不代表知识商品表已加载 3 行**。4 位顾客都有订单，无订单顾客分支仍需 A/D 补种子。
+种子包含 2 店、5 顾客、3 种订单商品、12 订单、7 物流。TB3 是合法演示顾客但没有订单，用于检查空结果不会泄露其他顾客订单。商品统计来自订单中的不同 productId，**不代表知识商品表已加载 3 行**。
 
-[knowledge.integration.v1.json](knowledge.integration.v1.json) 提供与 D 身份及商品 ID 对齐的 10 条知识材料，修正杯子同时有 500ml / 750ml 的事实。规则与活动为虚构演示店规则。A 尚未提供范围检索/加载契约，该文件是待接入交换数据，不能算作已启用的数据库知识。
+[knowledge.integration.v1.json](knowledge.integration.v1.json) 提供与 D 身份及商品 ID 对齐的 10 条知识材料，修正杯子同时有 500ml / 750ml 的事实。规则与活动为虚构演示店规则；A 已实现范围导入与检索，文件内容在首次打开演示会话时加载。
 
 ## 校验与使用
 

@@ -91,13 +91,17 @@ export function validateIntegration(data, config = profile) {
   for (const [key, actor] of Object.entries(config.actors)) check(customers.get(actor.customerId)?.shopId === actor.shopId, `${key}: invalid actor`)
   for (const [key, scenario] of Object.entries(config.scenarios)) {
     const actor = config.actors[scenario.actor]
-    const ids = scenario.orderIds || [scenario.orderId]
-    check(ids.every(id => orders.get(id)?.customerId === actor?.customerId && orders.get(id)?.shopId === actor?.shopId), `${key}: scenario ownership mismatch`)
-    if (scenario.productClue) {
-      const matches = data.orders.filter(o => o.customerId === actor?.customerId && o.shopId === actor?.shopId && Array.isArray(o.items) && o.items.some(i => i && `${i.productName} ${i.specification}`.includes(scenario.productClue)))
-      check(JSON.stringify(matches.map(o => o.id).sort()) === JSON.stringify([...ids].sort()), `${key}: unexpected matching orders`)
+    if (scenario.expectNoOrders) {
+      check(!data.orders.some(o => o.customerId === actor?.customerId && o.shopId === actor?.shopId), `${key}: expected customer without orders`)
+    } else {
+      const ids = scenario.orderIds || [scenario.orderId]
+      check(ids.every(id => orders.get(id)?.customerId === actor?.customerId && orders.get(id)?.shopId === actor?.shopId), `${key}: scenario ownership mismatch`)
+      if (scenario.productClue) {
+        const matches = data.orders.filter(o => o.customerId === actor?.customerId && o.shopId === actor?.shopId && Array.isArray(o.items) && o.items.some(i => i && `${i.productName} ${i.specification}`.includes(scenario.productClue)))
+        check(JSON.stringify(matches.map(o => o.id).sort()) === JSON.stringify([...ids].sort()), `${key}: unexpected matching orders`)
+      }
+      if (scenario.selectedOrderId) check(ids.includes(scenario.selectedOrderId), `${key}: selection outside candidates`)
     }
-    if (scenario.selectedOrderId) check(ids.includes(scenario.selectedOrderId), `${key}: selection outside candidates`)
   }
   check(orders.get(config.scenarios.return.orderId)?.status === 'DELIVERED', 'return scenario must be delivered')
   check(orders.get(config.scenarios.handoff.orderId)?.logistics?.status?.includes('延迟'), 'handoff scenario must be delayed')

@@ -96,6 +96,20 @@ class WorkbenchIntegrationTest {
             .isInstanceOf(CommerceException.class);
     }
 
+    @Test void validCustomerWithoutOrdersGetsAnEmptyScopedResult() {
+        var opened = service.open(new WorkbenchDTO.Open("demo-shop-tb","demo-customer-tb-3",false));
+        assertThat(opened.session().customerName()).contains("无订单测试");
+        assertThat(opened.orders()).isEmpty();
+        var result = send(opened.session().sessionId(),"empty-order-1","查一下我的订单物流");
+        assertThat(result.orders()).isEmpty();
+        assertThat(result.logistics()).isEmpty();
+        assertThat(last(result)).contains("未找到匹配订单");
+        assertThat(result.executions()).anySatisfy(e -> {
+            assertThat(e.action()).isEqualTo("get_order"); assertThat(e.status()).isEqualTo("SUCCESS");
+        });
+        assertThat(result.messages()).noneSatisfy(m -> assertThat(m.content()).contains("TB2026"));
+    }
+
     @Test void logisticsClarifiesOrderAndEnforcesCrossShopAndCustomerIsolation() {
         String id = open("tb").session().sessionId();
         var multiple = send(id,"l1","我的杯子到哪了");

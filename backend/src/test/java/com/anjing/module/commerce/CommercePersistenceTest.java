@@ -70,11 +70,17 @@ class CommercePersistenceTest {
     }
 
     @Test void demoContainsTwoPlatformsTwelveOrdersAndThreeProducts() {
-        assertThat(demo.identities().shops()).hasSize(2).allSatisfy(s -> assertThat(s.customers()).hasSize(2));
+        assertThat(demo.identities().shops()).hasSize(2);
+        assertThat(demo.identities().shops()).filteredOn(s -> s.shopId().equals("demo-shop-tb"))
+            .singleElement().satisfies(s -> assertThat(s.customers()).hasSize(3));
+        assertThat(demo.identities().shops()).filteredOn(s -> s.shopId().equals("demo-shop-dy"))
+            .singleElement().satisfies(s -> assertThat(s.customers()).hasSize(2));
         assertThat(orders.count()).isEqualTo(12);
         assertThat(orders.findAll()).extracting(CommerceOrder::getStatus).containsAll(List.of(OrderStatus.values()));
         assertThat(service.getOrder(new OrderQuery(TB1, null, null, null)).orders()).hasSize(4);
         assertThat(service.getOrder(new OrderQuery(DY1, null, null, null)).orders()).hasSize(3);
+        assertThat(service.getOrder(new OrderQuery(new Scope("demo-merchant", "demo-shop-tb", "demo-customer-tb-3"),
+            null, null, null)).orders()).isEmpty();
     }
 
     @Test void queriesReturnExplicitAmbiguityAndUseIntersectedFilters() {

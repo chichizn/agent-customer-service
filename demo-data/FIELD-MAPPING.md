@@ -1,6 +1,6 @@
 # C 与当前集成数据的映射
 
-2026-10-19，基于 main `99b5a48`。已实现 commerce 契约见 [commerce-contract.md](../docs/commerce-contract.md)，B 对 A 的待实现约定见 [B-WORKBENCH.md](../docs/frontend/B-WORKBENCH.md)。
+2026-10-19，基于 main `c2fac80` 与当前 TB3 种子更新。A 集成说明见 [A-INTEGRATION.md](../docs/backend/A-INTEGRATION.md)，commerce 契约见 [commerce-contract.md](../docs/commerce-contract.md)。
 
 ## 数据来源与字段
 
@@ -8,7 +8,7 @@
 |---|---|---|---|
 | 商家 | demo-merchant | demo-merchant-01 | 使用 D 身份列表 |
 | 店铺 | demo-shop-tb / demo-shop-dy | demo-shop-taobao / demo-shop-douyin | 新知识显式映射；旧包不直接加载 |
-| 顾客 | demo-customer-tb-1/2、dy-1/2 | tb-01/02/03、dy-01/02/03 | 按真实身份读取，不能仅按姓名替换 |
+| 顾客 | demo-customer-tb-1/2/3、dy-1/2；TB3 无订单 | tb-01/02/03、dy-01/02/03 | 按真实身份读取，不能仅按姓名替换；TB3 用于 AC-05 |
 | 商品 | cup、box、towel | cup、box、cloth、bag | 清洁布/帆布袋不等于毛巾，不作自动映射 |
 | 杯子规格 | 白色500ml、黑色750ml | 原知识只写500ml | 新知识列出两规格；先选订单/规格再回答 |
 | 订单 | demo-order-tb-01；TB202610100001 等 | demo-order-tb-001；DEMO-TB-20261018-001 等 | 使用下表，单号与 ID 分开 |
@@ -16,7 +16,7 @@
 | 时间 | orderedAt、occurredAt 为无偏移 LocalDateTime | 明确 +08:00 | 统一解释 Asia/Shanghai；HTTP可用T或空格分隔 |
 | 物流 | orders[].logistics，7条；status为中文描述 | 独立数组8条及英文状态 | 依照 available/原始节点，不编造运单或 ETA |
 | 平台售后 | 工单为 NOT_SUBMITTED_TO_PLATFORM | 初始 NONE | 使用 D 实际枚举，本地完成不表示退款 |
-| 知识 | D 不加载；A 范围检索待接入 | 10条 | 用 knowledge.integration.v1.json 交换，不灌全局接口 |
+| 知识 | A 工作台加载10条范围知识并按商家/店铺过滤 | 10条 | 集成文件仍是交换源；自动化范围测试不替代真实 MySQL/浏览器验收 |
 
 `demoNamespace` 是 C 草案字段；D 使用实体的 `demoData` 标记。不要假设传入 namespace 就有权限操作数据。当前 scope 用于单商家演示，A 工具须从已校验会话构造身份。
 
@@ -47,12 +47,11 @@
 
 A 的加载结果应提供稳定 ID 到真实知识主键的映射、范围、启用/有效期处理。C 再以 AC-13/14 验证，文件自洽不等于检索隔离已实现。
 
-## 尚待联调
+## 当前验收边界
 
-- A 会话开通/恢复、快照、人工消息、接待模式、持久上下文及真实执行记录。
-- A 实现 AgentTicketGuard，AI 走 createAgentTicket；不能用商家直建接口绕过确认/接管。
-- A 统一重置：使旧轮次失效，再协调会话/消息/上下文/记录和 D commerce；D restore 只处理本模块。
-- A/D 补合法无订单顾客。每店至少2顾客已有，AC-05 空顾客分支仍缺数据。
-- 固定演示时钟或整体平移下单、物流、签收与活动日期，记录策略；目前加载器未实现平移。
+- A 会话、消息、人工接管、持久上下文、AgentTicketGuard、范围知识、真实执行记录及统一重置已实现；自动化结果见 A 集成交付和最新验收记录。
+- TB3 是合法淘宝顾客且没有订单；离线种子校验、C 检查器和 H2 模块测试已覆盖空订单分支。
+- 本机 MySQL 凭据仍不可用，真实 API/浏览器 AC-01～AC-22 尚未完成；模块测试不能替代真实验收。
+- 固定演示时钟或整体平移下单、物流、签收与活动日期的策略仍待统一。
 
 10月18日原始设计及计数保留在 dataset.v1.json 和历史结果，不能直接作为当前数据库计数。

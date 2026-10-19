@@ -7,6 +7,21 @@ test('current commerce seed supports C stories, including cancelled zero payment
   assert.equal(validateIntegration(seed).status, 'PASS')
 })
 
+test('AC-05 has a real customer with zero orders and rejects orders added to that identity', () => {
+  assert.equal(profile.expectedCounts.customers, 5)
+  assert.equal(validateIntegration(seed).status, 'PASS')
+  assert.equal(seed.orders.some(order => order.customerId === profile.actors.TB3.customerId), false)
+  const mutated = structuredClone(seed)
+  const extraOrder = structuredClone(mutated.orders[0])
+  extraOrder.id = 'demo-order-invalid-empty-customer'
+  extraOrder.orderNumber = 'TB209901010099'
+  extraOrder.customerId = profile.actors.TB3.customerId
+  mutated.orders.push(extraOrder)
+  const result = validateIntegration(mutated)
+  assert.equal(result.status, 'FAIL')
+  assert(result.errors.some(error => error.includes('emptyOrders: expected customer without orders')))
+})
+
 test('prepared knowledge uses current identities and both cup variants', () => {
   assert.equal(validateKnowledge(knowledge).status, 'PASS')
 })
@@ -76,7 +91,7 @@ test('checker covers all seed orders and uses only four query endpoints', async 
   const { request, calls } = fixtureTransport()
   const result = await runChecks(request)
   assert.equal(result.status, 'PASS', JSON.stringify(result.checks.filter(c => c.status !== 'PASS')))
-  assert.equal(result.checks.length, 31)
+  assert.equal(result.checks.length, 34)
   assert.deepEqual([...new Set(calls)].sort(), ['/demo/identities', '/logistics/query', '/orders/query', '/tickets/query'])
 })
 

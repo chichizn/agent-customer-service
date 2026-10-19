@@ -1,0 +1,34 @@
+✔ current commerce seed supports C stories, including cancelled zero payment (1.8297ms)
+✔ AC-05 has a real customer with zero orders and rejects orders added to that identity (0.4714ms)
+✔ prepared knowledge uses current identities and both cup variants (0.2595ms)
+✔ reject knowledge regression: old merchant (0.2237ms)
+✔ reject knowledge regression: global shop rule (0.1509ms)
+✔ reject knowledge regression: old shop ID (0.102ms)
+✔ reject knowledge regression: unknown product (0.094ms)
+✔ reject knowledge regression: missing 750ml variant (0.0776ms)
+✔ reject knowledge regression: expired activity (0.1297ms)
+✔ reject seed regression: cross-customer ownership (0.2716ms)
+✔ reject seed regression: payment over item subtotal (0.1974ms)
+✔ reject seed regression: fractional cent payment (0.1684ms)
+✔ reject seed regression: reversed logistics timeline (0.2016ms)
+✔ reject seed regression: invalid calendar date (0.1609ms)
+✔ reject seed regression: duplicate order (0.1902ms)
+✔ reject seed regression: missing items (0.1435ms)
+✔ reject C story drift to another customer or a non-delayed order (0.2157ms)
+✔ checker covers all seed orders and uses only four query endpoints (1.9995ms)
+✔ unavailable service is BLOCKED; business rejection is FAIL (0.9798ms)
+✔ wrong merchant identity stops before querying customer resources (0.3327ms)
+✔ checker detects foreign order leak (0.8908ms)
+✔ checker detects wrong item specification (1.3623ms)
+✔ checker detects zero cancellation amount changed (0.6002ms)
+✔ checker detects foreign ticket (1.0301ms)
+✔ checker detects fabricated logistics (0.6018ms)
+✔ equivalent Jackson wall-time serialization is accepted (0.6622ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.4483

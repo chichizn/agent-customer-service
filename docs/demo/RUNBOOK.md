@@ -58,7 +58,7 @@ node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/comm
 ## 3. 完整演示前置
 
 - A/D/B api 链路可运行，实际模型经过问答验证；关闭/失败时有明确降级。C 已按 [22条用例](../acceptance/TEST-CASES.md) 实测。
-- 商家 `demo-merchant`。D 基线2店/4顾客/3种订单商品/12单/7物流；10条 C 范围知识另由 A 加载并给出映射，不能只数 JSON 行数。
+- 商家 `demo-merchant`。D 基线2店/5顾客（TB3无订单）/3种订单商品/12单/7物流；10条 C 范围知识由 A 加载，运行时按商家/店铺范围过滤。
 - 统一重置由 A 协调，D restore 仅处理 commerce。确认影响范围再操作；另一标签旧任务失效。两次复验非演示数据保留。
 - 日期为固定2026年种子，以2026-10-18 12:00+08为参考；当前2026-10-19退货单仍在窗口。后续录制须统一平移或固定演示时钟，并标明策略。
 - 1440px桌面主验收，同时检查1280px。只展示真实查询/写入及实际编号，失败保留失败。
@@ -71,7 +71,7 @@ node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/comm
 | 退货与进度 | 抖店小林，demo-shop-dy / demo-customer-dy-1 | DY202610100001（demo-order-dy-01，500ml杯，10-13 14:00签收） |
 | 延迟转人工 | 淘宝小周，demo-shop-tb / demo-customer-tb-2 | TB202610120005（demo-order-tb-05，杯子延迟，10-14 16:00异常） |
 
-完整单号、金额和状态见 [映射表](../../demo-data/FIELD-MAPPING.md)。抖店 dy-06 是运输中的毛巾，不能用作延迟故事；现种子没有无订单顾客。
+完整单号、金额和状态见 [映射表](../../demo-data/FIELD-MAPPING.md)。抖店 dy-06 是运输中的毛巾，不能用作延迟故事。TB3（demo-customer-tb-3）用于 AC-05 空订单验证。
 
 ## 5. 故事一：淘宝多单物流（约1分钟）
 
@@ -114,7 +114,7 @@ node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/comm
 
 | 情况 | 处理 |
 |---|---|
-| A 接口未接入 | 说明完整模式阻塞；可展示明确标为前端模拟的页面 |
+| API 或数据库不可达 | 说明真实验收受环境阻塞；可展示明确标为前端模拟的页面 |
 | 模型失败 | 保留降级/失败标记，只展示已验证流程 |
 | 提交后超时 | 先查实际工单/执行记录，使用原去重键重试 |
 | 资料串会话 | 记录会话和请求，停止该段并交A/B复验 |

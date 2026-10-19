@@ -6,7 +6,7 @@
 
 1. 同步 main，记录 commit 与本地改动。以 `demo-data/integration.v1.json` 对应 D 种子，不混用 C 旧草案或 B mock 身份。
 2. 根目录运行离线检查，无需第三方依赖。
-3. 启动后端，由操作者加载 D 数据后运行预检和 commerce 只读检查。前端 API 模式需 A 会话实现；前端模拟可单独预览。
+3. 启动后端，由操作者在隔离验收库加载 D 数据后运行预检和 commerce 只读检查。A 会话 API 已实现；前端 API 模式需真实后端和数据库可达，前端模拟可独立预览。
 4. 按 [TEST-CASES.md](TEST-CASES.md) 执行22条业务验收，保存真实会话、消息、工单、执行记录及前后状态。
 5. 新建带日期结果，按 [ISSUES.md](ISSUES.md) 复验；三个故事连续可操作后按 [录像脚本](../demo/RECORDING.md) 录制。
 
@@ -17,7 +17,7 @@ node docs/acceptance/scripts/preflight.mjs docs/acceptance/evidence/preflight-la
 node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/commerce-latest.json
 ```
 
-接口脚本只访问本机10002的4类 POST 查询：身份、订单、物流、工单；检查四位顾客归属、订单/物流内容、多单/单号匹配、外店/外顾客/不存在订单不可见。不加载/重置、不创建工单、不调用模型。工单为空时只能证明查询可用，不能计为建单或工单隔离已验收。显式 scope 也不能代替 A 会话身份校验。
+接口脚本只访问本机10002的4类 POST 查询：身份、订单、物流、工单；检查5位顾客归属（含 TB3 空订单身份）、订单/物流内容、多单/单号匹配、外店/外顾客/不存在订单不可见。不加载/重置、不创建工单、不调用模型。工单为空时只能证明查询可用，不能计为建单或工单隔离已验收。显式 scope 也不能代替 A 会话身份校验。
 
 | 检查 | 退出码 | 通过含义 |
 |---|---|---|

@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-10-19T14:28:21.085Z",
+  "scope": "OFFLINE_COMMERCE_SEED_AND_C_SCENARIOS_NOT_BUSINESS_ACCEPTANCE",
+  "seedSha256": "a56bab728b80498dcf14fd331d0c1622e54e48af1b24f1e2b0c8f50e1407f85a",
+  "knowledgeSha256": "2204b2cafa73962a7d5742654bf0344052f65dc5ca570f0fa2d8e843017d279b",
+  "status": "PASS",
+  "counts": {
+    "shops": 2,
+    "customers": 5,
+    "products": 3,
+    "orders": 12,
+    "logistics": 7
+  },
+  "errors": [],
+  "preparedKnowledge": {
+    "status": "PASS",
+    "count": 10,
+    "errors": []
+  },
+  "remainingGaps": [
+    "Real MySQL HTTP and browser AC-01..AC-22 still need execution; offline fixture validation is not business acceptance.",
+    "The fixed demo clock and policy/activity validity need a documented strategy for repeatable future demos."
+  ]
+}

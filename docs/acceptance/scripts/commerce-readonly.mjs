@@ -56,7 +56,7 @@ export async function runChecks(request = localRequest) {
     const ownOrders = seed.orders.filter(o => o.customerId === actor.customerId && o.shopId === actor.shopId)
     await check(`${name}: order scope and amounts`, async () => {
       const result = await success('/orders/query', { scope })
-      assert.equal(result.matchStatus, ownOrders.length === 1 ? 'MATCHED' : 'NEED_SELECTION')
+      assert.equal(result.matchStatus, ownOrders.length === 0 ? 'NOT_FOUND' : ownOrders.length === 1 ? 'MATCHED' : 'NEED_SELECTION')
       assert.deepEqual(result.orders.map(o => o.orderId).sort(), ownOrders.map(o => o.id).sort())
       for (const expected of ownOrders) {
         const live = result.orders.find(o => o.orderId === expected.id)
@@ -98,6 +98,13 @@ export async function runChecks(request = localRequest) {
       return result
     })
   }
+  await check('emptyOrders: customer has no visible orders', async () => {
+    const actor = profile.actors[profile.scenarios.emptyOrders.actor]
+    const result = await success('/orders/query', { scope: { merchantId: profile.merchantId, ...actor } })
+    assert.equal(result.matchStatus, 'NOT_FOUND')
+    assert.deepEqual(result.orders, [])
+    return result
+  })
   for (const name of ['multiOrder', 'singleOrder']) await check(`${name}: product matching`, async () => {
     const scenario = profile.scenarios[name]
     const result = await success('/orders/query', { scope: { merchantId: profile.merchantId, ...profile.actors[scenario.actor] }, productClue: scenario.productClue })

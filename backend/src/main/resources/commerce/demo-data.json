@@ -6,6 +6,7 @@
   "customers": [
     {"id":"demo-customer-tb-1","shopId":"demo-shop-tb","platformUserId":"buyer-001","name":"小林"},
     {"id":"demo-customer-tb-2","shopId":"demo-shop-tb","platformUserId":"buyer-002","name":"小周"},
+    {"id":"demo-customer-tb-3","shopId":"demo-shop-tb","platformUserId":"buyer-empty-003","name":"小许（无订单测试）"},
     {"id":"demo-customer-dy-1","shopId":"demo-shop-dy","platformUserId":"buyer-001","name":"小林"},
     {"id":"demo-customer-dy-2","shopId":"demo-shop-dy","platformUserId":"buyer-002","name":"小陈"}
   ],
