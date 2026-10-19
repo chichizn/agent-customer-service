@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-10-19T16:11:29.663Z",
+  "revision": "09941547c6340d18af12e5232ce7edc6b12da977",
+  "scope": "ISOLATED_MYSQL_WORKBENCH_HTTP_SMOKE_WRITES_SESSIONS_AND_MESSAGES",
+  "baseUrl": "http://127.0.0.1:10002",
+  "backendDatabase": "agent_customer_service_acceptance_20261019",
+  "model": "disabled",
+  "resetCalled": false,
+  "createdSessionIds": {
+    "TB3": "14ae7c4c-16b0-4525-a4ce-0b87c1d2660b",
+    "TB1": "219ffc27-9faa-40d6-89e2-5a21d02abf20",
+    "policy-tb": "64925013-0d87-4b6c-b5af-689066ae3490",
+    "policy-dy": "48efb84f-a522-4b78-ba1b-4d4718b4db75",
+    "handoff": "47573833-3fa9-4ea9-a94c-b8192d87cf9c"
+  },
+  "generatedMessageIds": [
+    "smoke-1d61544c-d950-4eeb-bd4b-4a389e793e10",
+    "idempotency-118e2bac-8e3c-4d9e-98f3-6d7319c6efd5",
+    "smoke-32e4b746-6198-4ae4-8291-23171e20a8a5",
+    "smoke-66d421d1-9e88-4649-bf7c-419a92c15d93",
+    "smoke-b8cb6793-b5f1-470b-93b6-0281f2066d64",
+    "smoke-883ade9a-1fff-4aa8-a1c2-47f806b9b420",
+    "smoke-3868bb88-e20a-4cfe-a0f1-9e00eb238530",
+    "smoke-c3d394a8-7757-4e74-af91-023b14cf5e1f",
+    "smoke-d4b6fd18-16fe-468b-b790-410020c76954",
+    "smoke-17d1e162-90b3-4c59-a846-10a4df413e0b",
+    "human-294dcfdd-e0ae-47f3-bf28-fa89de7ff39d",
+    "smoke-177b731f-3050-4c9f-ae46-74c456274b35"
+  ],
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "TB3 valid identity has no orders or logistics",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "14ae7c4c-16b0-4525-a4ce-0b87c1d2660b",
+        "orderCount": 0,
+        "logisticsCount": 0
+      }
+    },
+    {
+      "name": "same customer message id is idempotent and immutable",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "14ae7c4c-16b0-4525-a4ce-0b87c1d2660b",
+        "messageCount": 5,
+        "changedContentStatus": 409
+      }
+    },
+    {
+      "name": "multi-order clarification, owned logistics and scope isolation",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "219ffc27-9faa-40d6-89e2-5a21d02abf20",
+        "clarifiedOrders": [
+          "demo-order-tb-01",
+          "demo-order-tb-02"
+        ],
+        "selectedOrderId": "demo-order-tb-01",
+        "logistics": "DEMO-TB-0001 / 杭州",
+        "crossShop": "not found",
+        "crossCustomer": "not found"
+      }
+    },
+    {
+      "name": "return policy knowledge stays within each shop",
+      "status": "PASS",
+      "evidence": {
+        "taobao": "15天",
+        "douyin": "7天"
+      }
+    },
+    {
+      "name": "model-disabled return request hands off without creating a ticket",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "47573833-3fa9-4ea9-a94c-b8192d87cf9c",
+        "receptionMode": "WAITING_HUMAN",
+        "ticketCount": 0
+      }
+    },
+    {
+      "name": "human takeover, manual message idempotency and explicit AI return",
+      "status": "PASS",
+      "evidence": {
+        "sessionId": "47573833-3fa9-4ea9-a94c-b8192d87cf9c",
+        "customerMessageRole": "customer",
+        "humanMessageCount": 1,
+        "aiReturn": "next customer message only",
+        "restored": true
+      }
+    }
+  ]
+}

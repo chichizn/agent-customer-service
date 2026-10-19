@@ -4,7 +4,7 @@
 
 当前 Demo 目标与四人分工见 [功能需求说明](docs/requirements/README.md)；B 成员可独立运行的 Vue 工作台、顾客入口及 A/D 联调契约见 [B 前端交付说明](docs/frontend/B-WORKBENCH.md)。
 
-A 的会话、订单/工单编排、人工接管、范围知识及统一重置已补充本地实现，接口、启动步骤与验证范围见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。完整 MySQL/实际模型业务验收仍待执行。
+A 的会话、订单/工单编排、人工接管、范围知识及统一重置已补充本地实现，接口、启动步骤与验证范围见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。隔离 MySQL 的只读查询和工作台冒烟已验证；真实模型、浏览器双端及完整 AC 验收仍待执行，详见[最新验收记录](docs/acceptance/RESULTS-2026-10-20.md)。
 
 ## 环境要求
 
@@ -20,7 +20,7 @@ A 的会话、订单/工单编排、人工接管、范围知识及统一重置�
 ## 1. 克隆项目
 
 ```bash
-git clone git@github.com:anjing-le/agent-customer-service.git
+git clone git@github.com:chichizn/agent-customer-service.git
 cd agent-customer-service
 ```
 
@@ -53,6 +53,20 @@ spring:
       host: localhost
       port: 6379
       password: 123456                         # 如有密码则填入，无密码留空
+
+# 本地单实例，无 Redis 时使用本地锁
+app:
+  features:
+    redis:
+      enabled: false
+    distributed-lock:
+      enabled: true
+      provider: local
+
+management:
+  health:
+    redis:
+      enabled: false
 
 # LLM 大模型配置（可选，不配也能正常对话，走规则引擎兜底）
 llm:
@@ -137,7 +151,7 @@ curl -X POST http://localhost:10002/api/chat/message/send \
 | 数据库连接失败 `Communications link failure` | 确认 MySQL 已启动，端口 3306，密码正确 |
 | 对话只返回固定文案，LLM 没生效 | `llm.enabled` 设为 true 并填入有效 API Key |
 | `pnpm: command not found` | 执行 `npm install -g pnpm` |
-| Redis 连接失败 | 不影响核心功能，项目内置本地锁降级 |
+| 本地没有 Redis | 按上方关闭 Redis 并选择 local 锁；多实例部署启用 Redis、redisson 和 Redis 健康检查 |
 | 前端 API 404 | 确保后端在 10002 端口运行 |
 
 ## 许可证

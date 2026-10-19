@@ -1,5 +1,6 @@
 package com.anjing.config.lock;
 
+import com.anjing.model.constants.DistributeLockConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +49,13 @@ public class LocalLockConfig {
      */
     public static class LocalLockManager {
         
-        private final ConcurrentHashMap<String, ReentrantLock> locks = new ConcurrentHashMap<>();
+        private final ConcurrentHashMap<String, LockEntry> locks = new ConcurrentHashMap<>();
+
+        private static class LockEntry {
+            final ReentrantLock lock = new ReentrantLock();
+            // 仅在同一 key 的 compute 内更新，包含持有者、等待者和每次重入。
+            int references;
+        }
         
         /**
          * 获取锁
@@ -59,10 +66,22 @@ public class LocalLockConfig {
          * @return 是否获取成功
          */
         public boolean tryLock(String lockKey, long waitTime, long expireTime) {
-            ReentrantLock lock = locks.computeIfAbsent(lockKey, k -> new ReentrantLock());
-            
+            if (waitTime < DistributeLockConstant.DEFAULT_WAIT_TIME) {
+                throw new IllegalArgumentException("waitTime must be -1 or non-negative");
+            }
+            LockEntry entry = locks.compute(lockKey, (key, current) -> {
+                LockEntry retained = current == null ? new LockEntry() : current;
+                retained.references++;
+                return retained;
+            });
+            boolean acquired = false;
             try {
-                boolean acquired = lock.tryLock(waitTime, java.util.concurrent.TimeUnit.SECONDS);
+                if (waitTime == DistributeLockConstant.DEFAULT_WAIT_TIME) {
+                    entry.lock.lockInterruptibly();
+                    acquired = true;
+                } else {
+                    acquired = entry.lock.tryLock(waitTime, java.util.concurrent.TimeUnit.SECONDS);
+                }
                 if (acquired) {
                     log.debug("🔒 本地锁获取成功: {}", lockKey);
                 } else {
@@ -73,6 +92,10 @@ public class LocalLockConfig {
                 Thread.currentThread().interrupt();
                 log.warn("🔒 本地锁获取被中断: {}", lockKey);
                 return false;
+            } finally {
+                if (!acquired) {
+                    releaseReference(lockKey, entry);
+                }
             }
         }
         
@@ -82,16 +105,21 @@ public class LocalLockConfig {
          * @param lockKey 锁键
          */
         public void unlock(String lockKey) {
-            ReentrantLock lock = locks.get(lockKey);
-            if (lock != null && lock.isHeldByCurrentThread()) {
-                lock.unlock();
+            LockEntry entry = locks.get(lockKey);
+            if (entry != null && entry.lock.isHeldByCurrentThread()) {
+                entry.lock.unlock();
+                releaseReference(lockKey, entry);
                 log.debug("🔓 本地锁释放成功: {}", lockKey);
-                
-                // 清理无人持有的锁
-                if (!lock.hasQueuedThreads()) {
-                    locks.remove(lockKey);
-                }
             }
+        }
+
+        private void releaseReference(String lockKey, LockEntry entry) {
+            locks.computeIfPresent(lockKey, (key, current) -> {
+                if (current != entry) {
+                    return current;
+                }
+                return --current.references == 0 ? null : current;
+            });
         }
         
         /**
@@ -101,8 +129,8 @@ public class LocalLockConfig {
          * @return 是否被锁定
          */
         public boolean isLocked(String lockKey) {
-            ReentrantLock lock = locks.get(lockKey);
-            return lock != null && lock.isLocked();
+            LockEntry entry = locks.get(lockKey);
+            return entry != null && entry.lock.isLocked();
         }
         
         /**
@@ -110,7 +138,7 @@ public class LocalLockConfig {
          */
         public String getStats() {
             int totalLocks = locks.size();
-            long activeLocks = locks.values().stream().mapToLong(lock -> lock.isLocked() ? 1 : 0).sum();
+            long activeLocks = locks.values().stream().filter(entry -> entry.lock.isLocked()).count();
             return String.format("总锁数: %d, 活跃锁: %d", totalLocks, activeLocks);
         }
     }

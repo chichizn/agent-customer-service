@@ -1,9 +1,11 @@
 package com.anjing.aspect;
 
 import com.anjing.annotation.DistributeLock;
-import com.anjing.model.exception.SystemException;
-import com.anjing.model.errorcode.LockErrorCode;
+import com.anjing.config.lock.LocalLockConfig.LocalLockManager;
+import com.anjing.config.properties.FeatureProperties;
 import com.anjing.model.constants.DistributeLockConstant;
+import com.anjing.model.errorcode.LockErrorCode;
+import com.anjing.model.exception.SystemException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,8 +15,10 @@ import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.core.StandardReflectionParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
+import org.springframework.util.StringUtils;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -147,23 +151,32 @@ import java.util.concurrent.TimeUnit;
 public class DistributeLockAspect
 {
 
-    private RedissonClient redissonClient;
+    private final ObjectProvider<RedissonClient> redissonClientProvider;
+    private final ObjectProvider<LocalLockManager> localLockManagerProvider;
+    private final FeatureProperties featureProperties;
 
-    public DistributeLockAspect(RedissonClient redissonClient) {
-        this.redissonClient = redissonClient;
+    public DistributeLockAspect(ObjectProvider<RedissonClient> redissonClientProvider,
+                                ObjectProvider<LocalLockManager> localLockManagerProvider,
+                                FeatureProperties featureProperties) {
+        this.redissonClientProvider = redissonClientProvider;
+        this.localLockManagerProvider = localLockManagerProvider;
+        this.featureProperties = featureProperties;
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(DistributeLockAspect.class);
 
     @Around("@annotation(com.anjing.annotation.DistributeLock)")
-    public Object process(ProceedingJoinPoint pjp) throws Exception {
-        Object response = null;
+    public Object process(ProceedingJoinPoint pjp) throws Throwable {
+        if (!featureProperties.getDistributedLock().isEnabled()) {
+            return pjp.proceed();
+        }
+
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         DistributeLock distributeLock = method.getAnnotation(DistributeLock.class);
 
         String key = distributeLock.key();
-        if (DistributeLockConstant.NONE_KEY.equals(key)) {
-            if (DistributeLockConstant.NONE_KEY.equals(distributeLock.keyExpression())) {
+        if (missingKey(key)) {
+            if (missingKey(distributeLock.keyExpression())) {
                 throw new SystemException(LockErrorCode.LOCK_KEY_MISSING);
             }
             try {
@@ -187,10 +200,14 @@ public class DistributeLockAspect
                 }
 
                 // 解析表达式，获取结果
-                key = String.valueOf(expression.getValue(context));
+                Object value = expression.getValue(context);
+                key = value == null ? null : value.toString();
             } catch (Exception e) {
                 LOG.error("SpEL expression parse error: {}", distributeLock.keyExpression(), e);
                 throw new SystemException(LockErrorCode.LOCK_EXPRESSION_ERROR);
+            }
+            if (missingKey(key)) {
+                throw new SystemException(LockErrorCode.LOCK_KEY_MISSING);
             }
         }
 
@@ -200,6 +217,30 @@ public class DistributeLockAspect
 
         long expireTime = distributeLock.expireTime();
         long waitTime = distributeLock.waitTime();
+        String provider = featureProperties.getDistributedLock().getProvider();
+        if (waitTime < -1 || expireTime == 0 || expireTime < -1 ||
+                !("local".equalsIgnoreCase(provider) || "redisson".equalsIgnoreCase(provider))) {
+            throw new SystemException(LockErrorCode.LOCK_CONFIG_ERROR);
+        }
+        if ("local".equalsIgnoreCase(provider)) {
+            LocalLockManager localLockManager = localLockManagerProvider.getIfAvailable();
+            if (localLockManager == null) {
+                throw new SystemException(LockErrorCode.LOCK_ACQUIRE_FAILED);
+            }
+            if (!localLockManager.tryLock(lockKey, waitTime, expireTime)) {
+                throw new SystemException(LockErrorCode.LOCK_ACQUIRE_FAILED);
+            }
+            try {
+                return pjp.proceed();
+            } finally {
+                localLockManager.unlock(lockKey);
+            }
+        }
+
+        RedissonClient redissonClient = redissonClientProvider.getIfAvailable();
+        if (redissonClient == null) {
+            throw new SystemException(LockErrorCode.LOCK_REDIS_ERROR);
+        }
         RLock rLock = redissonClient.getLock(lockKey);
         boolean lockResult = false;
         
@@ -238,9 +279,7 @@ public class DistributeLockAspect
 
         try {
             LOG.info(String.format("lock success for key : %s , expire : %s", lockKey, expireTime));
-            response = pjp.proceed();
-        } catch (Throwable e) {
-            throw new Exception(e);
+            return pjp.proceed();
         } finally {
             try {
                 if (rLock.isHeldByCurrentThread()) {
@@ -252,6 +291,10 @@ public class DistributeLockAspect
                 // 锁释放失败不抛异常，避免影响业务逻辑的正常返回
             }
         }
-        return response;
     }
+
+    private boolean missingKey(String value) {
+        return !StringUtils.hasText(value) || DistributeLockConstant.NONE_KEY.equals(value);
+    }
+
 }

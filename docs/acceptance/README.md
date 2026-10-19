@@ -1,6 +1,6 @@
 # C 成员验收入口
 
-最新状态见 [2026-10-19 验收记录](RESULTS-2026-10-19.md)；保留 [10月18日记录](RESULTS-2026-10-18.md)。
+最新状态见 [2026-10-20 验收记录](RESULTS-2026-10-20.md)；保留 [10月19日记录](RESULTS-2026-10-19.md) 和更早历史。
 
 ## 执行顺序
 
@@ -15,9 +15,20 @@ node demo-data/scripts/check-integration.mjs docs/acceptance/evidence/integratio
 node --test docs/acceptance/scripts/integration.test.mjs
 node docs/acceptance/scripts/preflight.mjs docs/acceptance/evidence/preflight-latest.json
 node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/commerce-latest.json
+node docs/acceptance/scripts/workbench-smoke.mjs --allow-write --database agent_customer_service_acceptance_20261019 docs/acceptance/evidence/workbench-latest.json
 ```
 
-接口脚本只访问本机10002的4类 POST 查询：身份、订单、物流、工单；检查5位顾客归属（含 TB3 空订单身份）、订单/物流内容、多单/单号匹配、外店/外顾客/不存在订单不可见。不加载/重置、不创建工单、不调用模型。工单为空时只能证明查询可用，不能计为建单或工单隔离已验收。显式 scope 也不能代替 A 会话身份校验。
+`commerce-readonly.mjs` 只访问本机10002的4类 POST 查询：身份、订单、物流、工单；检查5位顾客归属（含 TB3 空订单身份）、订单/物流内容、多单/单号匹配、外店/外顾客/不存在订单不可见。不加载/重置、不创建工单、不调用模型。工单为空时只能证明查询可用，不能计为建单或工单隔离已验收。显式 scope 也不能代替 A 会话身份校验。
+
+工作台冒烟脚本会创建并保留会话及消息，不重置数据、不建工单，也不调用模型。它只接受回环地址，并固定记录名为 `agent_customer_service_acceptance_20261019` 的目标；运行前仍须核实 10002 后端实际连接的库确为本轮隔离库。不要对日常开发库或真实业务库运行。
+
+后端重启比较脚本只读取冒烟报告中的会话。先保存快照，正常重启指向同一数据库的后端，再核对快照；它不重启进程，也不验证浏览器或未创建的工单。
+
+```powershell
+node docs/acceptance/scripts/workbench-restart-check.mjs capture docs/acceptance/evidence/workbench-latest.json docs/acceptance/evidence/restart-before.json
+# 确认进程归属后，正常重启当前验收后端。
+node docs/acceptance/scripts/workbench-restart-check.mjs verify docs/acceptance/evidence/restart-before.json docs/acceptance/evidence/restart-after.json
+```
 
 | 检查 | 退出码 | 通过含义 |
 |---|---|---|
@@ -25,6 +36,8 @@ node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/comm
 | integration.test | 0 / 非0 | 检查器自身回归通过 / 失败，使用替身 |
 | preflight | 0 / 2 | 前后端基线可访问 / 未就绪，响应详情见报告 |
 | commerce-readonly | 0 / 1 / 2 | 查询响应符合种子 / 响应不符 / 不可达或超时 |
+| workbench-smoke | 0 / 非0 | 六组有限工作台 HTTP 检查通过 / 失败，写入会话和消息 |
+| workbench-restart-check | 0 / 非0 | 重启前快照捕获或重启后完整快照一致 / 失败，仅查询 |
 
 旧数据/加载器回归用 `node demo-data/scripts/verify-package.mjs`；不传输出路径可避免覆盖历史证据。
 

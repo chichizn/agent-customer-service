@@ -1,16 +1,19 @@
 package com.anjing.module.chat.workbench;
 
 import com.anjing.Application;
+import com.anjing.annotation.DistributeLock;
 import com.anjing.module.commerce.CommerceDemoService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.*;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.Map;
 
@@ -27,18 +30,28 @@ import static org.assertj.core.api.Assertions.assertThat;
     "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
     "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect",
     "app.features.redis.enabled=false",
-    "app.features.distributed-lock.enabled=false",
+    "app.features.distributed-lock.enabled=true",
     "app.features.distributed-lock.provider=local",
-    "spring.autoconfigure.exclude=org.redisson.spring.starter.RedissonAutoConfigurationV2",
     "llm.enabled=false",
     "logging.level.root=WARN"
 })
+@Import(WorkbenchApplicationHttpTest.LockProbeConfiguration.class)
 class WorkbenchApplicationHttpTest {
+    @TestConfiguration(proxyBeanMethods=false)
+    static class LockProbeConfiguration {
+        @Bean LockProbe lockProbe() { return new LockProbe(); }
+    }
+
+    static class LockProbe {
+        @DistributeLock(scene="local-lock-test",key="probe")
+        public String execute() { return "locked"; }
+    }
+
     @LocalServerPort int port;
     @Autowired TestRestTemplate http;
     @Autowired CommerceDemoService demo;
     @Autowired WorkbenchService workbench;
-    @MockitoBean org.redisson.api.RedissonClient redissonClient;
+    @Autowired LockProbe lockProbe;
 
     @BeforeEach void resetIsolatedDatabase() {
         demo.load();
@@ -46,6 +59,8 @@ class WorkbenchApplicationHttpTest {
     }
 
     @Test void bootedApplicationRoutesIdentityAndEmptyCustomerConversationOverHttp() {
+        assertThat(lockProbe.execute()).isEqualTo("locked");
+
         JsonNode identities = post("/api/commerce/demo/identities", Map.of());
         assertThat(identities.at("/data/shops/1/customers").toString()).contains("demo-customer-tb-3");
 

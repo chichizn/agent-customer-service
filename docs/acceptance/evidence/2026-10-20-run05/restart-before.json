@@ -1,0 +1,63 @@
+{
+  "generatedAt": "2026-10-19T16:19:52.822Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "scope": "READ_ONLY_WORKBENCH_SNAPSHOT_RESTART_COMPARISON_NOT_FULL_AC",
+  "status": "CAPTURED",
+  "sessions": [
+    {
+      "name": "TB3",
+      "sessionId": "14ae7c4c-16b0-4525-a4ce-0b87c1d2660b",
+      "snapshotSha256": "fc5320d11be9f5e032a2770920e1267867f9ddc1fbe03c53282612709bc711c9",
+      "messageCount": 5,
+      "executionCount": 4,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 0
+    },
+    {
+      "name": "TB1",
+      "sessionId": "219ffc27-9faa-40d6-89e2-5a21d02abf20",
+      "snapshotSha256": "04cc518ddac749da95cf77def7010587d0f80ae487f1664952f4adc3be96c8f6",
+      "messageCount": 9,
+      "executionCount": 9,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 0
+    },
+    {
+      "name": "policy-tb",
+      "sessionId": "64925013-0d87-4b6c-b5af-689066ae3490",
+      "snapshotSha256": "a8a87b7b3d67e7d25722caab9b1221a3ed067bbfaf95802de583404ee42df182",
+      "messageCount": 3,
+      "executionCount": 1,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 0
+    },
+    {
+      "name": "policy-dy",
+      "sessionId": "48efb84f-a522-4b78-ba1b-4d4718b4db75",
+      "snapshotSha256": "0d5ff3540c9a8bcf81f3162399a5f97d91740cde7297b0ed8360ba25139c0038",
+      "messageCount": 3,
+      "executionCount": 1,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 0
+    },
+    {
+      "name": "handoff",
+      "sessionId": "47573833-3fa9-4ea9-a94c-b8192d87cf9c",
+      "snapshotSha256": "ecfbaab403b58e1d2e240016d86ad6ee1710cae4839d1f0c964a9f4f8f9aae61",
+      "messageCount": 9,
+      "executionCount": 6,
+      "humanMessageCount": 1,
+      "receptionMode": "AI",
+      "selectedOrderId": "demo-order-dy-01",
+      "ticketCount": 0
+    }
+  ]
+}

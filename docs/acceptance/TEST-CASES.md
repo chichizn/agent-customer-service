@@ -1,6 +1,6 @@
 # AC-01～AC-22 可执行验收用例
 
-依据需求 v0.2；2026-10-19 对齐 main 的 D 种子和 [C 集成配置](../../demo-data/integration.v1.json)，订单对照见 [FIELD-MAPPING.md](../../demo-data/FIELD-MAPPING.md)。本文件是操作规程，不是已执行结果，实际状态见 [最新验收记录](RESULTS-2026-10-19.md)。B mock 另用一套身份，只能验证前端模拟，不能套用下列真实集成单号。
+依据需求 v0.2；2026-10-19 对齐 main 的 D 种子和 [C 集成配置](../../demo-data/integration.v1.json)，订单对照见 [FIELD-MAPPING.md](../../demo-data/FIELD-MAPPING.md)。本文件是操作规程，不是已执行结果，实际状态见 [最新验收记录](RESULTS-2026-10-20.md)。B mock 另用一套身份，只能验证前端模拟，不能套用下列真实集成单号。
 
 ## 公共前置和记号
 

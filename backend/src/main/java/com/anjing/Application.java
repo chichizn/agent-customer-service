@@ -35,7 +35,8 @@ import java.util.Arrays;
  * @author Backend Template Team
  * @version 1.0
  */
-@SpringBootApplication
+// 项目通过 RedissonConfig 按功能开关创建客户端，避免 starter 绕过开关连接 Redis。
+@SpringBootApplication(excludeName = "org.redisson.spring.starter.RedissonAutoConfigurationV2")
 @ServletComponentScan
 @EnableAspectJAutoProxy
 @EnableScheduling
