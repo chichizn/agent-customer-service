@@ -6,6 +6,7 @@ import com.anjing.module.chat.ChatService;
 import com.anjing.module.chat.entity.*;
 import com.anjing.module.chat.repository.*;
 import com.anjing.module.commerce.*;
+import com.anjing.module.demo.DemoBusinessTime;
 import com.anjing.module.commerce.CommerceDTO.*;
 import com.anjing.module.commerce.CommerceTypes.*;
 import com.anjing.module.commerce.entity.Merchant;
@@ -50,7 +51,7 @@ class WorkbenchIntegrationTest {
     @EntityScan(basePackageClasses={ChatSession.class,Merchant.class})
     @EnableJpaRepositories(basePackageClasses={ChatSessionRepository.class,MerchantRepository.class})
     @Import({CommerceService.class,CommerceDemoService.class,WorkbenchService.class,
-        WorkbenchKnowledgeService.class,SessionTicketGuard.class})
+        WorkbenchKnowledgeService.class,SessionTicketGuard.class,DemoBusinessTime.class})
     static class Config {
         @Bean ObjectMapper mapper() { return new ObjectMapper().registerModule(new JavaTimeModule()); }
         @Bean LlmService llm() { return mock(LlmService.class); }
@@ -64,6 +65,7 @@ class WorkbenchIntegrationTest {
     @Autowired ChatMessageRepository messages;
     @Autowired ChatExecutionRepository executions;
     @Autowired ScopedKnowledgeRepository knowledge;
+    @Autowired WorkbenchKnowledgeService knowledgeService;
     @Autowired ServiceTicketRepository tickets;
     @Autowired PlatformTransactionManager transactionManager;
     @Autowired DataSource dataSource;
@@ -214,6 +216,24 @@ class WorkbenchIntegrationTest {
         assertThat(fetch(tb.session().sessionId()).knowledge()).extracting(WorkbenchVO.Knowledge::knowledgeId)
             .contains("demo-knowledge-tb-return").doesNotContain("demo-knowledge-dy-return");
         assertThat(knowledge.count()).isEqualTo(10);
+    }
+
+    @Test void openingSessionBackfillsLegacyDatesWithoutResetAndExpiredKnowledgeStaysHidden() {
+        JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+        String activityId = "demo-knowledge-tb-activity";
+        jdbc.update("update cs_scoped_knowledge set kind=null, starts_at=null, ends_at=null, content=?, status=? where id=?",
+            "商家修改过的活动", "DISABLED", activityId);
+        open("tb");
+        var restored = knowledge.findById(activityId).orElseThrow();
+        assertThat(restored.getKind()).isEqualTo("ACTIVITY");
+        assertThat(restored.getStartsAt()).isEqualTo(java.time.LocalDateTime.parse("2026-10-01T00:00:00"));
+        assertThat(restored.getEndsAt()).isEqualTo(java.time.LocalDateTime.parse("2026-10-31T23:59:59"));
+        assertThat(restored.getContent()).isEqualTo("商家修改过的活动");
+        assertThat(restored.getStatus()).isEqualTo("DISABLED");
+        jdbc.update("update cs_scoped_knowledge set status='ACTIVE', ends_at=? where id=?",
+            java.time.LocalDateTime.parse("2026-10-17T23:59:59"), activityId);
+        open("tb");
+        assertThat(knowledgeService.search("demo-merchant", "demo-shop-tb", "活动优惠")).isEmpty();
     }
 
     @Test void unifiedResetIsRepeatablePreservesOriginalChatAndInvalidatesOldSession() {

@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-10-19T16:47:16.893Z",
+  "revision": "e2559503689f3207f2279d85253264379154e4a4",
+  "workspaceDirty": true,
+  "scope": "ISOLATED_MYSQL_DEMO_ACTIVITY_CLOCK_HTTP_NOT_FULL_AC",
+  "baseUrl": "http://127.0.0.1:10002",
+  "backendDatabase": "agent_customer_service_acceptance_20261019",
+  "model": "disabled",
+  "expectedAt": "2026-11-01T12:00:00+08:00",
+  "resetCalled": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "business time metadata",
+      "status": "PASS",
+      "businessTime": {
+        "mode": "fixed",
+        "effectiveAt": "2026-11-01T12:00:00+08:00",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "name": "demo-shop-tb activity visibility",
+      "status": "PASS",
+      "sessionId": "83a19199-7ae0-4777-8615-9ac87897345c",
+      "expectedKnowledgeIds": [],
+      "actualKnowledgeIds": [],
+      "messageCreatedAt": "2026-10-20T00:47:16.749234900+08:00",
+      "lastReply": "【模型不可用，规则降级】当前店铺缺少足够的知识依据，请补充问题或联系人工客服。",
+      "ticketCount": 0
+    },
+    {
+      "name": "demo-shop-dy activity visibility",
+      "status": "PASS",
+      "sessionId": "05e72d81-1ff3-4396-bd06-bf36b25caad0",
+      "expectedKnowledgeIds": [],
+      "actualKnowledgeIds": [],
+      "messageCreatedAt": "2026-10-20T00:47:16.858804800+08:00",
+      "lastReply": "【模型不可用，规则降级】当前店铺缺少足够的知识依据，请补充问题或联系人工客服。",
+      "ticketCount": 0
+    }
+  ]
+}

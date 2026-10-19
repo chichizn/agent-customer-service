@@ -1,6 +1,6 @@
 # C 成员数据与联调交付
 
-更新：2026-10-19。当前集成基线在 main `c2fac80` 之后加入 TB3 无订单顾客；需求依据见 [需求 v0.2](../docs/requirements/README.md)。
+更新：2026-10-20。当前集成基线已加入 TB3 无订单顾客和演示活动时钟；需求依据见 [需求 v0.2](../docs/requirements/README.md)。
 
 ## 当前使用的数据
 
@@ -46,6 +46,8 @@ node demo-data/scripts/load-current-knowledge.mjs
 
 这些旧检查仍可离线复验。旧知识加载器只预览原草案4商品、2共用FAQ；`--apply` 会写入全局知识，既不接 D 商品映射，也不支持店铺范围。当前真实集成不要用它导入新知识或店铺规则。10月18日原始数据和证据保持原样。
 
-日期基准为 **2026-10-18 12:00，Asia/Shanghai**，所有日期是固定演示数据。当前加载器不平移日期；后续需 A/D 统一日期策略，不能只延长活动而让签收时间过期。
+日期基准为 **2026-10-18 12:00，Asia/Shanghai**，种子日期保持不变。后端默认 `DEMO_TIME_MODE=fixed`，仅演示活动有效期使用该基准；可设置 `DEMO_REFERENCE_TIME`（含时区）或 `DEMO_TIME_MODE=system` 后重启。活动起止边界均包含，缺失有效期、未开始和已结束的活动不参与检索。非演示知识始终使用真实时间；消息、工单时间和超时也保持真实时间。退货规则仅供说明，是否受理仍由商家审核，当前不自动判定资格或承诺退款。
 
-关联材料：[最新验收记录](../docs/acceptance/RESULTS-2026-10-19.md)、[用例](../docs/acceptance/TEST-CASES.md)、[演示手册](../docs/demo/RUNBOOK.md)、[录像准备](../docs/demo/RECORDING.md)。
+JPA 更新表结构后，首次打开或恢复会话会为旧演示知识补齐类型及有效期，保留已有文案、启用状态和范围；无需重置订单、会话或工单。旧活动未完成补齐时会被排除，避免无日期活动被当作有效。
+
+关联材料：[最新验收记录](../docs/acceptance/RESULTS-2026-10-20.md)、[用例](../docs/acceptance/TEST-CASES.md)、[演示手册](../docs/demo/RUNBOOK.md)、[录像准备](../docs/demo/RECORDING.md)。

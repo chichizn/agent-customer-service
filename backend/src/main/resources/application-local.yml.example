@@ -21,6 +21,9 @@ spring:
 
 # 本地默认不要求 Redis。多实例部署时启用 Redis，并改用 redisson。
 app:
+  demo:
+    time-mode: ${DEMO_TIME_MODE:fixed}
+    reference-time: ${DEMO_REFERENCE_TIME:2026-10-18T12:00:00+08:00}
   features:
     redis:
       enabled: false

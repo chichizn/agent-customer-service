@@ -46,6 +46,22 @@ test('commerce 身份映射保留商家并将顾客绑定到所属店铺', () =>
   })
 })
 
+test('演示时间配置传递给双端，兼容未提供时间的旧身份接口', () => {
+  const identities: CommerceIdentities = {
+    merchantId: 'demo-merchant',
+    merchantName: '演示商家',
+    shops: [],
+    businessTime: {
+      mode: 'fixed',
+      effectiveAt: '2026-10-18T12:00:00+08:00',
+      timeZone: 'Asia/Shanghai'
+    }
+  }
+  assert.deepEqual(toDemoCatalog(identities).businessTime, identities.businessTime)
+  delete identities.businessTime
+  assert.equal(Object.hasOwn(toDemoCatalog(identities), 'businessTime'), false)
+})
+
 test('订单映射保留真实单号、商品规格、金额和状态', () => {
   const order: CommerceOrderRecord = {
     orderId: 'order-1',

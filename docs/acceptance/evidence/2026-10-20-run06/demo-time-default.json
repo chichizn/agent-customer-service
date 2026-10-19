@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-19T16:48:33.269Z",
+  "revision": "e2559503689f3207f2279d85253264379154e4a4",
+  "workspaceDirty": true,
+  "scope": "ISOLATED_MYSQL_DEMO_ACTIVITY_CLOCK_HTTP_NOT_FULL_AC",
+  "baseUrl": "http://127.0.0.1:10002",
+  "backendDatabase": "agent_customer_service_acceptance_20261019",
+  "model": "disabled",
+  "expectedAt": "2026-10-18T12:00:00+08:00",
+  "resetCalled": false,
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "business time metadata",
+      "status": "PASS",
+      "businessTime": {
+        "mode": "fixed",
+        "effectiveAt": "2026-10-18T12:00:00+08:00",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "name": "demo-shop-tb activity visibility",
+      "status": "PASS",
+      "sessionId": "1406d8ff-522a-4645-9c07-6e1add10e068",
+      "expectedKnowledgeIds": [
+        "demo-knowledge-tb-activity"
+      ],
+      "actualKnowledgeIds": [
+        "demo-knowledge-tb-activity"
+      ],
+      "messageCreatedAt": "2026-10-20T00:48:33.117823300+08:00",
+      "lastReply": "【模型不可用，规则降级】淘宝演示店收纳盒活动：仅淘宝演示店收纳盒新订单单件9折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+      "ticketCount": 0
+    },
+    {
+      "name": "demo-shop-dy activity visibility",
+      "status": "PASS",
+      "sessionId": "7f5876e5-6086-4ffe-bbd4-76a0fa3c33e0",
+      "expectedKnowledgeIds": [
+        "demo-knowledge-dy-activity"
+      ],
+      "actualKnowledgeIds": [
+        "demo-knowledge-dy-activity"
+      ],
+      "messageCreatedAt": "2026-10-20T00:48:33.236509800+08:00",
+      "lastReply": "【模型不可用，规则降级】抖店演示店保温杯活动：仅抖店演示店保温杯新订单单件95折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+      "ticketCount": 0
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-10-20T00:49:22.6872204+08:00",
+  "scope": "READ_ONLY_ISOLATED_MYSQL_KNOWLEDGE_METADATA_AFTER_UPGRADE",
+  "status": "PASS",
+  "before": "10 legacy knowledge rows; kind/starts_at/ends_at columns absent before this source restart",
+  "after": {
+    "port": 13307,
+    "database": "agent_customer_service_acceptance_20261019",
+    "activities": [
+      {
+        "id": "demo-knowledge-dy-activity",
+        "endsAt": "2026-10-31 23:59:59.000000",
+        "status": "ACTIVE",
+        "startsAt": "2026-10-01 00:00:00.000000"
+      },
+      {
+        "id": "demo-knowledge-tb-activity",
+        "endsAt": "2026-10-31 23:59:59.000000",
+        "status": "ACTIVE",
+        "startsAt": "2026-10-01 00:00:00.000000"
+      }
+    ],
+    "ticketCount": 0,
+    "knowledgeCount": 10,
+    "typedKnowledgeCount": 10
+  },
+  "resetCalled": false
+}

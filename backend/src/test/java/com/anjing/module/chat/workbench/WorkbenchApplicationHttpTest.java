@@ -62,6 +62,8 @@ class WorkbenchApplicationHttpTest {
         assertThat(lockProbe.execute()).isEqualTo("locked");
 
         JsonNode identities = post("/api/commerce/demo/identities", Map.of());
+        assertThat(identities.at("/data/businessTime/mode").asText()).isEqualTo("fixed");
+        assertThat(identities.at("/data/businessTime/effectiveAt").asText()).isEqualTo("2026-10-18T12:00:00+08:00");
         assertThat(identities.at("/data/shops/1/customers").toString()).contains("demo-customer-tb-3");
 
         JsonNode opened = post("/api/chat/session/open", Map.of(

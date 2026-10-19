@@ -5,6 +5,7 @@
   import type { Platform, ReceptionMode } from '@/api/customer-service/model/workbenchModel'
   import MessageThread from './components/MessageThread.vue'
   import BusinessPanel from './components/BusinessPanel.vue'
+  import DemoTimeNotice from './components/DemoTimeNotice.vue'
   import { useWorkbench } from './composables/useWorkbench'
   import { formatTime, modeLabels, platformLabels } from './workbenchLabels'
   import './workbench.css'
@@ -12,6 +13,7 @@
   defineOptions({ name: 'ChatCenter' })
   const router = useRouter()
   const {
+    catalog,
     sessions,
     selectedId,
     snapshot,
@@ -92,6 +94,7 @@
         >独立窗口 ↗</a
       ></div
     >
+    <DemoTimeNotice :business-time="catalog.businessTime" />
     <div v-if="syncError || actionError" class="cs-error-banner" role="alert"
       ><span>{{ actionError || syncError }}</span
       ><button class="cs-link" :disabled="busy" @click="refresh">重新同步</button></div

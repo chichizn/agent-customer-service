@@ -3,6 +3,7 @@ package com.anjing.module.chat.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Entity @Table(name="cs_scoped_knowledge") @Getter @Setter
 public class ScopedKnowledge {
@@ -15,5 +16,8 @@ public class ScopedKnowledge {
     @Column(nullable=false,columnDefinition="TEXT") private String content;
     @Column(nullable=false,length=1000) private String source;
     @Column(nullable=false,length=20) private String status;
+    @Column(length=20) private String kind;
+    private LocalDateTime startsAt;
+    private LocalDateTime endsAt;
     @Column(nullable=false) private boolean demoData;
 }

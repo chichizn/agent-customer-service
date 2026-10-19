@@ -4,6 +4,7 @@ import com.anjing.module.commerce.CommerceTypes.*;
 import com.anjing.module.commerce.CommerceVO.*;
 import com.anjing.module.commerce.entity.*;
 import com.anjing.module.commerce.repository.*;
+import com.anjing.module.demo.DemoBusinessTime;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
@@ -26,6 +27,7 @@ public class CommerceDemoService {
     private final ServiceTicketRepository tickets;
     private final TicketSubmissionRepository submissions;
     private final ObjectMapper objectMapper;
+    private final DemoBusinessTime businessTime;
 
     /** 只列出本模块演示身份，供 A 校验及 B 构建模拟入口。 */
     @Transactional(readOnly = true)
@@ -35,7 +37,7 @@ public class CommerceDemoService {
         return new DemoIdentities(merchant.getId(), merchant.getName(), shops.findByMerchantIdOrderById(MERCHANT_ID).stream()
             .filter(Shop::isDemoData).map(s -> new ShopIdentity(s.getId(), s.getName(), s.getPlatform(),
                 customers.findByMerchantIdAndShopIdOrderById(MERCHANT_ID, s.getId()).stream().filter(Customer::isDemoData)
-                    .map(c -> new CustomerIdentity(c.getId(), c.getPlatformUserId(), c.getName())).toList())).toList());
+                    .map(c -> new CustomerIdentity(c.getId(), c.getPlatformUserId(), c.getName())).toList())).toList(), businessTime.describe());
     }
 
     /** 不清除已有工单；已存在的演示订单也不覆盖。 */

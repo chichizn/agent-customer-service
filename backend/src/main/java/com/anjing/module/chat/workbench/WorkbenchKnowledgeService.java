@@ -4,18 +4,24 @@ import com.anjing.module.chat.entity.ScopedKnowledge;
 import com.anjing.module.chat.repository.ScopedKnowledgeRepository;
 import com.anjing.module.commerce.CommerceDemoService;
 import com.anjing.module.commerce.CommerceException;
+import com.anjing.module.demo.DemoBusinessTime;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service @RequiredArgsConstructor
 public class WorkbenchKnowledgeService {
     private final ScopedKnowledgeRepository repository;
     private final ObjectMapper mapper;
+    private final DemoBusinessTime businessTime;
 
     @Transactional
     public void load(boolean overwrite) {
@@ -28,7 +34,14 @@ public class WorkbenchKnowledgeService {
                 var old = repository.findById(id);
                 if (old.isPresent() && (!old.get().isDemoData() || !CommerceDemoService.MERCHANT_ID.equals(old.get().getMerchantId())))
                     throw new CommerceException("DEMO_DATA_CONFLICT", "知识编号与非演示数据冲突，未覆盖原数据");
-                if (!overwrite && old.isPresent()) continue;
+                if (!overwrite && old.isPresent()) {
+                    // Upgrade legacy demo metadata without replacing edited content, scope or status.
+                    if (old.get().getKind() == null) {
+                        applyValidity(old.get(), item);
+                        repository.save(old.get());
+                    }
+                    continue;
+                }
                 String scope = item.path("scope").asText();
                 String shop = item.path("shopId").isNull() ? null : item.path("shopId").asText();
                 if (id.isBlank() || !CommerceDemoService.MERCHANT_ID.equals(item.path("merchantId").asText()) ||
@@ -40,6 +53,7 @@ public class WorkbenchKnowledgeService {
                 k.setTopic(item.path("topic").asText()); k.setTitle(item.path("title").asText());
                 k.setContent(item.path("content").asText()); k.setSource(item.path("source").asText());
                 k.setStatus(item.path("status").asText()); k.setDemoData(true);
+                applyValidity(k, item);
                 repository.save(k);
             }
         } catch (IOException ex) { throw new IllegalStateException("无法读取集成知识种子", ex); }
@@ -61,9 +75,41 @@ public class WorkbenchKnowledgeService {
     }
 
     public List<ScopedKnowledge> applicable(String merchantId, String shopId) {
+        LocalDateTime demoNow = businessTime.now(true);
+        LocalDateTime systemNow = businessTime.now(false);
         return repository.findByMerchantIdAndStatus(merchantId,"ACTIVE").stream()
             .filter(k -> "MERCHANT".equals(k.getScope()) && k.getShopId()==null ||
-                "SHOP".equals(k.getScope()) && Objects.equals(shopId,k.getShopId())).toList();
+                "SHOP".equals(k.getScope()) && Objects.equals(shopId,k.getShopId()))
+            .filter(k -> validAt(k, k.isDemoData() ? demoNow : systemNow)).toList();
+    }
+
+    private void applyValidity(ScopedKnowledge knowledge, JsonNode item) {
+        LocalDateTime start = timestamp(item.path("policy").path("startsAt"));
+        LocalDateTime end = timestamp(item.path("policy").path("endsAt"));
+        String kind = item.path("kind").asText();
+        if (("ACTIVITY".equals(kind) && (start == null || end == null)) ||
+            (start != null && end != null && start.isAfter(end))) {
+            throw new IllegalStateException("知识有效期无效: " + knowledge.getId());
+        }
+        knowledge.setKind(kind);
+        knowledge.setStartsAt(start);
+        knowledge.setEndsAt(end);
+    }
+
+    private LocalDateTime timestamp(JsonNode value) {
+        if (value.isMissingNode() || value.isNull()) return null;
+        try {
+            return OffsetDateTime.parse(value.asText()).atZoneSameInstant(ZoneId.of("Asia/Shanghai")).toLocalDateTime();
+        } catch (RuntimeException ex) {
+            throw new IllegalStateException("知识有效期必须包含有效日期和时区", ex);
+        }
+    }
+
+    private boolean validAt(ScopedKnowledge knowledge, LocalDateTime now) {
+        LocalDateTime start = knowledge.getStartsAt(), end = knowledge.getEndsAt();
+        if (("ACTIVITY".equals(knowledge.getKind()) || "DISCOUNT".equals(knowledge.getTopic())) &&
+            (start == null || end == null)) return false;
+        return (start == null || !now.isBefore(start)) && (end == null || !now.isAfter(end));
     }
     private boolean has(String text,String... words) { return Arrays.stream(words).anyMatch(text::contains); }
 }

@@ -23,11 +23,13 @@
 | `/tickets/create` | scope、sessionId、messageId、orderId、ticketType、reason、customerConfirmed | ticket、created、reuseReason、message |
 | `/tickets/query` | scope，选填 ticketNumber、orderId、sessionId | 工单数组，含处理历史 |
 | `/tickets/update` | merchantId、shopId、ticketId、expectedStatus、status、note、operatorId | 更新后的工单，含完整处理历史 |
-| `/demo/identities` | 无请求体 | merchantId、merchantName、shops，每店包含 customers |
+| `/demo/identities` | 无请求体 | merchantId、merchantName、shops（每店包含 customers）、businessTime（mode、effectiveAt、timeZone） |
 | `/demo/load` | 无请求体 | 加载结果；补齐缺失演示数据，保留现有订单及工单 |
 | `/demo/restore` | `{"confirmed":true}` | commerce 演示业务恢复结果；清除演示工单 |
 
 必填 ID 非空且不超过 64 字符，productClue 不超过 100 字符，reason/note 非空且不超过 1000 字符。枚举区分大小写。缺少确认字段按未确认处理。所有日期为当地 `Asia/Shanghai` 的 ISO 本地时间，如 `2026-10-10T09:00:00`；演示数据时间固定，不用于实时到货预测。
+
+2026-10-20 新增的 `businessTime.effectiveAt` 带明确 UTC 偏移，如 `2026-10-18T12:00:00+08:00`。默认固定演示活动有效期时钟，双端据此提示；可通过 `DEMO_TIME_MODE` 和 `DEMO_REFERENCE_TIME` 调整。订单/物流日期不平移，工单操作时间仍为真实时间，配置不代表自动批准退货或退款。
 
 ## 订单与物流
 

@@ -17,8 +17,15 @@ export interface DemoCustomer {
   name: string
 }
 
+export interface DemoBusinessTime {
+  mode: 'fixed' | 'system'
+  effectiveAt: string
+  timeZone: string
+}
+
 export interface DemoCatalog {
   merchantId: string
+  businessTime?: DemoBusinessTime
   shops: DemoShop[]
   customers: DemoCustomer[]
 }

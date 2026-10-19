@@ -1,6 +1,7 @@
 import type {
   CommerceOrder,
   DemoCatalog,
+  DemoBusinessTime,
   OrderLogistics,
   Platform,
   ServiceTicket,
@@ -11,6 +12,7 @@ import type {
 export interface CommerceIdentities {
   merchantId: string
   merchantName: string
+  businessTime?: DemoBusinessTime
   shops: {
     shopId: string
     name: string
@@ -59,6 +61,7 @@ export interface CommerceTicketRecord {
 export function toDemoCatalog(identities: CommerceIdentities): DemoCatalog {
   return {
     merchantId: identities.merchantId,
+    ...(identities.businessTime ? { businessTime: identities.businessTime } : {}),
     shops: identities.shops.map(({ shopId, name, platform }) => ({ shopId, name, platform })),
     customers: identities.shops.flatMap((shop) =>
       shop.customers.map((customer) => ({ ...customer, shopId: shop.shopId }))

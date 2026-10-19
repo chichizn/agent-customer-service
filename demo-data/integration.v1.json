@@ -27,7 +27,7 @@
     "emptyOrders": { "actor": "TB3", "expectNoOrders": true }
   },
   "gaps": [
-    "Real MySQL HTTP and browser AC-01..AC-22 still need execution; offline fixture validation is not business acceptance.",
-    "The fixed demo clock and policy/activity validity need a documented strategy for repeatable future demos."
+    "Limited isolated-MySQL HTTP checks have passed; real-model and dual-browser AC-01..AC-22 still need execution. Offline fixture validation is not business acceptance.",
+    "Demo activity validity uses a configurable fixed business clock by default. Return eligibility remains subject to merchant review; seed dates are not shifted."
   ]
 }

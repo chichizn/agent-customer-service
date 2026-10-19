@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-10-19T16:46:31.602Z",
+  "revision": "e2559503689f3207f2279d85253264379154e4a4",
+  "workspaceDirty": true,
+  "scope": "ISOLATED_MYSQL_DEMO_ACTIVITY_CLOCK_HTTP_NOT_FULL_AC",
+  "baseUrl": "http://127.0.0.1:10002",
+  "backendDatabase": "agent_customer_service_acceptance_20261019",
+  "model": "disabled",
+  "expectedAt": "2026-11-01T12:00:00+08:00",
+  "resetCalled": false,
+  "status": "FAIL",
+  "checks": [
+    {
+      "name": "business time metadata",
+      "status": "PASS",
+      "businessTime": {
+        "mode": "fixed",
+        "effectiveAt": "2026-11-01T12:00:00+08:00",
+        "timeZone": "Asia/Shanghai"
+      }
+    },
+    {
+      "name": "demo time HTTP probe",
+      "status": "FAIL",
+      "reason": "Customer message timestamp must use real Asia/Shanghai time"
+    }
+  ]
+}

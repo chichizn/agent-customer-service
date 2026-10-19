@@ -3,6 +3,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import { isWorkbenchMock } from '@/api/customer-service/workbench'
   import MessageThread from '../chat/components/MessageThread.vue'
+  import DemoTimeNotice from '../chat/components/DemoTimeNotice.vue'
   import { useWorkbench } from '../chat/composables/useWorkbench'
   import { platformLabels } from '../chat/workbenchLabels'
   import '../chat/workbench.css'
@@ -97,6 +98,7 @@
           : '平台消息为演示消息，业务结果由后端返回。'
       }}</div
     >
+    <DemoTimeNotice :business-time="catalog.businessTime" />
     <div v-if="syncError || actionError" class="cs-error-banner" role="alert"
       ><span>{{ actionError || syncError }}</span
       ><button class="cs-link" :disabled="busy" @click="refresh">重新同步</button></div

@@ -5,6 +5,7 @@ import com.anjing.module.commerce.CommerceTypes.*;
 import com.anjing.module.commerce.CommerceVO.*;
 import com.anjing.module.commerce.entity.*;
 import com.anjing.module.commerce.repository.*;
+import com.anjing.module.demo.DemoBusinessTime;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,7 @@ class CommercePersistenceTest {
     @Configuration(proxyBeanMethods = false)
     @EntityScan(basePackageClasses = Merchant.class)
     @EnableJpaRepositories(basePackageClasses = MerchantRepository.class)
-    @Import({CommerceService.class, CommerceDemoService.class})
+    @Import({CommerceService.class, CommerceDemoService.class, DemoBusinessTime.class})
     static class Config {
         @Bean ObjectMapper objectMapper() { return new ObjectMapper().registerModule(new JavaTimeModule()); }
         @Bean static MethodValidationPostProcessor methodValidation() { return new MethodValidationPostProcessor(); }

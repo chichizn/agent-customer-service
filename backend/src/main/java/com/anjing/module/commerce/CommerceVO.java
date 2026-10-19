@@ -1,6 +1,7 @@
 package com.anjing.module.commerce;
 
 import com.anjing.module.commerce.CommerceTypes.*;
+import com.anjing.module.demo.DemoBusinessTime;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,7 @@ public final class CommerceVO {
     public record TicketCreated(Ticket ticket, boolean created, String reuseReason, String message) {}
     public record CustomerIdentity(String customerId, String platformUserId, String name) {}
     public record ShopIdentity(String shopId, String name, Platform platform, List<CustomerIdentity> customers) {}
-    public record DemoIdentities(String merchantId, String merchantName, List<ShopIdentity> shops) {}
+    public record DemoIdentities(String merchantId, String merchantName, List<ShopIdentity> shops,
+        DemoBusinessTime.Info businessTime) {}
     public record DemoRestored(String merchantId, int shops, int customers, int orders, String message) {}
 }
