@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Anjing AI 多平台电商客服数字员工：无需登录，体验跨店会话、订单物流、售后工单与人工接管。比赛公开体验版使用虚构数据与本地规则。" />
+    <title>Anjing AI · 产品体验</title>
+    <style>
+      :root { color-scheme: light; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #142832; background: #f5f4ee; }
+      * { box-sizing: border-box; } body { margin: 0; } a { color: inherit; }
+      .wrap { max-width: 1160px; margin: auto; padding: 28px 28px 48px; }
+      header { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #d6ded7; padding-bottom: 22px; }
+      .brand { font-weight: 800; font-size: 22px; letter-spacing: -.5px; } .edition { font-size: 13px; color: #587063; }
+      .hero { padding: 70px 0 38px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 44px; align-items: center; }
+      .eyebrow { color: #36664e; font-size: 14px; font-weight: 700; } h1 { font-size: clamp(34px, 4vw, 54px); line-height: 1.2; letter-spacing: -1.5px; margin: 18px 0 24px; }
+      .lead { font-size: 18px; line-height: 1.85; color: #4a5e58; } .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 14px; }
+      .button { display: inline-block; text-decoration: none; padding: 15px 22px; border-radius: 8px; border: 1px solid #173e30; font-weight: 700; font-size: 16px; }
+      .primary { background: #173e30; color: white; } .button:hover { box-shadow: 0 3px 12px #173e3025; transform: translateY(-1px); }
+      .meta { font-size: 13px; line-height: 1.8; color: #62736d; } .screen { background: #122322; padding: 14px; border-radius: 12px; box-shadow: 0 18px 50px #102b2420; }
+      .screen img { width: 100%; display: block; border-radius: 5px; } .caption { color: #cee0d5; font-size: 12px; line-height: 1.7; padding-top: 10px; }
+      .notice { background: #e8eee7; border-left: 4px solid #406b52; padding: 18px 22px; line-height: 1.8; font-size: 14px; margin-bottom: 44px; }
+      h2 { font-size: 26px; margin: 0 0 24px; } .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+      .step { border-top: 1px solid #b7c7b9; padding-top: 20px; } .num { color: #46745a; font-size: 14px; font-weight: 800; } h3 { font-size: 19px; margin: 12px 0; }
+      .step p { line-height: 1.9; font-size: 14px; color: #50635a; } .materials { border-top: 1px solid #d0dbd2; margin-top: 40px; padding-top: 26px; display: flex; gap: 22px; flex-wrap: wrap; font-size: 14px; }
+      footer { margin-top: 34px; font-size: 12px; color: #6d7b72; line-height: 1.8; }
+      @media(max-width: 800px) { .hero { grid-template-columns: 1fr; padding-top: 38px; gap: 22px; } .steps { grid-template-columns: 1fr; gap: 16px; } .wrap { padding: 22px 20px; } .edition { max-width: 150px; text-align: right; } }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <header><span class="brand">Anjing AI</span><span class="edition">浙客松 · 天猫校园<br />OPC 产业孵化赛道参赛项目</span></header>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">多平台电商客服数字员工 · MVP</div>
+          <h1>多家店的客服，<br />在一个工作台处理。</h1>
+          <p class="lead">从顾客咨询，到订单查询、售后工单和人工接管，体验小商家日常客服的一次完整协作。</p>
+          <div class="actions">
+            <a class="button primary" href="./#/customer-workbench-preview" target="_blank" rel="noopener">进入商家工作台 ↗</a>
+            <a class="button" href="./#/customer-simulator" target="_blank" rel="noopener">进入顾客端 ↗</a>
+          </div>
+          <div class="meta">无需登录 · 建议使用电脑浏览器 · 双端请使用同一浏览器的普通标签页</div>
+        </div>
+        <div class="screen">
+          <img src="./competition-assets/workbench.jpg" alt="本地真实后端版本的商家工作台，包含会话、订单、知识依据与执行记录" />
+          <div class="caption">产品截图：本地后端版本。下方公开交互体验使用独立的浏览器模拟数据。</div>
+        </div>
+      </section>
+      <aside class="notice"><strong>体验范围说明：</strong>当前公开站是浏览器交互演示，使用虚构店铺、订单和本地规则回复，不调用大模型、不连接淘宝或抖店、不执行真实退款。数据只保存在您当前浏览器中。本地完整版已实现大模型优先、规则兜底及 Java 后端业务处理，测试说明见商业 BP。请勿输入个人信息或真实订单。</aside>
+      <section>
+        <h2>建议体验路线，约 3 分钟</h2>
+        <div class="steps">
+          <article class="step"><span class="num">01 / 顾客发起咨询</span><h3>问物流，再问退货</h3><p>打开顾客端，选择淘宝店和林小满，发送“查物流”。按提示选择订单，再发送“我要退货”，补充原因并确认创建演示工单。</p></article>
+          <article class="step"><span class="num">02 / 商家处理会话</span><h3>查看业务过程</h3><p>保持顾客端打开，在商家工作台找到同一顾客。查看消息、订单、物流、工单，以及知识依据和执行记录。可切换抖店会话观察店铺区分。</p></article>
+          <article class="step"><span class="num">03 / 人工接手</span><h3>完成一次交接</h3><p>顾客发送“转人工”，商家点击接管并发送人工回复。返回顾客端查看消息，再在商家端恢复 AI。刷新页面后演示记录仍保留。</p></article>
+        </div>
+      </section>
+      <div class="materials">
+        <a href="./competition-assets/business-plan.pdf" target="_blank" rel="noopener">阅读商业 BP（PDF）</a>
+        <a href="./competition-assets/business-plan.pptx" download>下载可编辑 BP（PPTX）</a>
+        <a href="./competition-assets/screenshots/01-workbench.jpg" target="_blank" rel="noopener">商家工作台截图</a>
+        <a href="./competition-assets/screenshots/02-customer.png" target="_blank" rel="noopener">顾客端截图</a>
+      </div>
+      <footer>版本日期：2026-10-20。当前为工程原型验证阶段，尚未形成真实商家付费与经营数据。页面中“淘宝”“抖店”仅用于场景标识，不代表平台合作或官方授权。</footer>
+    </main>
+  </body>
+</html>
