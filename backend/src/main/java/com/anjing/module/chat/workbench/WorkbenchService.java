@@ -167,8 +167,10 @@ public class WorkbenchService {
         } else {
             String token = orderToken(text);
             boolean selecting = token!=null && text.replace(token,"").matches("[\\s。.!！]*");
-            boolean returning = has(text,"要退货","想退货","申请退货","申请退款","要退款","想退款","想退掉") ||
-                "RETURN_EXCHANGE".equals(intent) && !selecting && !has(text,"几天","期限","规则","运费");
+            boolean policyIntent = has(text,"几天","期限","规则","政策","运费","条件");
+            boolean returning = has(text,"要退货","想退货","要退款","想退款","想退掉","帮我申请退货","帮我申请退款") ||
+                has(text,"申请退货","申请退款") && !policyIntent ||
+                "RETURN_EXCHANGE".equals(intent) && !selecting && !policyIntent;
             boolean compensation = has(text,"申请补偿","申请赔偿","我要补偿","要求补偿");
             boolean logistics = has(text,"物流","快递","到哪","发货","到货","配送") || "LOGISTICS_QUERY".equals(intent);
             boolean continuing = selecting && s.getPendingAction()!=null;

@@ -1,6 +1,7 @@
 package com.anjing.module.commerce;
 
 import com.anjing.model.result.R;
+import com.anjing.module.chat.workbench.MerchantTicketService;
 import com.anjing.module.commerce.CommerceDTO.*;
 import com.anjing.module.commerce.CommerceVO.*;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.List;
 public class CommerceController {
     private final CommerceService service;
     private final CommerceDemoService demo;
+    private final MerchantTicketService ticketWorkflow;
     @PostMapping("/orders/query")
     public R<OrderMatches> orders(@Valid @RequestBody OrderQuery request) { return R.ok(service.getOrder(request)); }
     @PostMapping("/logistics/query")
@@ -24,7 +26,7 @@ public class CommerceController {
     @PostMapping("/tickets/query")
     public R<List<Ticket>> tickets(@Valid @RequestBody TicketQuery request) { return R.ok(service.getServiceTicket(request)); }
     @PostMapping("/tickets/update")
-    public R<Ticket> update(@Valid @RequestBody UpdateTicket request) { return R.ok(service.updateTicket(request)); }
+    public R<Ticket> update(@Valid @RequestBody UpdateTicket request) { return R.ok(ticketWorkflow.update(request)); }
     @PostMapping("/demo/identities")
     public R<DemoIdentities> identities() { return R.ok(demo.identities()); }
     @PostMapping("/demo/load")

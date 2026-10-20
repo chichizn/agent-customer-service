@@ -1,0 +1,57 @@
+- main:
+  - generic: CUSTOMER SERVICE / WORKSPACE
+  - heading "客服工作台 后端接口模式" [level=1]:
+    - text: 客服工作台
+    - generic: 后端接口模式
+  - paragraph: 连接每一次咨询，让服务有迹可循。
+  - generic: 自动同步已开启
+  - link "打开顾客入口 ↗":
+    - /url: "#/customer-simulator"
+  - button "重置演示"
+  - note:
+    - generic: 演示时间
+    - generic: 演示活动按 2026/10/18 12:00（Asia/Shanghai）判断有效期。
+    - text: 订单与物流为预置数据；消息和工单记录实际操作时间，售后诉求由商家审核。
+  - complementary:
+    - heading "全部会话 0" [level=2]:
+      - text: 全部会话
+      - generic: "0"
+    - button "刷新会话列表": ↻
+    - generic: ⌕
+    - textbox "搜索会话":
+      - /placeholder: 搜索顾客、店铺或消息
+    - combobox "筛选平台":
+      - option "全部平台" [selected]
+      - option "淘宝"
+      - option "抖店"
+    - combobox "筛选接待模式":
+      - option "全部接待" [selected]
+      - option "AI 接待"
+      - option "等待人工"
+      - option "人工接待"
+    - button "等待人工处理 0":
+      - generic: 等待人工处理
+      - strong: "0"
+    - navigation "会话列表":
+      - text: 暂无符合条件的会话
+      - link "从顾客入口发起咨询 ↗":
+        - /url: "#/customer-simulator"
+    - generic: 商家统一接待台
+  - region "当前会话":
+    - heading "会话详情" [level=2]
+    - paragraph: 选择左侧会话查看消息与业务资料
+    - generic: ◌
+    - heading "选择一条会话开始处理" [level=3]
+    - paragraph: 会话消息和业务资料会自动同步。
+  - complementary:
+    - heading "业务资料" [level=2]
+    - generic: CONTEXT
+    - tablist "业务资料分类":
+      - tab "订单" [selected]
+      - tab "工单"
+      - tab "知识"
+      - tab "执行记录"
+    - tabpanel "订单":
+      - generic: 选择会话后查看对应顾客资料
+- generic "Toggle devtools panel":
+- generic "Toggle Component Inspector":

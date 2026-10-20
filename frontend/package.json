@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "vite --open",
     "build": "vue-tsc --noEmit && vite build",
+    "build:demo": "vue-tsc --noEmit && vite build --mode demo",
+    "serve:demo": "node scripts/demo-static-server.mjs",
     "serve": "vite preview",
     "test:workbench": "tsx --test scripts/workbench.test.ts scripts/commerceAdapter.test.ts",
     "lint": "eslint",

@@ -51,7 +51,7 @@ class WorkbenchIntegrationTest {
     @EntityScan(basePackageClasses={ChatSession.class,Merchant.class})
     @EnableJpaRepositories(basePackageClasses={ChatSessionRepository.class,MerchantRepository.class})
     @Import({CommerceService.class,CommerceDemoService.class,WorkbenchService.class,
-        WorkbenchKnowledgeService.class,SessionTicketGuard.class,DemoBusinessTime.class})
+        WorkbenchKnowledgeService.class,SessionTicketGuard.class,DemoBusinessTime.class,MerchantTicketService.class})
     static class Config {
         @Bean ObjectMapper mapper() { return new ObjectMapper().registerModule(new JavaTimeModule()); }
         @Bean LlmService llm() { return mock(LlmService.class); }
@@ -59,6 +59,7 @@ class WorkbenchIntegrationTest {
     }
     @Autowired WorkbenchService service;
     @Autowired CommerceService commerce;
+    @Autowired MerchantTicketService ticketWorkflow;
     @Autowired CommerceDemoService demo;
     @Autowired LlmService llm;
     @Autowired ChatSessionRepository sessions;
@@ -140,12 +141,70 @@ class WorkbenchIntegrationTest {
         send(id,"t2","确认提交");
         assertThat(tickets.count()).isEqualTo(1);
         assertThatThrownBy(() -> send(id,"t2","更改提交内容")).isInstanceOf(CommerceException.class);
-        commerce.updateTicket(new UpdateTicket("demo-merchant","demo-shop-dy",ticketId,
+        ticketWorkflow.update(new UpdateTicket("demo-merchant","demo-shop-dy",ticketId,
             TicketStatus.PENDING_REVIEW,TicketStatus.PROCESSING,"商家核实中","operator"));
+        assertThat(fetch(id).executions()).anySatisfy(e -> {
+            assertThat(e.action()).isEqualTo("update_service_ticket");
+            assertThat(e.status()).isEqualTo("SUCCESS");
+            assertThat(e.relatedId()).isEqualTo(ticketId);
+        });
         assertThat(last(send(id,"t3","刚才的工单进度怎么样"))).contains(number,"处理中","商家核实中");
         var newSession = service.open(new WorkbenchDTO.Open("demo-shop-dy","demo-customer-dy-1",true));
         assertThat(newSession.tickets()).hasSize(1);
         assertThat(last(send(newSession.session().sessionId(),"t4","工单进度"))).contains(number);
+    }
+
+    @Test void merchantUpdateRollsBackStatusAndHistoryWhenExecutionCannotPersistAndCanRetry() {
+        String id = open("dy").session().sessionId();
+        send(id,"update-draft","想退货 DY202610100001，原因是漏水");
+        var created = send(id,"update-confirm","确认提交");
+        String ticketId = (String) created.tickets().get(0).get("ticketId");
+        var update = new UpdateTicket("demo-merchant","demo-shop-dy",ticketId,
+            TicketStatus.PENDING_REVIEW,TicketStatus.REJECTED,"需要补充凭证","operator");
+        JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+        jdbc.execute("alter table cs_chat_execution add constraint fail_merchant_execution check (action <> 'update_service_ticket' or status <> 'SUCCESS')");
+        try {
+            assertThatThrownBy(() -> ticketWorkflow.update(update)).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+            assertThat(tickets.findById(ticketId).orElseThrow().getStatus()).isEqualTo(TicketStatus.PENDING_REVIEW);
+            assertThat(jdbc.queryForObject("select count(*) from commerce_ticket_history where ticket_id = ?",Long.class,ticketId)).isEqualTo(1);
+            assertThat(fetch(id).executions()).anySatisfy(e -> {
+                assertThat(e.action()).isEqualTo("update_service_ticket");
+                assertThat(e.status()).isEqualTo("FAILED");
+            });
+        } finally {
+            jdbc.execute("alter table cs_chat_execution drop constraint fail_merchant_execution");
+        }
+        assertThat(ticketWorkflow.update(update).status()).isEqualTo(TicketStatus.REJECTED);
+        assertThat(jdbc.queryForObject("select count(*) from commerce_ticket_history where ticket_id = ?",Long.class,ticketId)).isEqualTo(2);
+        assertThatThrownBy(() -> ticketWorkflow.update(new UpdateTicket("demo-merchant","demo-shop-dy",ticketId,
+            TicketStatus.REJECTED,TicketStatus.PROCESSING,"重新处理","operator"))).isInstanceOf(CommerceException.class);
+        assertThat(tickets.findById(ticketId).orElseThrow().getStatus()).isEqualTo(TicketStatus.REJECTED);
+    }
+
+    @Test void forgedMerchantScopeCannotAppendExecutionToAnotherShopsSession() {
+        String id = open("dy").session().sessionId();
+        send(id,"scope-draft","想退货 DY202610100001，原因是漏水");
+        var created = send(id,"scope-confirm","确认提交");
+        String ticketId = (String) created.tickets().get(0).get("ticketId");
+        int before = fetch(id).executions().size();
+        assertThatThrownBy(() -> ticketWorkflow.update(new UpdateTicket("demo-merchant","demo-shop-tb",ticketId,
+            TicketStatus.PENDING_REVIEW,TicketStatus.REJECTED,"伪造店铺","operator"))).isInstanceOf(CommerceException.class);
+        assertThat(fetch(id).executions()).hasSize(before);
+        assertThat(tickets.findById(ticketId).orElseThrow().getStatus()).isEqualTo(TicketStatus.PENDING_REVIEW);
+    }
+
+    @Test void askingReturnWindowAndPostageDoesNotStartAnApplicationEvenWithReturnIntent() {
+        when(llm.analyzeUserInput(anyString())).thenReturn(Map.of("intentCode","RETURN_EXCHANGE"));
+        for (String shop : List.of("tb","dy")) {
+            String id = open(shop).session().sessionId();
+            var result = send(id,"policy-"+shop,"签收后几天可以申请退货？寄回运费怎么办？");
+            assertThat(last(result)).contains(shop.equals("tb")?"15天":"7天");
+            assertThat(result.awaitingConfirmation()).isFalse();
+            assertThat(result.selectedOrderId()).isNull();
+            assertThat(fetch(id).knowledge()).isNotEmpty();
+            assertThat(last(send(id,"policy-confirm-"+shop,"确认提交"))).contains("没有可提交");
+        }
+        assertThat(tickets.count()).isZero();
     }
 
     @Test void explicitUnknownOrderClearsOldSelectionAndNeverFallsBackToOtherOwnedOrders() {

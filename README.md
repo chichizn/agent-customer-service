@@ -4,7 +4,7 @@
 
 当前 Demo 目标与四人分工见 [功能需求说明](docs/requirements/README.md)；B 成员可独立运行的 Vue 工作台、顾客入口及 A/D 联调契约见 [B 前端交付说明](docs/frontend/B-WORKBENCH.md)。
 
-A 的会话、订单/工单编排、人工接管、范围知识及统一重置已补充本地实现，接口见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。2026-10-20 已在隔离 MySQL 验证真实模型确认建单、商家处理、顾客查询、人工协作及10个会话重启恢复，并完成有限双端浏览器操作。后端80项、前端14项、C检查器26项测试及前端构建通过；完整22项AC仍需逐项验收，模型存在偶发超时，详见[最新验收记录](docs/acceptance/RESULTS-2026-10-20.md)。
+A 的会话、订单/工单编排、人工接管、范围知识及统一重置已补充本地实现，接口见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。2026-10-20 完成真实模型/隔离MySQL的三故事双端操作、刷新恢复、连续UI重置与非演示数据保留；另有17组可控并发/故障HTTP检查通过。后端83项、前端14项、C检查器26项及Vue类型/生产构建通过；完整22项AC仍有部分组合及证据未补齐，模型存在偶发超时，详见[最新验收记录](docs/acceptance/RESULTS-2026-10-20.md)。已完成内容及需要项目负责人提供的账号、业务资料和部署资源见[下一步清单](docs/demo/NEXT-STEPS.md)。
 
 ## 环境要求
 
@@ -130,6 +130,8 @@ pnpm dev
 工作台默认使用前端模拟。联调真实后端时，在 `frontend/.env.local` 配置 `VITE_CUSTOMER_SERVICE_MODE=api`、`VITE_API_URL=/`、`VITE_API_PROXY_URL=http://127.0.0.1:10002`，重启前端。示例见 `frontend/.env.workbench.example`。两个入口为 `/#/customer-workbench-preview`（商家）、`/#/customer-simulator`（顾客），首次使用须先加载演示种子，步骤见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。
 
 `npm run build` 会执行 Vue 类型检查并生成静态文件；真实部署仍须显式配置 API 模式、`VITE_API_URL` 及同源 `/api` 反向代理。Vite 开发代理不适用于生产静态服务。
+
+本地静态API演示可在 `frontend` 目录运行 `pnpm run build:demo`、`pnpm run serve:demo`，访问 `http://127.0.0.1:20003/#/customer-workbench-preview`。该模式显式构建真实API版本，并将同源 `/api` 转发至本地10002；仅监听回环地址。详见[静态演示步骤](docs/demo/RUNBOOK.md)。
 
 ## 6. 验证
 

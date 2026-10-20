@@ -1,0 +1,17 @@
+
+> art-design-pro@0.0.0 build
+> vue-tsc --noEmit && vite build
+
+🚀 API_URL = https://m1.apifoxmock.com/m1/6400575-6097373-default
+🚀 VERSION = 3.0.1
+vite v7.1.7 building for production...
+transforming...
+✓ 2951 modules transformed.
+rendering chunks...
+computing gzip size...
+… asset list omitted …
+dist/assets/el-table-column-CrqItFTR.js                                                74.98 kB │ gzip:  24.95 kB
+dist/assets/index-BB1KIxCr.js                                                         145.82 kB │ gzip:  42.38 kB
+dist/assets/useChart-CEXYyG8h.js                                                      754.52 kB │ gzip: 246.89 kB
+dist/assets/index-B0OqVRn9.js                                                       1,363.03 kB │ gzip: 451.35 kB
+✓ built in 13.32s

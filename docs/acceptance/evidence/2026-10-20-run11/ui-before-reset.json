@@ -1,0 +1,977 @@
+{
+  "list": {
+    "code": 0,
+    "message": "操作成功",
+    "data": [
+      {
+        "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+        "shopId": "demo-shop-dy",
+        "shopName": "安静生活抖店（演示）",
+        "platform": "DOUYIN",
+        "customerId": "demo-customer-dy-1",
+        "customerName": "小林",
+        "receptionMode": "AI",
+        "status": "active",
+        "lastMessage": "工单 STC1FFBA62850F4D04AEDBC2EEF5B9326E，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+        "updatedAt": "2026-10-20T16:48:10.796357+08:00",
+        "handoffSummary": null
+      },
+      {
+        "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+        "shopId": "demo-shop-tb",
+        "shopName": "安静生活淘宝店（演示）",
+        "platform": "TAOBAO",
+        "customerId": "demo-customer-tb-2",
+        "customerName": "小周",
+        "receptionMode": "AI",
+        "status": "active",
+        "lastMessage": "订单 TB202610120005：演示快递，运单 DEMO-TB-0005，运输延迟，待核实。\n2026-10-13T10:00+08:00 商家已交寄\n2026-10-14T16:00+08:00 转运异常，需联系承运商核实；未提供预计送达时间\n未提供预计送达时间，不作到货承诺。",
+        "updatedAt": "2026-10-20T16:45:03.143365+08:00",
+        "handoffSummary": "转交原因：顾客要求人工或提出需商家决定的补偿：订单 TB202610120005 的快递一直没动，必须额外赔我500元，找人工；订单：TB202610120005 / demo-order-tb-05；物流：运输延迟，待核实；末节点：2026-10-14T16:00+08:00 转运异常，需联系承运商核实；未提供预计送达时间；已完成查询：get_order、get_logistics、get_service_ticket；诉求：待补充；原因：待补充；顾客最近消息：订单 TB202610120005 的快递一直没动，必须额外赔我500元，找人工；已有工单：无；待决定：请商家核实并回复，不代表已执行平台退款。"
+      },
+      {
+        "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+        "shopId": "demo-shop-tb",
+        "shopName": "安静生活淘宝店（演示）",
+        "platform": "TAOBAO",
+        "customerId": "demo-customer-tb-1",
+        "customerName": "小林",
+        "receptionMode": "AI",
+        "status": "active",
+        "lastMessage": "订单 TB202610100001：演示快递，运单 DEMO-TB-0001，运输中。\n2026-10-11T10:00+08:00 商家已交寄\n2026-10-12T08:30+08:00 到达杭州转运中心\n未提供预计送达时间，不作到货承诺。",
+        "updatedAt": "2026-10-20T16:39:52.811561+08:00",
+        "handoffSummary": null
+      }
+    ],
+    "timestamp": 1792486209511,
+    "success": true
+  },
+  "capturedAt": "2026-10-20T16:50:09.5856451+08:00",
+  "snapshots": [
+    {
+      "code": 0,
+      "message": "操作成功",
+      "data": {
+        "session": {
+          "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+          "shopId": "demo-shop-dy",
+          "shopName": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customerId": "demo-customer-dy-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "工单 STC1FFBA62850F4D04AEDBC2EEF5B9326E，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+          "updatedAt": "2026-10-20T16:48:10.796357+08:00",
+          "handoffSummary": null
+        },
+        "messages": [
+          {
+            "messageId": "53cb5a50-1158-4d3e-97e4-2fdbac0ebd8a",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": null,
+            "role": "system",
+            "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+            "createdAt": "2026-10-20T16:41:03.621324+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "5a3a2ba2-b4af-386c-9d74-0ffc2787c32e",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": "599eb91b-4d24-429a-8661-ecd7c025af87",
+            "role": "customer",
+            "content": "订单 DY202610100001 的杯子漏水，想退货，原因是杯子漏水",
+            "createdAt": "2026-10-20T16:41:03.93183+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "c23913a7-81e4-4c95-9e4a-defd01c85aa7",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+            "createdAt": "2026-10-20T16:41:08.133625+08:00",
+            "orderIds": [
+              "demo-order-dy-01"
+            ],
+            "ticketId": null
+          },
+          {
+            "messageId": "9ea4a8cc-a993-3504-86df-eae43973f62e",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": "3d1a42a9-8b5f-4ba6-b466-a72942eb07cd",
+            "role": "customer",
+            "content": "确认提交",
+            "createdAt": "2026-10-20T16:41:35.36474+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "9c8e25ef-e1c4-4caa-8df9-68bb6aba2cf1",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "工单 STC1FFBA62850F4D04AEDBC2EEF5B9326E：已记录诉求，待商家审核；本系统未执行平台退货或退款",
+            "createdAt": "2026-10-20T16:41:41.111073+08:00",
+            "orderIds": [
+              "demo-order-dy-01"
+            ],
+            "ticketId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6"
+          },
+          {
+            "messageId": "c958496c-6fc2-3746-8b22-7df636cb3e53",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": "b5d9d810-c83e-4286-b808-4829aa7d35b8",
+            "role": "customer",
+            "content": "刚才的申请怎么样了",
+            "createdAt": "2026-10-20T16:42:13.558326+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "251785b3-a169-4ecf-8b2e-8a724fbbd5d1",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "工单 STC1FFBA62850F4D04AEDBC2EEF5B9326E，状态：处理中。已联系顾客确认漏水情况 本系统未执行平台退货或退款。",
+            "createdAt": "2026-10-20T16:42:19.325579+08:00",
+            "orderIds": [],
+            "ticketId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6"
+          },
+          {
+            "messageId": "c46fab36-936f-3748-aa5d-9d36f906de5c",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": "f02b02a8-c8bb-43ab-a363-1fc41fe7af7b",
+            "role": "customer",
+            "content": "刚才的工单现在完成了吗",
+            "createdAt": "2026-10-20T16:47:51.031132+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "76e35432-c034-437b-8ef3-5c360ec8f095",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "工单 STC1FFBA62850F4D04AEDBC2EEF5B9326E，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+            "createdAt": "2026-10-20T16:48:10.794357+08:00",
+            "orderIds": [],
+            "ticketId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6"
+          }
+        ],
+        "orders": [
+          {
+            "orderId": "demo-order-dy-03",
+            "orderNumber": "DY202610120003",
+            "shopId": "demo-shop-dy",
+            "customerId": "demo-customer-dy-1",
+            "items": [
+              {
+                "name": "纯棉毛巾",
+                "quantity": 1,
+                "specification": "蓝色"
+              }
+            ],
+            "paidAmount": 18.0,
+            "status": "PENDING_SHIPMENT",
+            "createdAt": "2026-10-12T11:00+08:00"
+          },
+          {
+            "orderId": "demo-order-dy-02",
+            "orderNumber": "DY202610110002",
+            "shopId": "demo-shop-dy",
+            "customerId": "demo-customer-dy-1",
+            "items": [
+              {
+                "name": "收纳盒",
+                "quantity": 1,
+                "specification": "透明中号"
+              }
+            ],
+            "paidAmount": 35.0,
+            "status": "SHIPPED",
+            "createdAt": "2026-10-11T10:00+08:00"
+          },
+          {
+            "orderId": "demo-order-dy-01",
+            "orderNumber": "DY202610100001",
+            "shopId": "demo-shop-dy",
+            "customerId": "demo-customer-dy-1",
+            "items": [
+              {
+                "name": "保温杯",
+                "quantity": 1,
+                "specification": "白色 500ml"
+              }
+            ],
+            "paidAmount": 49.0,
+            "status": "DELIVERED",
+            "createdAt": "2026-10-10T09:00+08:00"
+          }
+        ],
+        "logistics": [
+          {
+            "orderId": "demo-order-dy-03",
+            "carrier": null,
+            "trackingNumber": null,
+            "status": "订单尚未发货，暂无物流",
+            "nodes": []
+          },
+          {
+            "orderId": "demo-order-dy-02",
+            "carrier": "演示速运",
+            "trackingNumber": "DEMO-DY-0002",
+            "status": "运输中",
+            "nodes": [
+              {
+                "time": "2026-10-12T10:00+08:00",
+                "description": "商家已交寄"
+              },
+              {
+                "time": "2026-10-13T11:00+08:00",
+                "description": "到达上海转运中心"
+              }
+            ]
+          },
+          {
+            "orderId": "demo-order-dy-01",
+            "carrier": "演示速运",
+            "trackingNumber": "DEMO-DY-0001",
+            "status": "已签收",
+            "nodes": [
+              {
+                "time": "2026-10-11T09:00+08:00",
+                "description": "商家已交寄"
+              },
+              {
+                "time": "2026-10-13T14:00+08:00",
+                "description": "顾客已签收"
+              }
+            ]
+          }
+        ],
+        "tickets": [
+          {
+            "ticketId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6",
+            "ticketNumber": "STC1FFBA62850F4D04AEDBC2EEF5B9326E",
+            "orderNumber": "DY202610100001",
+            "sessionId": "f04241b8-a084-4652-bb6b-9179614da2a3",
+            "orderId": "demo-order-dy-01",
+            "shopId": "demo-shop-dy",
+            "customerId": "demo-customer-dy-1",
+            "type": "RETURN",
+            "reason": "杯子漏水",
+            "status": "COMPLETED",
+            "processingNote": "本地诉求已处理，平台结果另行确认",
+            "createdAt": "2026-10-20T16:41:41.102171+08:00",
+            "updatedAt": "2026-10-20T16:43:15.089939+08:00",
+            "history": [
+              {
+                "historyId": "ec8d4217-13ec-4fd5-84b1-9344defc46ad",
+                "fromStatus": null,
+                "toStatus": "PENDING_REVIEW",
+                "note": "已记录诉求，待商家审核",
+                "operatorId": "demo-customer-dy-1",
+                "occurredAt": "2026-10-20T16:41:41.102171"
+              },
+              {
+                "historyId": "e720e859-7520-4a9a-97dc-b85ce1eece85",
+                "fromStatus": "PENDING_REVIEW",
+                "toStatus": "PROCESSING",
+                "note": "已联系顾客确认漏水情况",
+                "operatorId": "demo-operator",
+                "occurredAt": "2026-10-20T16:42:13.258375"
+              },
+              {
+                "historyId": "5b5f114a-e6df-4643-a892-1921e8ee953e",
+                "fromStatus": "PROCESSING",
+                "toStatus": "COMPLETED",
+                "note": "本地诉求已处理，平台结果另行确认",
+                "operatorId": "demo-operator",
+                "occurredAt": "2026-10-20T16:43:15.089939"
+              }
+            ]
+          }
+        ],
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-ticket",
+            "title": "本地服务工单的含义",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "executions": [
+          {
+            "executionId": "47195dd5-98f6-44fb-a92f-d8cb063b4a1f",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 3 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:41:08.123448+08:00"
+          },
+          {
+            "executionId": "73fc2ba3-8810-4eb9-adaa-8e618cbdd51a",
+            "action": "get_order",
+            "status": "SUCCESS",
+            "summary": "已找到一笔匹配订单",
+            "relatedId": "demo-order-dy-01",
+            "createdAt": "2026-10-20T16:41:08.129821+08:00"
+          },
+          {
+            "executionId": "3c510b31-1745-4559-9287-3157c5a8a7e6",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 0 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:41:41.081978+08:00"
+          },
+          {
+            "executionId": "85a0add2-746c-47f8-8920-2c04130ed68c",
+            "action": "create_service_ticket",
+            "status": "SUCCESS",
+            "summary": "已记录诉求，待商家审核；本系统未执行平台退货或退款",
+            "relatedId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6",
+            "createdAt": "2026-10-20T16:41:41.110073+08:00"
+          },
+          {
+            "executionId": "8d493b39-6aeb-4fab-87b6-6f46358e80ba",
+            "action": "update_service_ticket",
+            "status": "SUCCESS",
+            "summary": "工单状态已由 PENDING_REVIEW 更新为 PROCESSING",
+            "relatedId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6",
+            "createdAt": "2026-10-20T16:42:13.263913+08:00"
+          },
+          {
+            "executionId": "0a5a3f51-116e-4561-81c5-da6de472e65c",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:42:19.321057+08:00"
+          },
+          {
+            "executionId": "c6ecd07c-76b3-499e-a599-d98324b37a9e",
+            "action": "get_service_ticket",
+            "status": "SUCCESS",
+            "summary": "找到 1 张当前顾客工单",
+            "relatedId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6",
+            "createdAt": "2026-10-20T16:42:19.324552+08:00"
+          },
+          {
+            "executionId": "3851496f-3a34-41b5-bd2b-8d3e884475d6",
+            "action": "update_service_ticket",
+            "status": "SUCCESS",
+            "summary": "工单状态已由 PROCESSING 更新为 COMPLETED",
+            "relatedId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6",
+            "createdAt": "2026-10-20T16:43:15.091629+08:00"
+          },
+          {
+            "executionId": "34ac088d-0e30-48a4-948b-228065e670a9",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:48:10.788869+08:00"
+          },
+          {
+            "executionId": "8a56e242-3f7b-4b1d-a25d-ee0f575732b8",
+            "action": "get_service_ticket",
+            "status": "SUCCESS",
+            "summary": "找到 1 张当前顾客工单",
+            "relatedId": "e38b4279-e7bd-49f1-b1a4-f308b914faa6",
+            "createdAt": "2026-10-20T16:48:10.793337+08:00"
+          }
+        ],
+        "selectedOrderId": "demo-order-dy-01",
+        "awaitingConfirmation": false
+      },
+      "timestamp": 1792486209559,
+      "success": true
+    },
+    {
+      "code": 0,
+      "message": "操作成功",
+      "data": {
+        "session": {
+          "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-2",
+          "customerName": "小周",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "订单 TB202610120005：演示快递，运单 DEMO-TB-0005，运输延迟，待核实。\n2026-10-13T10:00+08:00 商家已交寄\n2026-10-14T16:00+08:00 转运异常，需联系承运商核实；未提供预计送达时间\n未提供预计送达时间，不作到货承诺。",
+          "updatedAt": "2026-10-20T16:45:03.143365+08:00",
+          "handoffSummary": "转交原因：顾客要求人工或提出需商家决定的补偿：订单 TB202610120005 的快递一直没动，必须额外赔我500元，找人工；订单：TB202610120005 / demo-order-tb-05；物流：运输延迟，待核实；末节点：2026-10-14T16:00+08:00 转运异常，需联系承运商核实；未提供预计送达时间；已完成查询：get_order、get_logistics、get_service_ticket；诉求：待补充；原因：待补充；顾客最近消息：订单 TB202610120005 的快递一直没动，必须额外赔我500元，找人工；已有工单：无；待决定：请商家核实并回复，不代表已执行平台退款。"
+        },
+        "messages": [
+          {
+            "messageId": "29e13fd9-cf0a-4c90-a0fe-f4e3c90ba221",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": null,
+            "role": "system",
+            "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+            "createdAt": "2026-10-20T16:43:15.396906+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "fda0a6db-aa5f-38f9-8301-1fb778e3bd01",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": "ad522eed-8ae2-4753-b52c-3adc19bdcf50",
+            "role": "customer",
+            "content": "订单 TB202610120005 的快递一直没动，必须额外赔我500元，找人工",
+            "createdAt": "2026-10-20T16:43:15.685761+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "6f4ed5d5-9846-4657-98c6-4c6cc20db82f",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "已转为等待人工，商家接管后继续处理。已完成的本地操作可在业务资料中查看。",
+            "createdAt": "2026-10-20T16:43:15.696398+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "def7a18d-5b94-4dbb-a2cf-21b22344dd36",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": null,
+            "role": "system",
+            "content": "商家已接管会话。",
+            "createdAt": "2026-10-20T16:43:59.53797+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "83243aeb-92ef-3f7a-a15b-32965dd211d0",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": "1670d60f-3285-4cec-85d6-ae221b1e408a",
+            "role": "customer",
+            "content": "有人吗",
+            "createdAt": "2026-10-20T16:43:59.827342+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "8e7b392a-6de6-3881-9621-546a6ccbd96a",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": "14c83079-d26a-4f65-98a2-4b03d73713d3",
+            "role": "customer",
+            "content": "现在处理了吗",
+            "createdAt": "2026-10-20T16:44:00.134176+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "9a3954c7-7455-362a-aaa2-bd39e80913f9",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": "f2a6c0fb-7973-4575-9a81-03e4f6ab50e8",
+            "role": "customer",
+            "content": "再帮我提交赔偿",
+            "createdAt": "2026-10-20T16:44:00.428597+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "91718a99-d471-31d1-a651-d899c3c8cf74",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": "5be00e94-86b8-43e8-91fb-b1001068844b",
+            "role": "human",
+            "content": "已收到，我来核实物流",
+            "createdAt": "2026-10-20T16:44:00.710175+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "64080a09-9979-43ba-ba07-c66239d71aae",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": null,
+            "role": "system",
+            "content": "已交回 AI，由下一条顾客消息触发处理。",
+            "createdAt": "2026-10-20T16:44:44.509642+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "c0d3b37f-27e4-33c4-93df-357a4d02edfc",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": "784183de-e26a-4ea5-aad6-a924928c0251",
+            "role": "customer",
+            "content": "我刚才那单物流现在是什么状态",
+            "createdAt": "2026-10-20T16:44:59.724592+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "c430c020-cd6b-4691-8aed-91aaa105153f",
+            "sessionId": "3b2c33af-2689-4e46-beba-48bf8bb8585e",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "订单 TB202610120005：演示快递，运单 DEMO-TB-0005，运输延迟，待核实。\n2026-10-13T10:00+08:00 商家已交寄\n2026-10-14T16:00+08:00 转运异常，需联系承运商核实；未提供预计送达时间\n未提供预计送达时间，不作到货承诺。",
+            "createdAt": "2026-10-20T16:45:03.143365+08:00",
+            "orderIds": [
+              "demo-order-tb-05"
+            ],
+            "ticketId": null
+          }
+        ],
+        "orders": [
+          {
+            "orderId": "demo-order-tb-06",
+            "orderNumber": "TB202610130006",
+            "shopId": "demo-shop-tb",
+            "customerId": "demo-customer-tb-2",
+            "items": [
+              {
+                "name": "收纳盒",
+                "quantity": 1,
+                "specification": "透明中号"
+              }
+            ],
+            "paidAmount": 39.0,
+            "status": "PENDING_SHIPMENT",
+            "createdAt": "2026-10-13T14:00+08:00"
+          },
+          {
+            "orderId": "demo-order-tb-05",
+            "orderNumber": "TB202610120005",
+            "shopId": "demo-shop-tb",
+            "customerId": "demo-customer-tb-2",
+            "items": [
+              {
+                "name": "保温杯",
+                "quantity": 1,
+                "specification": "白色 500ml"
+              }
+            ],
+            "paidAmount": 59.0,
+            "status": "SHIPPED",
+            "createdAt": "2026-10-12T13:00+08:00"
+          }
+        ],
+        "logistics": [
+          {
+            "orderId": "demo-order-tb-06",
+            "carrier": null,
+            "trackingNumber": null,
+            "status": "订单尚未发货，暂无物流",
+            "nodes": []
+          },
+          {
+            "orderId": "demo-order-tb-05",
+            "carrier": "演示快递",
+            "trackingNumber": "DEMO-TB-0005",
+            "status": "运输延迟，待核实",
+            "nodes": [
+              {
+                "time": "2026-10-13T10:00+08:00",
+                "description": "商家已交寄"
+              },
+              {
+                "time": "2026-10-14T16:00+08:00",
+                "description": "转运异常，需联系承运商核实；未提供预计送达时间"
+              }
+            ]
+          }
+        ],
+        "tickets": [],
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-logistics",
+            "title": "物流时效说明",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "物流以演示订单的实际节点为准。未提供预计送达时间时不能承诺明天到货；未发货和已取消订单没有运单。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "executions": [
+          {
+            "executionId": "943f58dd-69fe-4fbe-adbf-224be4171fea",
+            "action": "get_order",
+            "status": "SUCCESS",
+            "summary": "已找到一笔匹配订单",
+            "relatedId": "demo-order-tb-05",
+            "createdAt": "2026-10-20T16:43:15.68776+08:00"
+          },
+          {
+            "executionId": "d92663e1-088f-4a74-9f0c-2c481f04ddad",
+            "action": "get_order",
+            "status": "SUCCESS",
+            "summary": "已找到一笔匹配订单",
+            "relatedId": "demo-order-tb-05",
+            "createdAt": "2026-10-20T16:43:15.68876+08:00"
+          },
+          {
+            "executionId": "9daf8cbe-12b0-4205-9494-86f502f7c118",
+            "action": "get_logistics",
+            "status": "SUCCESS",
+            "summary": "运输延迟，待核实",
+            "relatedId": "demo-order-tb-05",
+            "createdAt": "2026-10-20T16:43:15.689761+08:00"
+          },
+          {
+            "executionId": "3d42d4a5-3093-4ae2-8c3c-bc12d62a7e3e",
+            "action": "get_service_ticket",
+            "status": "SUCCESS",
+            "summary": "找到 0 张当前顾客工单",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:43:15.690761+08:00"
+          },
+          {
+            "executionId": "a33a8303-3107-49fd-a677-15ea5ed164f9",
+            "action": "handoff_to_human",
+            "status": "SUCCESS",
+            "summary": "转交原因：顾客要求人工或提出需商家决定的补偿：订单 TB202610120005 的快递一直没动，必须额外赔我500元，找人工；订单：TB202610120005 / demo-order-tb-05；物流：运输延迟，待核实；末节点：2026-10-14T16:00+08:00 转运异常，需联系承运商核实；未提供预计送达时间；已完成查询：get_order、get_logistics、get_service_ticket；诉求：待补充；原因：待补充；顾客最近消息：订单 TB202610120005 的快递一直没动，必须额外赔我500元，找人工；已有工单：无；待决定：请商家核实并回复，不代表已执行平台退款。",
+            "relatedId": "demo-order-tb-05",
+            "createdAt": "2026-10-20T16:43:15.696954+08:00"
+          },
+          {
+            "executionId": "cde9a7f3-1786-4088-837f-63a086eb7af8",
+            "action": "handoff_to_human",
+            "status": "SUCCESS",
+            "summary": "接待模式切换为 HUMAN",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:43:59.53797+08:00"
+          },
+          {
+            "executionId": "15d25b17-8b7d-46f2-a1f2-76679ae01c11",
+            "action": "handoff_to_human",
+            "status": "SUCCESS",
+            "summary": "接待模式切换为 AI",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:44:44.510256+08:00"
+          },
+          {
+            "executionId": "c8f3cdd1-63df-400e-a494-df25d9bb8756",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:45:03.140793+08:00"
+          },
+          {
+            "executionId": "ce3d8831-eda7-4ce9-9e69-682dba49240a",
+            "action": "get_order",
+            "status": "SUCCESS",
+            "summary": "已找到一笔匹配订单",
+            "relatedId": "demo-order-tb-05",
+            "createdAt": "2026-10-20T16:45:03.142361+08:00"
+          },
+          {
+            "executionId": "daa07c39-e457-4133-b2d4-2d5960a2bee9",
+            "action": "get_logistics",
+            "status": "SUCCESS",
+            "summary": "运输延迟，待核实",
+            "relatedId": "demo-order-tb-05",
+            "createdAt": "2026-10-20T16:45:03.142361+08:00"
+          }
+        ],
+        "selectedOrderId": "demo-order-tb-05",
+        "awaitingConfirmation": false
+      },
+      "timestamp": 1792486209570,
+      "success": true
+    },
+    {
+      "code": 0,
+      "message": "操作成功",
+      "data": {
+        "session": {
+          "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "订单 TB202610100001：演示快递，运单 DEMO-TB-0001，运输中。\n2026-10-11T10:00+08:00 商家已交寄\n2026-10-12T08:30+08:00 到达杭州转运中心\n未提供预计送达时间，不作到货承诺。",
+          "updatedAt": "2026-10-20T16:39:52.811561+08:00",
+          "handoffSummary": null
+        },
+        "messages": [
+          {
+            "messageId": "2587196f-713e-4da4-9ba8-6b8917853a94",
+            "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+            "clientMessageId": null,
+            "role": "system",
+            "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+            "createdAt": "2026-10-20T16:36:33.174269+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "eabb8697-8b2a-339d-9c80-4a0b042ec4d3",
+            "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+            "clientMessageId": "ada562e8-571f-4b28-b94b-aa5d50fcac4d",
+            "role": "customer",
+            "content": "我的杯子到哪了",
+            "createdAt": "2026-10-20T16:36:33.485515+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "ed747a6c-1333-442c-baa9-081b6db3c192",
+            "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "找到多笔匹配订单，请先选择具体订单：\nTB202610110002（保温杯）\nTB202610100001（保温杯）",
+            "createdAt": "2026-10-20T16:36:39.579659+08:00",
+            "orderIds": [
+              "demo-order-tb-02",
+              "demo-order-tb-01"
+            ],
+            "ticketId": null
+          },
+          {
+            "messageId": "2f30cb1d-b792-3b35-86ed-08de554e5725",
+            "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+            "clientMessageId": "98e0914f-fb47-445e-832a-a9a3849c96fe",
+            "role": "customer",
+            "content": "demo-order-tb-01",
+            "createdAt": "2026-10-20T16:39:21.854848+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "4579b9fb-dd79-463f-9f65-30679f407649",
+            "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "订单 TB202610100001：演示快递，运单 DEMO-TB-0001，运输中。\n2026-10-11T10:00+08:00 商家已交寄\n2026-10-12T08:30+08:00 到达杭州转运中心\n未提供预计送达时间，不作到货承诺。",
+            "createdAt": "2026-10-20T16:39:28.185481+08:00",
+            "orderIds": [
+              "demo-order-tb-01"
+            ],
+            "ticketId": null
+          },
+          {
+            "messageId": "315f9556-64d8-361e-9ff3-c842f5ba2a4a",
+            "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+            "clientMessageId": "3c2441ac-c92c-4c85-8491-b4c9e3075eb5",
+            "role": "customer",
+            "content": "那这个现在到哪里了",
+            "createdAt": "2026-10-20T16:39:48.782599+08:00",
+            "orderIds": [],
+            "ticketId": null
+          },
+          {
+            "messageId": "453ad626-fb09-49b8-935c-6a15c0bbc017",
+            "sessionId": "998e28e1-a93a-4cc9-a3f0-9e12ee51f714",
+            "clientMessageId": null,
+            "role": "ai",
+            "content": "订单 TB202610100001：演示快递，运单 DEMO-TB-0001，运输中。\n2026-10-11T10:00+08:00 商家已交寄\n2026-10-12T08:30+08:00 到达杭州转运中心\n未提供预计送达时间，不作到货承诺。",
+            "createdAt": "2026-10-20T16:39:52.809546+08:00",
+            "orderIds": [
+              "demo-order-tb-01"
+            ],
+            "ticketId": null
+          }
+        ],
+        "orders": [
+          {
+            "orderId": "demo-order-tb-02",
+            "orderNumber": "TB202610110002",
+            "shopId": "demo-shop-tb",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "name": "保温杯",
+                "quantity": 1,
+                "specification": "黑色 750ml"
+              }
+            ],
+            "paidAmount": 69.0,
+            "status": "PENDING_SHIPMENT",
+            "createdAt": "2026-10-11T10:00+08:00"
+          },
+          {
+            "orderId": "demo-order-tb-01",
+            "orderNumber": "TB202610100001",
+            "shopId": "demo-shop-tb",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "name": "保温杯",
+                "quantity": 1,
+                "specification": "白色 500ml"
+              }
+            ],
+            "paidAmount": 59.0,
+            "status": "SHIPPED",
+            "createdAt": "2026-10-10T09:00+08:00"
+          },
+          {
+            "orderId": "demo-order-tb-03",
+            "orderNumber": "TB202610090003",
+            "shopId": "demo-shop-tb",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "name": "收纳盒",
+                "quantity": 2,
+                "specification": "透明中号"
+              }
+            ],
+            "paidAmount": 78.0,
+            "status": "DELIVERED",
+            "createdAt": "2026-10-09T11:00+08:00"
+          },
+          {
+            "orderId": "demo-order-tb-04",
+            "orderNumber": "TB202610080004",
+            "shopId": "demo-shop-tb",
+            "customerId": "demo-customer-tb-1",
+            "items": [
+              {
+                "name": "纯棉毛巾",
+                "quantity": 1,
+                "specification": "蓝色"
+              }
+            ],
+            "paidAmount": 0.0,
+            "status": "CANCELLED",
+            "createdAt": "2026-10-08T12:00+08:00"
+          }
+        ],
+        "logistics": [
+          {
+            "orderId": "demo-order-tb-02",
+            "carrier": null,
+            "trackingNumber": null,
+            "status": "订单尚未发货，暂无物流",
+            "nodes": []
+          },
+          {
+            "orderId": "demo-order-tb-01",
+            "carrier": "演示快递",
+            "trackingNumber": "DEMO-TB-0001",
+            "status": "运输中",
+            "nodes": [
+              {
+                "time": "2026-10-11T10:00+08:00",
+                "description": "商家已交寄"
+              },
+              {
+                "time": "2026-10-12T08:30+08:00",
+                "description": "到达杭州转运中心"
+              }
+            ]
+          },
+          {
+            "orderId": "demo-order-tb-03",
+            "carrier": "演示快递",
+            "trackingNumber": "DEMO-TB-0003",
+            "status": "已签收",
+            "nodes": [
+              {
+                "time": "2026-10-10T09:00+08:00",
+                "description": "商家已交寄"
+              },
+              {
+                "time": "2026-10-12T15:00+08:00",
+                "description": "顾客已签收"
+              }
+            ]
+          },
+          {
+            "orderId": "demo-order-tb-04",
+            "carrier": null,
+            "trackingNumber": null,
+            "status": "订单已取消，暂无可查询物流",
+            "nodes": []
+          }
+        ],
+        "tickets": [],
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-logistics",
+            "title": "物流时效说明",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "物流以演示订单的实际节点为准。未提供预计送达时间时不能承诺明天到货；未发货和已取消订单没有运单。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "executions": [
+          {
+            "executionId": "bc8bb5b5-d802-4004-8607-444b9b1af723",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 2 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:36:39.572584+08:00"
+          },
+          {
+            "executionId": "a966b33e-5559-4c9d-abfa-86cee38cb100",
+            "action": "get_order",
+            "status": "SUCCESS",
+            "summary": "找到多笔订单，请顾客选择后再继续",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:36:39.577656+08:00"
+          },
+          {
+            "executionId": "a98a9c77-e3e9-49d4-903f-e200711aa484",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 0 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:39:28.174558+08:00"
+          },
+          {
+            "executionId": "824f2827-5783-4643-b365-163ebe4cb325",
+            "action": "get_order",
+            "status": "SUCCESS",
+            "summary": "已找到一笔匹配订单",
+            "relatedId": "demo-order-tb-01",
+            "createdAt": "2026-10-20T16:39:28.179136+08:00"
+          },
+          {
+            "executionId": "8eb6dc0f-4acb-4d9e-ab07-578bb31207f6",
+            "action": "get_logistics",
+            "status": "SUCCESS",
+            "summary": "运输中",
+            "relatedId": "demo-order-tb-01",
+            "createdAt": "2026-10-20T16:39:28.182136+08:00"
+          },
+          {
+            "executionId": "51057eed-42c4-4e18-b09c-9e30f8d2861a",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T16:39:52.790679+08:00"
+          },
+          {
+            "executionId": "c22de5c6-db57-4da7-b2bf-ace07b5fbdfe",
+            "action": "get_order",
+            "status": "SUCCESS",
+            "summary": "已找到一笔匹配订单",
+            "relatedId": "demo-order-tb-01",
+            "createdAt": "2026-10-20T16:39:52.798039+08:00"
+          },
+          {
+            "executionId": "b4f26d64-72e7-4a65-82e6-632aaa09c105",
+            "action": "get_logistics",
+            "status": "SUCCESS",
+            "summary": "运输中",
+            "relatedId": "demo-order-tb-01",
+            "createdAt": "2026-10-20T16:39:52.806235+08:00"
+          }
+        ],
+        "selectedOrderId": "demo-order-tb-01",
+        "awaitingConfirmation": false
+      },
+      "timestamp": 1792486209582,
+      "success": true
+    }
+  ],
+  "api": "127.0.0.1:10002"
+}

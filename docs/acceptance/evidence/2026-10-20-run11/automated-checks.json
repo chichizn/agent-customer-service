@@ -1,0 +1,115 @@
+{
+  "generatedAt": "2026-10-20T09:14:39.041487+00:00",
+  "sourceCommit": "1d4bbc859a061a8cb8348dc2b3205c2d019ec37c",
+  "workspaceDirty": true,
+  "backend": {
+    "status": "PASS",
+    "suiteCount": 10,
+    "tests": 83,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "com.anjing.aspect.DistributeLockAspectTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "1.95"
+      },
+      {
+        "name": "com.anjing.config.lock.LocalLockManagerTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "1.23"
+      },
+      {
+        "name": "com.anjing.module.chat.ChatContextPersistenceTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "3.528"
+      },
+      {
+        "name": "com.anjing.module.chat.LlmServiceTest",
+        "tests": "12",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "1.152"
+      },
+      {
+        "name": "com.anjing.module.chat.workbench.WorkbenchApplicationHttpTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "6.326"
+      },
+      {
+        "name": "com.anjing.module.chat.workbench.WorkbenchIntegrationTest",
+        "tests": "28",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "2.92"
+      },
+      {
+        "name": "com.anjing.module.chat.workbench.WorkbenchKnowledgeServiceTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.104"
+      },
+      {
+        "name": "com.anjing.module.commerce.CommerceControllerTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.205"
+      },
+      {
+        "name": "com.anjing.module.commerce.CommercePersistenceTest",
+        "tests": "14",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.613"
+      },
+      {
+        "name": "com.anjing.module.demo.DemoBusinessTimeTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.004"
+      }
+    ]
+  },
+  "frontend": {
+    "status": "PASS",
+    "tests": 14,
+    "failed": 0
+  },
+  "checker": {
+    "status": "PASS",
+    "tests": 26,
+    "failed": 0
+  },
+  "build": {
+    "status": "PASS",
+    "command": "vue-tsc --noEmit && vite build",
+    "note": "Default template build; local same-origin demo verified separately."
+  },
+  "demoBuild": {
+    "status": "PASS",
+    "command": "vue-tsc --noEmit && vite build --mode demo",
+    "note": "Built dist served on loopback 20003 with same-origin API to 10002; public production deployment pending."
+  }
+}

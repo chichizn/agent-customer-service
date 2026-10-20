@@ -1,0 +1,2 @@
+# Preserve evidence bytes so SHA256 values survive checkout on every platform.
+* -text

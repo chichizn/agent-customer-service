@@ -3,6 +3,7 @@ package com.anjing.module.commerce;
 import com.anjing.module.commerce.CommerceDTO.*;
 import com.anjing.module.commerce.CommerceTypes.*;
 import com.anjing.module.commerce.CommerceVO.*;
+import com.anjing.module.chat.workbench.MerchantTicketService;
 import org.junit.jupiter.api.*;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ class CommerceControllerTest {
 
     @BeforeEach void setup() {
         service = mock(CommerceService.class); demo = mock(CommerceDemoService.class);
-        mvc = MockMvcBuilders.standaloneSetup(new CommerceController(service, demo))
+        mvc = MockMvcBuilders.standaloneSetup(new CommerceController(service, demo, mock(MerchantTicketService.class)))
             .setControllerAdvice(new CommerceExceptionHandler()).build();
     }
 

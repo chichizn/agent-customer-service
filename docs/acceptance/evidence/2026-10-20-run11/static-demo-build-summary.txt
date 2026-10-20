@@ -1,0 +1,19 @@
+🚀 API_URL = /
+🚀 VERSION = 3.0.1
+vite v7.1.7 building for demo...
+transforming...
+✓ 2951 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/assets/favicon-L_Py0CoQ.svg                                                        1.16 kB │ gzip:   0.49 kB
+dist/index.html                                                                         1.49 kB │ gzip:   0.87 kB
+dist/assets/login_icon-C4TVlUS8.svg                                                     4.23 kB │ gzip:   1.48 kB
+dist/assets/403-BdWuHcJA.svg                                                            4.61 kB │ gzip:   1.55 kB
+dist/assets/yd-BrGqJ6Cs.png                                                             4.63 kB
+dist/assets/sd-C0PQtrty.png                                                             4.75 kB
+… asset list omitted …
+dist/assets/el-table-column-BXk01LTR.js                                                74.98 kB │ gzip:  24.95 kB
+dist/assets/index-DS0nRfBs.js                                                         145.82 kB │ gzip:  42.39 kB
+dist/assets/useChart-DbjPZ7fT.js                                                      754.52 kB │ gzip: 246.89 kB
+dist/assets/index-B4ATEQDa.js                                                       1,363.09 kB │ gzip: 451.30 kB
+✓ built in 12.81s

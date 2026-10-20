@@ -1,0 +1,79 @@
+- main:
+  - generic: CUSTOMER SIMULATOR
+  - heading "顾客模拟入口 平台消息模拟" [level=1]:
+    - text: 顾客模拟入口
+    - generic: 平台消息模拟
+  - paragraph: 以顾客视角，体验一次完整的咨询。
+  - link "打开客服工作台 ↗":
+    - /url: "#/customer-workbench-preview"
+  - generic: 平台消息为演示消息，业务结果由后端返回。
+  - note:
+    - generic: 演示时间
+    - generic: 演示活动按 2026/10/18 12:00（Asia/Shanghai）判断有效期。
+    - text: 订单与物流为预置数据；消息和工单记录实际操作时间，售后诉求由商家审核。
+  - complementary:
+    - heading "演示身份" [level=2]
+    - generic: 01 / IDENTITY
+    - text: 平台与店铺
+    - combobox "平台与店铺":
+      - option "抖店 · 安静生活抖店（演示）"
+      - option "淘宝 · 安静生活淘宝店（演示）" [selected]
+    - text: 顾客身份
+    - combobox "顾客身份":
+      - option "小林" [selected]
+      - option "小周"
+      - option "小许（无订单测试）"
+    - button "恢复最近会话 ↗"
+    - button "显式新建会话"
+    - text: 已有会话
+    - combobox "已有会话":
+      - option "请选择会话"
+      - option "446a109d-5349-4d · 订单 TB202610100" [selected]
+    - generic: 02 / QUICK START
+    - heading "试试这些问题" [level=3]
+    - button "我的杯子到哪了？":
+      - generic: 我的杯子到哪了？
+      - generic: ↗
+    - button "我想退货，原因是不喜欢这个颜色":
+      - generic: 我想退货，原因是不喜欢这个颜色
+      - generic: ↗
+    - button "商品破损了，希望记录补偿诉求":
+      - generic: 商品破损了，希望记录补偿诉求
+      - generic: ↗
+    - button "刚才的工单进度怎么样了？":
+      - generic: 刚才的工单进度怎么样了？
+      - generic: ↗
+    - button "店铺的退货规则是什么？":
+      - generic: 店铺的退货规则是什么？
+      - generic: ↗
+    - button "我要转人工":
+      - generic: 我要转人工
+      - generic: ↗
+    - paragraph: 快捷问题只填入输入框，由你确认发送。切换身份会清空当前会话视图。
+  - heading "小林 的咨询 淘宝" [level=2]:
+    - text: 小林 的咨询
+    - generic: 淘宝
+  - paragraph: 安静生活淘宝店（演示）
+  - generic: 顾客视角
+  - generic: AI 接待客服消息会自动同步到此处
+  - log "会话消息":
+    - article:
+      - paragraph: 演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。
+    - article:
+      - generic: 小
+      - strong: 顾客
+      - time: 10/20 17:06
+      - paragraph: 查订单 TB202610100001 的物流
+    - article:
+      - generic: AI
+      - strong: AI 客服
+      - time: 10/20 17:06
+      - paragraph: 订单 TB202610100001：演示快递，运单 DEMO-TB-0001，运输中。 2026-10-11T10:00+08:00 商家已交寄 2026-10-12T08:30+08:00 到达杭州转运中心 未提供预计送达时间，不作到货承诺。
+      - button "demo-order-tb-01"
+  - generic: 顾客消息
+  - textbox "顾客消息":
+    - /placeholder: 输入想咨询的问题…
+  - generic: Enter 发送 · Shift + Enter 换行 0/2000
+  - button "发送消息" [disabled]:
+    - text: 发送消息
+    - generic: ↗

@@ -1,0 +1,57 @@
+- main:
+  - generic: CUSTOMER SIMULATOR
+  - heading "顾客模拟入口 平台消息模拟" [level=1]:
+    - text: 顾客模拟入口
+    - generic: 平台消息模拟
+  - paragraph: 以顾客视角，体验一次完整的咨询。
+  - link "打开客服工作台 ↗":
+    - /url: "#/customer-workbench-preview"
+  - generic: 平台消息为演示消息，业务结果由后端返回。
+  - note:
+    - generic: 演示时间
+    - generic: 演示活动按 2026/10/18 12:00（Asia/Shanghai）判断有效期。
+    - text: 订单与物流为预置数据；消息和工单记录实际操作时间，售后诉求由商家审核。
+  - complementary:
+    - heading "演示身份" [level=2]
+    - generic: 01 / IDENTITY
+    - text: 平台与店铺
+    - combobox "平台与店铺":
+      - option "抖店 · 安静生活抖店（演示）" [selected]
+      - option "淘宝 · 安静生活淘宝店（演示）"
+    - text: 顾客身份
+    - combobox "顾客身份":
+      - option "小林" [selected]
+      - option "小陈"
+    - button "开始咨询 ↗"
+    - button "显式新建会话"
+    - generic: 02 / QUICK START
+    - heading "试试这些问题" [level=3]
+    - button "我的杯子到哪了？" [disabled]:
+      - generic: 我的杯子到哪了？
+      - generic: ↗
+    - button "我想退货，原因是不喜欢这个颜色" [disabled]:
+      - generic: 我想退货，原因是不喜欢这个颜色
+      - generic: ↗
+    - button "商品破损了，希望记录补偿诉求" [disabled]:
+      - generic: 商品破损了，希望记录补偿诉求
+      - generic: ↗
+    - button "刚才的工单进度怎么样了？" [disabled]:
+      - generic: 刚才的工单进度怎么样了？
+      - generic: ↗
+    - button "店铺的退货规则是什么？" [disabled]:
+      - generic: 店铺的退货规则是什么？
+      - generic: ↗
+    - button "我要转人工" [disabled]:
+      - generic: 我要转人工
+      - generic: ↗
+    - paragraph: 快捷问题只填入输入框，由你确认发送。切换身份会清空当前会话视图。
+  - heading "开始一段咨询 抖店" [level=2]:
+    - text: 开始一段咨询
+    - generic: 抖店
+  - paragraph: 安静生活抖店（演示）
+  - generic: 顾客视角
+  - generic: ◌
+  - heading "选择身份，开启一段咨询" [level=3]
+  - paragraph: 恢复已有会话可继续之前的订单与售后咨询。
+- generic "Toggle devtools panel":
+- generic "Toggle Component Inspector":

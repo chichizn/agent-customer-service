@@ -1,6 +1,6 @@
 # 演示运行与操作手册
 
-更新：2026-10-20。会话、业务编排、人工协作和统一重置已实现，见 [A 集成交付](../backend/A-INTEGRATION.md)。隔离 MySQL 的查询及工作台 HTTP 冒烟已有实测；实际模型、双端浏览器和完整业务故事仍待验收，见 [最新验收结果](../acceptance/RESULTS-2026-10-20.md)。
+更新：2026-10-20。会话、业务编排、人工协作和统一重置已实现，见 [A 集成交付](../backend/A-INTEGRATION.md)。run11已完成真实模型、隔离MySQL的三故事双端操作与刷新、连续UI重置；17组并发及故障检查另用本地模型fixture完成。范围与未补齐项目见 [最新验收结果](../acceptance/RESULTS-2026-10-20.md)，[本轮图文步骤](../acceptance/evidence/2026-10-20-run11/verification.md)。
 
 ## 1. 选择运行方式
 
@@ -8,7 +8,7 @@
 |---|---|---|
 | B 前端 mock | 浏览器 localStorage、前端规则回复，不调用 Java/MySQL/LLM | 页面、模拟多单、模拟工单、人工切换、同源双标签同步 |
 | D commerce 检查 | Java/MySQL 订单、物流、工单接口 | 真实模块查询；不能代表聊天已调用工具 |
-| 完整 api 模式 | B 页面 + A 会话编排 + D commerce + 实际模型 | 接口实现已补，下方三个业务故事仍需真实环境验收 |
+| 完整 api 模式 | B 页面 + A 会话编排 + D commerce + 实际模型 | run11三故事已有真实双端记录；完整22条AC及MP4仍须按登记补齐 |
 
 mock 的姓名/ID/商品另有一套，以 [B 说明](../frontend/B-WORKBENCH.md) 为准，不能在 mock 中输入下方 D 单号并声称查到数据库。
 
@@ -57,7 +57,13 @@ node docs/acceptance/scripts/commerce-readonly.mjs docs/acceptance/evidence/comm
 
 ## 3. 完整演示前置
 
-- A/D/B api 链路可运行，实际模型经过问答验证；关闭/失败时有明确降级。C 已按 [22条用例](../acceptance/TEST-CASES.md) 实测。
+### 本地静态构建（同源API）
+
+在 `frontend` 目录运行 `pnpm run build:demo`，成功后运行 `pnpm run serve:demo`。仓库提交的 `.env.demo` 固定选择真实API模式与 `/` API前缀，避免默认生产模板地址；构建前清除当前终端内可能覆盖它的 `VITE_API_URL`、`VITE_CUSTOMER_SERVICE_MODE` 环境变量。
+
+访问 `http://127.0.0.1:20003/#/customer-simulator` 或 `/#/customer-workbench-preview`。这里提供的是 `dist` 静态文件，`/api` 转发到本地10002，不依赖Vite开发代理。服务仅监听回环地址，适合本地验证；公网部署应使用HTTPS反向代理并另行完成认证和权限等生产工作。
+
+- A/D/B api 链路可运行，实际模型经过问答验证；关闭/失败时有明确降级。交付前须按 [22条用例](../acceptance/TEST-CASES.md) 补齐实测；这是验收要求，当前结果以逐项登记为准。
 - 商家 `demo-merchant`。D 基线2店/5顾客（TB3无订单）/3种订单商品/12单/7物流；10条 C 范围知识由 A 加载，运行时按商家/店铺范围过滤。
 - 统一重置由 A 协调，D restore 仅处理 commerce。确认影响范围再操作；另一标签旧任务失效。两次复验非演示数据保留。
 - 默认 `DEMO_TIME_MODE=fixed`、`DEMO_REFERENCE_TIME=2026-10-18T12:00:00+08:00`，双端显示演示时间。活动按这一时间过滤，订单和物流不平移；消息、工单及超时按真实时间。改为 `system` 后重启可检查活动过期；退货是否受理由商家审核，当前不会自动判断资格。录制时记录所选模式和基准。

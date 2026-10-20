@@ -1,0 +1,20 @@
+{
+  "database": "agent_customer_service_acceptance_20261019",
+  "dbPort": 13307,
+  "mode": "valid",
+  "entered": "none",
+  "queryFailure": false,
+  "at": "2026-10-20T08:51:01.583102600Z",
+  "commerce_merchant": 1,
+  "commerce_shop": 2,
+  "commerce_customer": 5,
+  "commerce_order": 12,
+  "commerce_logistics": 7,
+  "commerce_service_ticket": 0,
+  "commerce_ticket_submission": 0,
+  "commerce_ticket_history": 0,
+  "cs_chat_session": 1,
+  "cs_chat_message": 0,
+  "cs_chat_execution": 0,
+  "cs_scoped_knowledge": 11
+}
