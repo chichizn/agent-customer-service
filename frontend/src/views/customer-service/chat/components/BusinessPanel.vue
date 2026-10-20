@@ -15,6 +15,12 @@
   const targetStatus = ref<TicketStatus>('PROCESSING')
   const note = ref('')
   const validation = ref('')
+  const replyLabels = {
+    MODEL_KNOWLEDGE: '大模型匹配知识回答',
+    RULE_KNOWLEDGE: '规则知识兜底回答',
+    BUSINESS_TOOL: '业务工具处理',
+    CLARIFICATION: '继续补充问题'
+  }
   watch(
     () => props.snapshot?.session.sessionId,
     () => {
@@ -217,6 +223,23 @@
           </article>
         </template>
         <template v-if="tab === 'knowledge'">
+          <article v-if="snapshot.analysis" class="cs-card" aria-label="本轮客服分析">
+            <div class="cs-card-top">
+              <strong>本轮客服分析</strong>
+              <span
+                class="cs-badge"
+                :class="snapshot.analysis.analysisSource === 'MODEL' ? 'green' : 'amber'"
+                >{{
+                  snapshot.analysis.analysisSource === 'MODEL' ? '大模型分析' : '规则分析兜底'
+                }}</span
+              >
+            </div>
+            <p
+              >{{ snapshot.analysis.scene }} · {{ snapshot.analysis.intentName }} ·
+              {{ snapshot.analysis.emotion }}</p
+            >
+            <div class="cs-card-bottom">{{ replyLabels[snapshot.analysis.replySource] }}</div>
+          </article>
           <div v-if="!snapshot.knowledge.length" class="cs-empty"
             >本轮尚无知识引用<br />引用将以实际返回的数据展示</div
           >

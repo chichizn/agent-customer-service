@@ -40,6 +40,10 @@ public class WorkbenchKnowledgeService {
                         applyValidity(old.get(), item);
                         repository.save(old.get());
                     }
+                    if (old.get().getKeywordsJson() == null) {
+                        applyMatching(old.get(), item);
+                        repository.save(old.get());
+                    }
                     continue;
                 }
                 String scope = item.path("scope").asText();
@@ -54,6 +58,7 @@ public class WorkbenchKnowledgeService {
                 k.setContent(item.path("content").asText()); k.setSource(item.path("source").asText());
                 k.setStatus(item.path("status").asText()); k.setDemoData(true);
                 applyValidity(k, item);
+                applyMatching(k, item);
                 repository.save(k);
             }
         } catch (IOException ex) { throw new IllegalStateException("无法读取集成知识种子", ex); }
@@ -61,6 +66,46 @@ public class WorkbenchKnowledgeService {
 
     @Transactional(readOnly=true)
     public List<ScopedKnowledge> search(String merchantId, String shopId, String text) {
+        return search(merchantId, shopId, text, "");
+    }
+
+    public List<ScopedKnowledge> search(String merchantId, String shopId, String text, String previousProductText) {
+        var candidates = candidates(merchantId, shopId, text, previousProductText);
+        boolean specific = candidates.stream().anyMatch(k -> score(k, text)>1);
+        return candidates.stream().filter(k -> score(k, text) > 0)
+            .filter(k -> !specific || score(k,text)>1)
+            .sorted(Comparator.<ScopedKnowledge>comparingInt(k -> score(k, text)).reversed()
+                .thenComparing(ScopedKnowledge::getId, Comparator.nullsLast(Comparator.naturalOrder())))
+            .limit(3).toList();
+    }
+
+    /** Both the model and fallback receive the same shop/product-filtered evidence. */
+    public List<ScopedKnowledge> candidates(String merchantId, String shopId, String text, String previousProductText) {
+        var available = applicable(merchantId, shopId);
+        String productText = mentionsProduct(available, text) ? text : previousProductText;
+        if (!mentionsProduct(available, productText)) return available;
+        return available.stream().filter(k -> words(k.getProductKeywordsJson()).isEmpty() ||
+            words(k.getProductKeywordsJson()).stream().anyMatch(w -> normalized(productText).contains(normalized(w)))).toList();
+    }
+
+    private boolean mentionsProduct(List<ScopedKnowledge> rows, String text) {
+        return rows.stream().flatMap(k -> words(k.getProductKeywordsJson()).stream())
+            .anyMatch(w -> normalized(text).contains(normalized(w)));
+    }
+
+    private int score(ScopedKnowledge k, String text) {
+        if (k.getKeywordsJson() != null) {
+            String query = normalized(text);
+            // Greetings match the whole utterance, so “你好差” cannot match “你好”.
+            return words(k.getKeywordsJson()).stream().filter(w ->
+                "GREETING".equals(k.getTopic()) || "THANKS".equals(k.getTopic()) ? query.equals(normalized(w)) :
+                    query.contains(normalized(w)))
+                .mapToInt(w -> words(k.getProductKeywordsJson()).contains(w) ? 1 : normalized(w).length()).max().orElse(0);
+        }
+        return legacyTopics(text).contains(k.getTopic()) ? 1 : 0;
+    }
+
+    private Set<String> legacyTopics(String text) {
         Set<String> topics = new HashSet<>();
         if (has(text,"退货","退款","售后","几天","期限")) topics.add("RETURN_WINDOW");
         if (has(text,"退货","运费","邮费")) topics.add("RETURN_SHIPPING");
@@ -70,8 +115,27 @@ public class WorkbenchKnowledgeService {
         if (has(text,"杯","容量","材质","保温")) topics.add("MATERIAL");
         if (has(text,"收纳","尺寸","长宽","微波")) topics.add("DIMENSIONS");
         if (has(text,"活动","优惠","折扣")) topics.add("DISCOUNT");
-        return applicable(merchantId,shopId).stream().filter(k -> topics.contains(k.getTopic()))
-            .sorted(Comparator.comparing(ScopedKnowledge::getId)).toList();
+        return topics;
+    }
+
+    private void applyMatching(ScopedKnowledge knowledge, JsonNode item) throws IOException {
+        knowledge.setKeywordsJson(mapper.writeValueAsString(item.path("keywords")));
+        knowledge.setProductKeywordsJson(mapper.writeValueAsString(item.path("productKeywords")));
+    }
+
+    private List<String> words(String json) {
+        if (json == null) return List.of();
+        try {
+            var node = mapper.readTree(json);
+            if (!node.isArray()) return List.of();
+            List<String> result = new ArrayList<>();
+            node.forEach(n -> { if (n.isTextual() && !n.asText().isBlank()) result.add(n.asText()); });
+            return result;
+        } catch (IOException ex) { return List.of(); }
+    }
+
+    private String normalized(String text) {
+        return Objects.toString(text, "").toLowerCase(Locale.ROOT).replaceAll("[\\p{P}\\p{Z}\\s]", "");
     }
 
     public List<ScopedKnowledge> applicable(String merchantId, String shopId) {

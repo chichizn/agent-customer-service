@@ -17,6 +17,8 @@ public class ScopedKnowledge {
     @Column(nullable=false,length=1000) private String source;
     @Column(nullable=false,length=20) private String status;
     @Column(length=20) private String kind;
+    @Column(columnDefinition="TEXT") private String keywordsJson;
+    @Column(columnDefinition="TEXT") private String productKeywordsJson;
     private LocalDateTime startsAt;
     private LocalDateTime endsAt;
     @Column(nullable=false) private boolean demoData;

@@ -60,7 +60,7 @@ class WorkbenchKnowledgeServiceTest {
     @Test void loadingPersistsActivityDatesInShanghaiTime() {
         service.load(false);
         ArgumentCaptor<ScopedKnowledge> saved = ArgumentCaptor.forClass(ScopedKnowledge.class);
-        verify(repository, times(10)).save(saved.capture());
+        verify(repository, times(39)).save(saved.capture());
         assertThat(saved.getAllValues().stream().filter(k -> "ACTIVITY".equals(k.getKind())).toList()).hasSize(2)
             .allSatisfy(k -> { assertThat(k.getStartsAt()).isEqualTo(START); assertThat(k.getEndsAt()).isEqualTo(END); });
     }
@@ -77,7 +77,8 @@ class WorkbenchKnowledgeServiceTest {
         assertThat(legacy.getEndsAt()).isEqualTo(END);
         assertThat(legacy.getContent()).isEqualTo("商家编辑的活动文案");
         assertThat(legacy.getStatus()).isEqualTo("DISABLED");
-        verify(repository).save(legacy);
+        assertThat(legacy.getKeywordsJson()).contains("优惠");
+        verify(repository, atLeastOnce()).save(legacy);
     }
 
     private void at(LocalDateTime demo, LocalDateTime real) {

@@ -132,6 +132,13 @@ export interface SessionSnapshot {
   executions: ExecutionRecord[]
   selectedOrderId?: string
   awaitingConfirmation?: boolean
+  analysis?: {
+    scene: string
+    intentName: string
+    emotion: string
+    analysisSource: 'MODEL' | 'RULE'
+    replySource: 'MODEL_KNOWLEDGE' | 'RULE_KNOWLEDGE' | 'BUSINESS_TOOL' | 'CLARIFICATION'
+  }
 }
 
 export interface OpenSessionParams {

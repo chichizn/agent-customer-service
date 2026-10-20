@@ -24,6 +24,9 @@ export function validateKnowledge(data, commerce = seed) {
     check(row.scope === 'MERCHANT' ? row.shopId === null : row.scope === 'SHOP' && shopIds.has(row.shopId), `${row.id}: knowledge scope mismatch`)
     check(Array.isArray(row.productIds) && row.productIds.every(id => products.has(id)), `${row.id}: unknown product`)
     check(row.id && row.title && row.content && row.source && row.status === 'ACTIVE', `${row.id}: incomplete knowledge`)
+    const words = value => Array.isArray(value) && value.every(word => typeof word === 'string' && word.trim().length > 0 && word.replace(/[\p{P}\p{Z}\s]/gu, '').length > 0)
+    check(words(row.keywords) && row.keywords.length > 0, `${row.id}: invalid matching keywords`)
+    check(words(row.productKeywords) && (row.productIds?.length === 0 || row.productKeywords.length > 0), `${row.id}: invalid product keywords`)
     if (['SHOP_RULE', 'ACTIVITY'].includes(row.kind)) check(row.scope === 'SHOP', `${row.id}: shop policy must not be global`)
     if (row.kind === 'ACTIVITY') {
       const p = row.policy || {}

@@ -14,6 +14,8 @@ import com.anjing.module.commerce.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -75,7 +77,7 @@ class WorkbenchIntegrationTest {
 
     @BeforeEach void setup() {
         reset(llm);
-        when(llm.analyzeUserInput(anyString())).thenReturn(Map.of("intentCode","GENERAL_QUERY"));
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(Map.of("intentCode","GENERAL_QUERY"));
         demo.load(); service.reset(new WorkbenchDTO.Reset(true));
         originalChat = mock(ChatService.class);
         mvc = MockMvcBuilders.standaloneSetup(new WorkbenchController(service),new ChatController(originalChat,service))
@@ -88,6 +90,96 @@ class WorkbenchIntegrationTest {
         return service.send(new WorkbenchDTO.Send(session,client,content));
     }
     private WorkbenchVO.Snapshot fetch(String session) { return service.fetch(new WorkbenchDTO.SessionId(session)); }
+
+    @ParameterizedTest
+    @CsvSource(delimiter='|', value={
+        "你好，在吗？|我在", "保温杯怎么清洗？|中性清洁剂", "收纳盒怎么清洗？|软布",
+        "毛巾第一次用要怎么洗？|洗标", "支持开发票吗？|税号", "可以用什么付款？|支付",
+        "有没有货？|实时库存", "保温杯多少钱？|结算页", "怎么下单？|收货地址",
+        "优惠券怎么用？|有效期", "包邮吗？|包邮范围", "什么时候发货？|发货时间",
+        "发什么快递？|承运快递", "怎么修改地址？|修改收货地址", "怎么取消订单？|取消订单",
+        "怎么退货？|准备凭证", "退款多久到账？|支付渠道", "退货地址在哪？|退货地址",
+        "杯盖漏水怎么办？|清晰照片", "漏发了怎么办？|外包装", "工单是什么？|只记录诉求",
+        "人工客服几点上班？|值班时间", "不用转人工|常见商品", "谢谢|不客气"
+    })
+    void commonQuestionsAreAnsweredByRulesWithoutHandoffOrWrites(String question,String expected) {
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(null);
+        for (String shop : List.of("tb","dy")) {
+            var result = send(open(shop).session().sessionId(),UUID.randomUUID().toString(),question);
+            assertThat(last(result)).as(question).contains(expected);
+            assertThat(result.session().receptionMode()).isEqualTo("AI");
+            assertThat(result.awaitingConfirmation()).isFalse();
+            assertThat(result.knowledge()).isNotEmpty();
+            assertThat(result.analysis().analysisSource()).isEqualTo("RULE");
+            assertThat(result.analysis().replySource()).isEqualTo("RULE_KNOWLEDGE");
+            assertThat(result.executions()).noneSatisfy(e -> assertThat(e.action()).isIn("create_service_ticket","handoff_to_human"));
+        }
+        assertThat(tickets.count()).isZero();
+    }
+
+    @Test void modelIntentCannotTurnOrdinaryQuestionsIntoApplications() {
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(Map.of("intentCode","RETURN_EXCHANGE"));
+        String id = open("dy").session().sessionId();
+        for (String question : List.of("你好", "可以退吗", "怎么退货", "人工客服几点上班", "支持开票吗")) {
+            var result = send(id,UUID.randomUUID().toString(),question);
+            assertThat(result.session().receptionMode()).isEqualTo("AI");
+            assertThat(result.awaitingConfirmation()).isFalse();
+            assertThat(result.executions()).noneSatisfy(e -> assertThat(e.action()).isEqualTo("get_order"));
+        }
+        assertThat(last(send(id,"no-application","确认提交"))).contains("没有可提交");
+    }
+
+    @Test void semanticModelSelectionHasPriorityAndIsPersistedWithScopedHistory() {
+        when(llm.analyzeUserInput(eq("劳驾能帮忙解答吗"),anyList(),anyList())).thenReturn(Map.of(
+            "intentCode","GENERAL_QUERY", "scene","通用咨询", "emotion","中性",
+            "knowledgeIds","[\"demo-knowledge-greeting\"]"));
+        String id = open("tb").session().sessionId();
+        send(id,"previous-product","保温杯有什么颜色");
+        var result = send(id,"semantic-greeting","劳驾能帮忙解答吗");
+        assertThat(last(result)).contains("你好，我在");
+        assertThat(result.analysis().replySource()).isEqualTo("MODEL_KNOWLEDGE");
+        assertThat(fetch(id).analysis()).isEqualTo(result.analysis());
+        verify(llm).analyzeUserInput(eq("劳驾能帮忙解答吗"),argThat(rows -> rows.stream()
+            .noneMatch(row -> row.get("id").startsWith("demo-knowledge-dy-"))),
+            argThat(rows -> rows.stream().anyMatch(row -> row.get("content").contains("保温杯有什么颜色"))));
+    }
+
+    @Test void rejectsForeignAndExpiredModelEvidenceAndUsesLocalRules() {
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(Map.of(
+            "intentCode","GENERAL_QUERY","knowledgeIds","[\"demo-knowledge-dy-return\"]"));
+        var result = send(open("tb").session().sessionId(),"bad-model-scope","退货期限几天");
+        assertThat(last(result)).contains("15天").doesNotContain("7天");
+        assertThat(result.analysis().replySource()).isEqualTo("RULE_KNOWLEDGE");
+        var activity = knowledge.findById("demo-knowledge-tb-activity").orElseThrow();
+        activity.setEndsAt(java.time.LocalDateTime.parse("2026-10-17T00:00:00")); knowledge.save(activity);
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(Map.of(
+            "intentCode","GENERAL_QUERY","knowledgeIds","[\"demo-knowledge-tb-activity\"]"));
+        result = send(result.session().sessionId(),"bad-model-expiry","有什么优惠活动");
+        assertThat(last(result)).doesNotContain("9折");
+        assertThat(result.session().receptionMode()).isEqualTo("AI");
+    }
+
+    @Test void productFollowupAndDiscountsDoNotMixUnrelatedProductsOrShops() {
+        String id = open("tb").session().sessionId();
+        send(id,"context-cup","保温杯有什么颜色");
+        var cleaned = send(id,"context-clean","怎么清洗");
+        assertThat(last(cleaned)).contains("杯盖").doesNotContain("毛巾","收纳盒");
+        var box = send(id,"box-discount","收纳盒有什么优惠");
+        assertThat(last(box)).contains("9折").doesNotContain("95折","保温杯");
+        var dy = send(open("dy").session().sessionId(),"dy-cup-discount","保温杯有什么优惠");
+        assertThat(last(dy)).contains("95折").doesNotContain("单件9折");
+    }
+
+    @Test void noOrderCustomerCanAskProductCapacityAndUnknownQuestionsStayInAiReception() {
+        var opened = service.open(new WorkbenchDTO.Open("demo-shop-tb","demo-customer-tb-3",false));
+        var result = send(opened.session().sessionId(),"presale-capacity","保温杯容量多大");
+        assertThat(last(result)).contains("500ml","750ml").doesNotContain("未找到匹配订单");
+        result = send(opened.session().sessionId(),"unknown-topic","火星基地在哪里");
+        assertThat(last(result)).contains("补充具体问题").doesNotContain("联系人工");
+        assertThat(result.session().receptionMode()).isEqualTo("AI");
+        assertThat(result.analysis().replySource()).isEqualTo("CLARIFICATION");
+        assertThat(send(opened.session().sessionId(),"explicit-human","我要转人工").session().receptionMode()).isEqualTo("WAITING_HUMAN");
+    }
 
     @Test void identityBoundSessionRestoresAndRejectsCrossShopCustomer() {
         var s = open("tb");
@@ -194,7 +286,7 @@ class WorkbenchIntegrationTest {
     }
 
     @Test void askingReturnWindowAndPostageDoesNotStartAnApplicationEvenWithReturnIntent() {
-        when(llm.analyzeUserInput(anyString())).thenReturn(Map.of("intentCode","RETURN_EXCHANGE"));
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(Map.of("intentCode","RETURN_EXCHANGE"));
         for (String shop : List.of("tb","dy")) {
             String id = open(shop).session().sessionId();
             var result = send(id,"policy-"+shop,"签收后几天可以申请退货？寄回运费怎么办？");
@@ -283,7 +375,7 @@ class WorkbenchIntegrationTest {
         String id = open("dy").session().sessionId();
         send(id,"r1","我想退货 DY202610100001，原因是不喜欢颜色");
         CountDownLatch entered = new CountDownLatch(1), release = new CountDownLatch(1);
-        when(llm.analyzeUserInput("确认提交")).thenAnswer(invocation -> {
+        when(llm.analyzeUserInput(eq("确认提交"),anyList(),anyList())).thenAnswer(invocation -> {
             entered.countDown(); if (!release.await(10,TimeUnit.SECONDS)) throw new IllegalStateException("timeout");
             return Map.of("intentCode","GENERAL_QUERY");
         });
@@ -307,7 +399,7 @@ class WorkbenchIntegrationTest {
     }
 
     @Test void modelFailureAllowsQueriesButTransfersWritesWithoutFalseSuccess() {
-        when(llm.analyzeUserInput(anyString())).thenReturn(null);
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(null);
         String id = open("tb").session().sessionId();
         assertThat(last(send(id,"f1","查询 TB202610100001 物流"))).contains("规则降级","DEMO-TB-0001");
         var write = send(id,"f2","我想退货 TB202610100001，原因是不喜欢");
@@ -317,7 +409,7 @@ class WorkbenchIntegrationTest {
     }
 
     @Test void waitingHumanSummarySurvivesTakeoverAndRepeatedReception() {
-        when(llm.analyzeUserInput(anyString())).thenReturn(null);
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(null);
         String id = open("dy").session().sessionId();
         String complaint = "订单 DY202610100001 的杯子漏水，想退货";
         var waiting = send(id,"summary-1",complaint);
@@ -358,7 +450,7 @@ class WorkbenchIntegrationTest {
         assertThat(last(dy)).contains("7天").doesNotContain("15天");
         assertThat(fetch(tb.session().sessionId()).knowledge()).extracting(WorkbenchVO.Knowledge::knowledgeId)
             .contains("demo-knowledge-tb-return").doesNotContain("demo-knowledge-dy-return");
-        assertThat(knowledge.count()).isEqualTo(10);
+        assertThat(knowledge.count()).isEqualTo(39);
     }
 
     @Test void openingSessionBackfillsLegacyDatesWithoutResetAndExpiredKnowledgeStaysHidden() {
@@ -390,7 +482,7 @@ class WorkbenchIntegrationTest {
         assertThat(service.list()).isEmpty(); assertThat(tickets.count()).isZero();
         assertThat(sessions.existsById("original-chat")).isTrue();
         assertThatThrownBy(() -> fetch(id)).isInstanceOf(CommerceException.class);
-        assertThat(knowledge.count()).isEqualTo(10);
+        assertThat(knowledge.count()).isEqualTo(39);
         new TransactionTemplate(transactionManager).executeWithoutResult(status -> sessions.deleteById("original-chat"));
     }
 
@@ -470,7 +562,7 @@ class WorkbenchIntegrationTest {
         String id = open("dy").session().sessionId();
         send(id,"reset1","想退货 DY202610100001，原因是不喜欢");
         CountDownLatch entered = new CountDownLatch(1), release = new CountDownLatch(1);
-        when(llm.analyzeUserInput("确认提交")).thenAnswer(invocation -> {
+        when(llm.analyzeUserInput(eq("确认提交"),anyList(),anyList())).thenAnswer(invocation -> {
             entered.countDown();
             if (!release.await(10,TimeUnit.SECONDS)) throw new IllegalStateException("timeout");
             return Map.of("intentCode","GENERAL_QUERY");

@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-10-20T18:12:07.0943214+08:00",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 13307,
+    "schema": "agent_customer_service_acceptance_20261019"
+  },
+  "method": "Read-only COUNT(*) per table after run12; no application reset or ticket submission in the smoke script.",
+  "smokeEvidence": {
+    "liveModel": {
+      "status": "PASS",
+      "checks": 11,
+      "passed": 11,
+      "modelKnowledgeSelections": 10
+    },
+    "rulesDisabled": {
+      "status": "PASS",
+      "checks": 57,
+      "passed": 57
+    }
+  },
+  "currentRows": {
+    "commerce_customer": 5,
+    "commerce_logistics": 7,
+    "commerce_logistics_node": 14,
+    "commerce_merchant": 1,
+    "commerce_order": 12,
+    "commerce_order_item": 13,
+    "commerce_service_ticket": 0,
+    "commerce_shop": 2,
+    "commerce_ticket_history": 0,
+    "commerce_ticket_submission": 0,
+    "cs_chat_execution": 219,
+    "cs_chat_message": 149,
+    "cs_chat_session": 6,
+    "cs_knowledge_activity": 3,
+    "cs_knowledge_faq": 12,
+    "cs_knowledge_industry": 1,
+    "cs_knowledge_product": 6,
+    "cs_knowledge_solution": 1,
+    "cs_scene_intent": 3,
+    "cs_scene_prompt": 2,
+    "cs_scene_rule": 3,
+    "cs_scoped_knowledge": 40
+  },
+  "comparisonBoundary": "Post-run counts only; this file is not a row-by-row pre/post comparison."
+}

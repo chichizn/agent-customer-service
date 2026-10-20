@@ -85,6 +85,18 @@ class LlmServiceTest {
         assertThat(messages.get(1).toString()).contains("杯子漏水");
     }
 
+    @Test void workbenchAnalysisSelectsKnowledgeAndIncludesRecentHistoryInOneCall() throws Exception {
+        answer("{\"intentCode\":\"GENERAL_QUERY\",\"knowledgeIds\":[\"cup-clean\"]}");
+        var result = service.analyzeUserInput("怎么洗",List.of(Map.of("id","cup-clean","content","用软布清洗")),
+            List.of(Map.of("role","user","content","我想了解保温杯")));
+        assertThat(result).containsEntry("knowledgeIds","[\"cup-clean\"]");
+        assertThat(calls).hasValue(1);
+        var sent = (List<?>) request.get("messages");
+        assertThat(sent).hasSize(3);
+        assertThat(sent.get(0).toString()).contains("cup-clean","用软布清洗","不要返回自由文本答案");
+        assertThat(sent.get(1).toString()).contains("我想了解保温杯");
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"not-json", "{}", "[]", "{\"intentCode\":\"DELETE_ORDER\"}", "{\"intentCode\":null}"})
     void rejectsMalformedOrUnknownIntent(String content) throws Exception {

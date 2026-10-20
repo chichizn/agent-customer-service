@@ -31,6 +31,10 @@ for (const [name, mutate] of [
   ['global shop rule', data => { const row = data.knowledge.find(k => k.kind === 'SHOP_RULE'); row.scope = 'MERCHANT'; row.shopId = null }],
   ['old shop ID', data => { data.knowledge.find(k => k.scope === 'SHOP').shopId = 'demo-shop-taobao' }],
   ['unknown product', data => { data.knowledge[0].productIds = ['demo-product-bag'] }],
+  ['empty keywords', data => { data.knowledge[0].keywords = [] }],
+  ['non-text keyword', data => { data.knowledge[0].keywords = [42] }],
+  ['punctuation keyword', data => { data.knowledge[0].keywords = ['？！'] }],
+  ['missing product aliases', data => { data.knowledge[0].productKeywords = [] }],
   ['missing 750ml variant', data => { data.knowledge[0].specifications.pop() }],
   ['expired activity', data => { data.knowledge.find(k => k.kind === 'ACTIVITY').policy.endsAt = '2026-09-30T00:00:00+08:00' }]
 ]) test(`reject knowledge regression: ${name}`, () => {

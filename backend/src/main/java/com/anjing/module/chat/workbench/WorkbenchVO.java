@@ -13,8 +13,9 @@ public final class WorkbenchVO {
     public record Knowledge(String knowledgeId, String title, String source, String content, String scope) {}
     public record Execution(String executionId, String action, String status, String summary,
         String relatedId, String createdAt) {}
+    public record Analysis(String scene, String intentName, String emotion, String analysisSource, String replySource) {}
     public record Snapshot(Session session, List<Message> messages, List<Map<String,Object>> orders,
         List<Map<String,Object>> logistics, List<Map<String,Object>> tickets,
         List<Knowledge> knowledge, List<Execution> executions, String selectedOrderId,
-        boolean awaitingConfirmation) {}
+        boolean awaitingConfirmation, Analysis analysis) {}
 }

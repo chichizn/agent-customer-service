@@ -45,8 +45,12 @@ public class AcceptanceRuntime {
                 public Object postProcessAfterInitialization(Object bean, String name) {
                     if (bean instanceof LlmService original) return new LlmService() {
                         @Override public Map<String,String> analyzeUserInput(String text) {
+                            return analyzeUserInput(text, List.of(), List.of());
+                        }
+                        @Override public Map<String,String> analyzeUserInput(String text,
+                                List<Map<String,String>> knowledge, List<Map<String,String>> history) {
                             if (mode.equals("disabled")) return null;
-                            var result = original.analyzeUserInput(text);
+                            var result = original.analyzeUserInput(text, knowledge, history);
                             if (mode.equals("hold-before-finish")) pause("before-finish");
                             return result;
                         }

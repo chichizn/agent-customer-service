@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
-  "contractStatus": "WAITING_FOR_A_SCOPED_IMPORT",
+  "version": "1.2.0",
+  "contractStatus": "SCOPED_IMPORT_IMPLEMENTED",
   "merchantId": "demo-merchant",
   "referenceTime": "2026-10-18T12:00:00+08:00",
   "knowledge": [
@@ -23,6 +23,23 @@
       "specifications": [
         "白色 500ml",
         "黑色 750ml"
+      ],
+      "keywords": [
+        "保温杯",
+        "杯子",
+        "容量",
+        "毫升",
+        "规格",
+        "颜色",
+        "材质",
+        "保温多久",
+        "保温时长",
+        "不锈钢"
+      ],
+      "productKeywords": [
+        "保温杯",
+        "杯子",
+        "水杯"
       ]
     },
     {
@@ -40,7 +57,22 @@
       "policy": {},
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "收纳盒",
+        "收纳箱",
+        "尺寸",
+        "长宽",
+        "多大",
+        "规格",
+        "微波",
+        "材质"
+      ],
+      "productKeywords": [
+        "收纳盒",
+        "收纳箱",
+        "盒子"
+      ]
     },
     {
       "id": "demo-knowledge-ticket",
@@ -55,7 +87,15 @@
       "policy": {},
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "工单是什么",
+        "工单有用",
+        "工单完成",
+        "平台受理",
+        "工单的含义"
+      ],
+      "productKeywords": []
     },
     {
       "id": "demo-knowledge-logistics",
@@ -70,7 +110,17 @@
       "policy": {},
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "什么时候到",
+        "明天到",
+        "几天到",
+        "预计送达",
+        "多久到",
+        "物流时效",
+        "保证到货"
+      ],
+      "productKeywords": []
     },
     {
       "id": "demo-knowledge-tb-return",
@@ -87,7 +137,17 @@
       },
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "退货",
+        "退款",
+        "退换",
+        "售后期限",
+        "签收后几天",
+        "退货政策",
+        "无理由"
+      ],
+      "productKeywords": []
     },
     {
       "id": "demo-knowledge-dy-return",
@@ -104,7 +164,17 @@
       },
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "退货",
+        "退款",
+        "退换",
+        "售后期限",
+        "签收后几天",
+        "退货政策",
+        "无理由"
+      ],
+      "productKeywords": []
     },
     {
       "id": "demo-knowledge-tb-fee",
@@ -119,7 +189,15 @@
       "policy": {},
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "运费",
+        "邮费",
+        "谁承担",
+        "谁出",
+        "运费险"
+      ],
+      "productKeywords": []
     },
     {
       "id": "demo-knowledge-dy-fee",
@@ -136,7 +214,15 @@
       },
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "运费",
+        "邮费",
+        "谁承担",
+        "谁出",
+        "运费险"
+      ],
+      "productKeywords": []
     },
     {
       "id": "demo-knowledge-tb-activity",
@@ -157,7 +243,20 @@
       },
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "活动",
+        "优惠",
+        "折扣",
+        "打折",
+        "便宜",
+        "促销"
+      ],
+      "productKeywords": [
+        "收纳盒",
+        "收纳箱",
+        "盒子"
+      ]
     },
     {
       "id": "demo-knowledge-dy-activity",
@@ -178,7 +277,809 @@
       },
       "status": "ACTIVE",
       "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
-      "demoNamespace": "customer-service-demo-v1"
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "活动",
+        "优惠",
+        "折扣",
+        "打折",
+        "便宜",
+        "促销"
+      ],
+      "productKeywords": [
+        "保温杯",
+        "杯子",
+        "水杯"
+      ]
+    },
+    {
+      "id": "demo-knowledge-greeting",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "GREETING",
+      "title": "问候与服务范围",
+      "content": "你好，我在。可以帮你了解商品规格、清洁保养、店铺优惠和退换货规则，也可以查本人订单、物流或本地工单。你想先了解什么？",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "你好",
+        "您好",
+        "在吗",
+        "在不在",
+        "有人吗",
+        "有人在吗",
+        "客服在吗",
+        "哈喽",
+        "嗨",
+        "hello",
+        "hi",
+        "你好呀",
+        "你好啊",
+        "早上好",
+        "晚上好",
+        "你好在吗",
+        "您好在吗"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-thanks",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "THANKS",
+      "title": "感谢与结束语",
+      "content": "不客气，很高兴帮到你。还有商品、订单或售后问题，继续发消息就好。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "谢谢",
+        "谢谢你",
+        "谢谢啦",
+        "谢谢了",
+        "感谢",
+        "好的谢谢",
+        "好谢谢",
+        "辛苦了",
+        "再见",
+        "拜拜",
+        "好的",
+        "好",
+        "明白了",
+        "知道了",
+        "收到"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-catalog",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "CATALOG",
+      "title": "演示商品目录",
+      "content": "当前演示商品有保温杯、收纳盒和纯棉毛巾。保温杯包含白色500ml、黑色750ml，收纳盒为透明中号，毛巾为蓝色。可以告诉我想了解哪件商品。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "有什么商品",
+        "有什么产品",
+        "卖什么",
+        "商品推荐",
+        "推荐商品",
+        "有哪些商品",
+        "商品目录",
+        "有哪些产品",
+        "有什么卖",
+        "有啥卖"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-cup-clean",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "CLEANING",
+      "title": "保温杯清洁建议",
+      "content": "保温杯清洁可先用温水和中性清洁剂轻洗，再充分冲净、开盖晾干；杯盖与密封圈按商品说明清洗和装回。避免用钢丝球刮擦，不使用强酸强碱清洁剂。具体耐温和清洗方式以商品说明为准。",
+      "productIds": [
+        "demo-product-cup"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "怎么洗",
+        "清洗",
+        "清洁",
+        "怎么清理",
+        "怎么保养",
+        "有味道",
+        "异味",
+        "第一次用",
+        "首次使用"
+      ],
+      "productKeywords": [
+        "保温杯",
+        "杯子",
+        "水杯"
+      ]
+    },
+    {
+      "id": "demo-knowledge-cup-use",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "PRODUCT_USE",
+      "title": "保温杯使用提醒",
+      "content": "装热水后小心烫伤，饮用前确认温度；拧紧杯盖并确认密封圈装好。未提供该款商品的保温测试时长、碳酸饮料适用性或洗碗机认证，不能保证适用，先核对商品说明。",
+      "productIds": [
+        "demo-product-cup"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "怎么用",
+        "注意事项",
+        "烫手",
+        "热水",
+        "碳酸",
+        "洗碗机",
+        "装什么"
+      ],
+      "productKeywords": [
+        "保温杯",
+        "杯子",
+        "水杯"
+      ]
+    },
+    {
+      "id": "demo-knowledge-box-clean",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "CLEANING",
+      "title": "收纳盒清洁建议",
+      "content": "收纳盒可先用软布配合温水、中性清洁剂清洗，冲净后晾干再收纳。未提供耐高温、食品接触或消毒柜认证；不要直接按可装食品、可高温消毒处理，先核对商品说明。",
+      "productIds": [
+        "demo-product-box"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "怎么洗",
+        "清洗",
+        "清洁",
+        "怎么清理",
+        "怎么保养",
+        "消毒",
+        "装食品",
+        "装食物"
+      ],
+      "productKeywords": [
+        "收纳盒",
+        "收纳箱",
+        "盒子"
+      ]
+    },
+    {
+      "id": "demo-knowledge-box-use",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "PRODUCT_USE",
+      "title": "收纳盒使用与尺寸提醒",
+      "content": "当前收纳盒是透明中号，可用于整理适合尺寸的日常物品。资料没有长宽高、承重及耐温数值，不能保证放进特定柜子、微波炉或冰箱；请先提供所需尺寸并核对商品说明。",
+      "productIds": [
+        "demo-product-box"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "怎么用",
+        "能装什么",
+        "承重",
+        "冰箱",
+        "柜子",
+        "耐温",
+        "食品级"
+      ],
+      "productKeywords": [
+        "收纳盒",
+        "收纳箱",
+        "盒子"
+      ]
+    },
+    {
+      "id": "demo-knowledge-towel",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "PRODUCT",
+      "topic": "SPECIFICATION",
+      "title": "纯棉毛巾规格",
+      "content": "演示订单中的商品名为纯棉毛巾，规格为蓝色。当前资料未提供尺寸、克重和检测报告，不推断其他颜色或具体检测结论。",
+      "productIds": [
+        "demo-product-towel"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "毛巾",
+        "规格",
+        "颜色",
+        "尺寸",
+        "克重",
+        "材质"
+      ],
+      "productKeywords": [
+        "毛巾"
+      ]
+    },
+    {
+      "id": "demo-knowledge-towel-clean",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "CLEANING",
+      "title": "毛巾清洁建议",
+      "content": "毛巾首次使用前建议按洗标清洗，与其他衣物分开清洗并充分晾干。使用温和洗涤剂；漂白、高温或烘干方式先看洗标，不承诺该款商品不掉色、不掉毛。",
+      "productIds": [
+        "demo-product-towel"
+      ],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "怎么洗",
+        "清洗",
+        "清洁",
+        "怎么保养",
+        "掉色",
+        "掉毛",
+        "第一次用",
+        "首次使用"
+      ],
+      "productKeywords": [
+        "毛巾"
+      ]
+    },
+    {
+      "id": "demo-knowledge-price",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "PRICE",
+      "title": "商品价格与实付金额",
+      "content": "商品售价可能因规格、店铺与活动变化，以对应店铺商品页及下单结算页为准，不能把历史订单实付当作当前售价。若要查已购订单，发送本人订单号，我可以帮你确认订单。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "多少钱",
+        "价格",
+        "售价",
+        "价钱",
+        "什么价",
+        "多少元",
+        "实付",
+        "原价"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-stock",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "STOCK",
+      "title": "库存与可选规格",
+      "content": "演示资料包含商品规格，没有实时库存和补货时间。可先确定商品及规格；实际是否可购买、何时补货，以店铺商品页显示为准。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "有货",
+        "库存",
+        "补货",
+        "缺货",
+        "现货",
+        "买得到",
+        "什么时候上架",
+        "有没有货",
+        "有没货"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-purchase",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "PURCHASE",
+      "title": "下单与选规格",
+      "content": "在对应店铺商品页选择商品、颜色和规格，核对数量及收货地址，再在结算页确认优惠和实付款。这里是客服演示入口，不能直接代下单或收取款项。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "怎么买",
+        "怎么购买",
+        "怎么下单",
+        "下单流程",
+        "如何下单",
+        "怎么选规格",
+        "在哪里购买"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-coupon",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "COUPON",
+      "title": "优惠券使用指引",
+      "content": "先核对优惠券的店铺、商品范围、门槛与有效期，再查看结算页是否抵扣。当前没有实时领券、叠加和历史订单补差价权限，不能承诺额外优惠；店铺已有活动可继续问我。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "优惠券",
+        "领券",
+        "用券",
+        "叠加",
+        "满减",
+        "补差价",
+        "差价",
+        "优惠码"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-payment",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "PAYMENT",
+      "title": "付款问题处理",
+      "content": "请在原平台订单页使用平台支持的支付方式。若显示扣款但订单未更新，先核对支付记录和订单状态，避免重复付款；此客服演示不能收款、代付或判断银行到账结果。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "支付",
+        "付款",
+        "扣款",
+        "重复付",
+        "付不了",
+        "付不成功",
+        "支付宝",
+        "微信支付"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-invoice",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "INVOICE",
+      "title": "开票资料与入口",
+      "content": "如需发票，可先在原平台订单页查看开票入口；准备订单号、发票抬头，企业开票还需核对税号。此演示未接入开票系统，不能自动开票或承诺开票时限。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "发票",
+        "开票",
+        "税号",
+        "抬头",
+        "电子票"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-shipping-fee",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "SHIPPING_FEE",
+      "title": "下单配送运费",
+      "content": "购买时的配送运费以对应店铺结算页及收货地区为准，当前未配置包邮范围或偏远地区加价表，不能一律承诺包邮。退货寄回运费可按当前店铺规则另查。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "包邮",
+        "配送运费",
+        "发货运费",
+        "邮费多少",
+        "运费多少",
+        "偏远地区",
+        "运费怎么算"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-dispatch",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "DISPATCH",
+      "title": "发货安排说明",
+      "content": "具体发货时间要结合商品备货与订单状态，当前没有统一发货时限。已下单可发送本人订单号查询；未发货不等于已经有运单，催发请求也不代表商家已发货。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "什么时候发货",
+        "多久发货",
+        "几天发货",
+        "发货时间",
+        "发货安排",
+        "催发",
+        "催一下发货"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-carrier",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "CARRIER",
+      "title": "快递承运信息",
+      "content": "具体承运快递和运单号以本人订单的物流记录为准。发送订单号后可以查询；尚未发货或已取消订单可能没有运单，不能提前保证指定快递。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "发什么快递",
+        "用什么快递",
+        "哪家快递",
+        "什么快递",
+        "指定快递",
+        "承运商"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-address",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "ADDRESS",
+      "title": "修改地址指引",
+      "content": "请先核对原平台订单是否已发货，在订单页查看能否修改收货地址。已发货需商家或承运方核实能否拦截改址；此演示只查询订单，不实际修改地址，也不会因发来地址就声称修改成功。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "改地址",
+        "修改地址",
+        "更改地址",
+        "收货地址",
+        "地址填错",
+        "改收货人",
+        "改手机号"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-cancel-order",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "CANCEL_ORDER",
+      "title": "取消订单指引",
+      "content": "取消订单请在原平台订单详情页查看可用入口；能否取消取决于当前订单状态。此演示没有执行平台取消和资金退款的接口，不能声称已取消；可发送本人订单号先核对状态。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "取消订单",
+        "怎么取消",
+        "不要这个订单",
+        "订单不要了",
+        "撤销订单"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-return-process",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "RETURN_PROCESS",
+      "title": "退换货办理步骤",
+      "content": "退换货一般先核对订单与当前店铺规则，说明商品问题并准备凭证，确认商家审核要求后再按平台指引处理。请勿自行寄往不明地址。若要在这里记录退货诉求，发送“我想退货”及本人订单号、原因，补齐后仍需确认提交。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "怎么退",
+        "如何退",
+        "退货流程",
+        "退货步骤",
+        "退货怎么",
+        "怎么申请退",
+        "怎么退款",
+        "如何退款",
+        "怎么办理退"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-exchange",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "EXCHANGE",
+      "title": "换货咨询",
+      "content": "换货需核对商品、订单状态、替换规格和库存，并由商家确认办理方式。此演示可说明规则和查询订单，但未接入平台换货操作，不能自动换货或保证有货。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "换货",
+        "换一个",
+        "换颜色",
+        "换规格",
+        "换尺寸",
+        "能换吗"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-refund-time",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "REFUND_TIME",
+      "title": "退款到账说明",
+      "content": "退款是否审核通过、退回渠道和到账时间，以原平台售后详情及支付渠道记录为准。此演示只创建本地服务工单；本地工单完成不表示资金已退，不能承诺固定到账日期。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "退款多久到账",
+        "退款什么时候到",
+        "什么时候退款",
+        "到账",
+        "退款进度",
+        "退的钱",
+        "没收到退款"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-return-address",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "RETURN_ADDRESS",
+      "title": "退货地址与寄回凭证",
+      "content": "退货前请以原平台售后页面或商家审核后的退货地址为准，并保存寄回运单和相关凭证。当前资料没有固定退货地址，不要按发货地址直接寄回，也不要在公开消息里发完整隐私信息。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "退货地址",
+        "寄到哪里",
+        "寄回哪里",
+        "往哪寄",
+        "退回地址",
+        "寄回单号",
+        "退货单号"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-damaged",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "DAMAGED",
+      "title": "商品破损与质量问题",
+      "content": "收到破损、漏水或其他质量问题，可先保留外包装、订单信息及清晰照片，说明具体情况。可以继续提供本人订单号查询；如要记录退货诉求，请明确申请并填写原因，不会仅凭咨询就自动创建工单。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "破损",
+        "坏了",
+        "漏水",
+        "质量问题",
+        "不能用",
+        "有瑕疵",
+        "不保温",
+        "杯盖坏",
+        "开裂"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-missing",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "MISSING",
+      "title": "少件、错发或漏发",
+      "content": "请核对订单商品和包裹明细，保存外包装、面单及已收到商品的照片，说明缺少或错发的商品、数量。可以先查本人订单；补发或赔偿需商家核实，当前不会自动安排补发或承诺金额。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "少件",
+        "少发",
+        "漏发",
+        "错发",
+        "发错",
+        "少一个",
+        "没发全",
+        "补发"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-delivery-issue",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "DELIVERY_ISSUE",
+      "title": "物流异常与签收问题",
+      "content": "若长时间没有物流更新、显示签收但未收到，先核对运单的最新节点、收货信息及代收情况。发送本人订单号可查当前记录；不能把显示签收当作已核实本人收到，也不承诺补偿金额。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "物流不动",
+        "快递不动",
+        "一直没动",
+        "显示签收",
+        "没收到货",
+        "未收到货",
+        "丢件",
+        "物流异常",
+        "快递丢了"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-warranty",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "WARRANTY",
+      "title": "保修与检测资料",
+      "content": "具体保修期限、维修方式及检测结论需以商品说明和商家提供的有效凭证为准。当前演示资料未提供这些承诺；可说明商品和问题以便核对，不能默认终身保修或保证检测通过。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "保修",
+        "质保",
+        "维修",
+        "检测报告",
+        "安全认证",
+        "正品",
+        "真假"
+      ],
+      "productKeywords": []
+    },
+    {
+      "id": "demo-knowledge-service",
+      "merchantId": "demo-merchant",
+      "scope": "MERCHANT",
+      "shopId": null,
+      "kind": "FAQ",
+      "topic": "SERVICE",
+      "title": "客服与人工协作",
+      "content": "常见商品和规则问题可以直接在这里问。需要商家作出决定或希望人工接待时，请明确发送“我要人工”；我会保留会话和已完成查询供商家接管。当前未配置人工值班时间，不保证立即接入。",
+      "productIds": [],
+      "policy": {},
+      "status": "ACTIVE",
+      "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+      "demoNamespace": "customer-service-demo-v1",
+      "keywords": [
+        "客服时间",
+        "营业时间",
+        "几点上班",
+        "人工服务时间",
+        "客服能做什么",
+        "怎么联系商家",
+        "不要转人工",
+        "不用人工",
+        "不用转人工"
+      ],
+      "productKeywords": []
     }
   ]
 }

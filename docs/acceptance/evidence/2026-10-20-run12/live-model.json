@@ -1,0 +1,1040 @@
+{
+  "generatedAt": "2026-10-20T09:53:08.983Z",
+  "mode": "--live",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "dbPort": 13307,
+  "scope": "REAL_HTTP_KNOWLEDGE_WITHOUT_RESET_OR_TICKET_SUBMISSION",
+  "sessions": {
+    "tb": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+    "dy": "6e3a6510-b07e-4830-a661-1e218136a192"
+  },
+  "checks": [
+    {
+      "name": "tb: 麻烦讲讲保温杯日常怎样打理",
+      "status": "PASS"
+    },
+    {
+      "name": "tb: 开电子发票要准备啥资料",
+      "status": "PASS"
+    },
+    {
+      "name": "tb: 怎么退货？",
+      "status": "PASS"
+    },
+    {
+      "name": "tb: shop return policy",
+      "status": "PASS"
+    },
+    {
+      "name": "tb: product discount",
+      "status": "PASS"
+    },
+    {
+      "name": "dy: 麻烦讲讲保温杯日常怎样打理",
+      "status": "PASS"
+    },
+    {
+      "name": "dy: 开电子发票要准备啥资料",
+      "status": "PASS"
+    },
+    {
+      "name": "dy: 怎么退货？",
+      "status": "PASS"
+    },
+    {
+      "name": "dy: shop return policy",
+      "status": "PASS"
+    },
+    {
+      "name": "dy: product discount",
+      "status": "PASS"
+    },
+    {
+      "name": "real provider selected scoped evidence",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "path": "/api/chat/session/open",
+      "body": {
+        "shopId": "demo-shop-tb",
+        "customerId": "demo-customer-tb-1",
+        "forceNew": true
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 141,
+      "snapshot": {
+        "session": {
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+          "updatedAt": "2026-10-20T17:53:09.059273+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "5e9884f8-fc2f-400e-b6ed-4477b8e36fb1",
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "clientMessageId": null,
+          "role": "system",
+          "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+          "createdAt": "2026-10-20T17:53:09.102447400+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": null,
+        "knowledge": [],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": []
+      }
+    },
+    {
+      "path": "/api/chat/session/open",
+      "body": {
+        "shopId": "demo-shop-dy",
+        "customerId": "demo-customer-dy-1",
+        "forceNew": true
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 26,
+      "snapshot": {
+        "session": {
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "shopId": "demo-shop-dy",
+          "shopName": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customerId": "demo-customer-dy-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+          "updatedAt": "2026-10-20T17:53:09.146300300+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "807f7a4e-8f51-4284-91dc-41e662382f4c",
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "clientMessageId": null,
+          "role": "system",
+          "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+          "createdAt": "2026-10-20T17:53:09.148299400+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": null,
+        "knowledge": [],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": []
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+        "content": "麻烦讲讲保温杯日常怎样打理",
+        "clientMessageId": "97d3a6ba-42f5-4bb8-927d-899e6509da64"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 5243,
+      "snapshot": {
+        "session": {
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "保温杯清洁建议：保温杯清洁可先用温水和中性清洁剂轻洗，再充分冲净、开盖晾干；杯盖与密封圈按商品说明清洗和装回。避免用钢丝球刮擦，不使用强酸强碱清洁剂。具体耐温和清洗方式以商品说明为准。",
+          "updatedAt": "2026-10-20T17:53:14.373094600+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "aab4500e-ff4d-44c6-9d05-419bcb78a35a",
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "保温杯清洁建议：保温杯清洁可先用温水和中性清洁剂轻洗，再充分冲净、开盖晾干；杯盖与密封圈按商品说明清洗和装回。避免用钢丝球刮擦，不使用强酸强碱清洁剂。具体耐温和清洗方式以商品说明为准。",
+          "createdAt": "2026-10-20T17:53:14.373094600+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "通用咨询",
+          "intentName": "通用咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-cup-clean",
+            "title": "保温杯清洁建议",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "保温杯清洁可先用温水和中性清洁剂轻洗，再充分冲净、开盖晾干；杯盖与密封圈按商品说明清洗和装回。避免用钢丝球刮擦，不使用强酸强碱清洁剂。具体耐温和清洗方式以商品说明为准。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "50a91ccd-0993-48bd-bf1f-299e0b8f6caa",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:14.373094600+08:00"
+          },
+          {
+            "executionId": "c76ac165-b628-4397-8b0a-c00f6644bd33",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:14.373094600+08:00"
+          },
+          {
+            "executionId": "cc54f03b-9ad9-4e0e-a2e9-e4ea107bcf7a",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：通用咨询；意图：通用咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:14.373094600+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+        "content": "开电子发票要准备啥资料",
+        "clientMessageId": "081845e5-2c61-472c-9fa3-6c57c4312997"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 3585,
+      "snapshot": {
+        "session": {
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "开票资料与入口：如需发票，可先在原平台订单页查看开票入口；准备订单号、发票抬头，企业开票还需核对税号。此演示未接入开票系统，不能自动开票或承诺开票时限。",
+          "updatedAt": "2026-10-20T17:53:17.977444+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "82fbfadb-c8a2-40b7-93d7-a8d3a164238a",
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "开票资料与入口：如需发票，可先在原平台订单页查看开票入口；准备订单号、发票抬头，企业开票还需核对税号。此演示未接入开票系统，不能自动开票或承诺开票时限。",
+          "createdAt": "2026-10-20T17:53:17.977444+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "通用咨询",
+          "intentName": "通用咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-invoice",
+            "title": "开票资料与入口",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "如需发票，可先在原平台订单页查看开票入口；准备订单号、发票抬头，企业开票还需核对税号。此演示未接入开票系统，不能自动开票或承诺开票时限。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "cc54f03b-9ad9-4e0e-a2e9-e4ea107bcf7a",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：通用咨询；意图：通用咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:14.373095+08:00"
+          },
+          {
+            "executionId": "869f22a2-d0f9-46d8-b0a6-175967363613",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：通用咨询；意图：通用咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:17.975525800+08:00"
+          },
+          {
+            "executionId": "d7a8c6c3-40d2-4111-b268-750050405f5d",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:17.977444+08:00"
+          },
+          {
+            "executionId": "d891a83b-dfd7-4c6e-9c7c-8efb0449dfee",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:17.977444+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+        "content": "怎么退货？",
+        "clientMessageId": "4c396f4b-62f1-4a29-94e3-0a31c1b8b57a"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 4235,
+      "snapshot": {
+        "session": {
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "退换货办理步骤：退换货一般先核对订单与当前店铺规则，说明商品问题并准备凭证，确认商家审核要求后再按平台指引处理。请勿自行寄往不明地址。若要在这里记录退货诉求，发送“我想退货”及本人订单号、原因，补齐后仍需确认提交。",
+          "updatedAt": "2026-10-20T17:53:22.209412400+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "65a08de8-a937-4e32-b469-ab503848630c",
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "退换货办理步骤：退换货一般先核对订单与当前店铺规则，说明商品问题并准备凭证，确认商家审核要求后再按平台指引处理。请勿自行寄往不明地址。若要在这里记录退货诉求，发送“我想退货”及本人订单号、原因，补齐后仍需确认提交。",
+          "createdAt": "2026-10-20T17:53:22.209412400+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "售后服务",
+          "intentName": "退换货咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-return-process",
+            "title": "退换货办理步骤",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "退换货一般先核对订单与当前店铺规则，说明商品问题并准备凭证，确认商家审核要求后再按平台指引处理。请勿自行寄往不明地址。若要在这里记录退货诉求，发送“我想退货”及本人订单号、原因，补齐后仍需确认提交。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "d891a83b-dfd7-4c6e-9c7c-8efb0449dfee",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:17.977444+08:00"
+          },
+          {
+            "executionId": "f9cd17a2-1ae5-4bb7-a61a-e4c3cbc500d8",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：售后服务；意图：退换货咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:22.206259+08:00"
+          },
+          {
+            "executionId": "fcd20016-fccc-4368-be2d-bbe143372ec6",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:22.207258700+08:00"
+          },
+          {
+            "executionId": "8611fcc8-d8bc-4e8c-8949-36d2c7f9e98c",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:22.208258600+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+        "content": "退货期限几天？",
+        "clientMessageId": "95d427c3-1c51-4e8d-88bb-1b31249b78c3"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 3570,
+      "snapshot": {
+        "session": {
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "淘宝演示店退货期限：本演示店普通商品签收后15天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非淘宝官方政策。",
+          "updatedAt": "2026-10-20T17:53:25.781573600+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "4f3eada4-1044-49c9-8e2c-fe03d1ed4f3c",
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "淘宝演示店退货期限：本演示店普通商品签收后15天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非淘宝官方政策。",
+          "createdAt": "2026-10-20T17:53:25.780734600+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "通用咨询",
+          "intentName": "退换货咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-tb-return",
+            "title": "淘宝演示店退货期限",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "本演示店普通商品签收后15天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非淘宝官方政策。",
+            "scope": "SHOP"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "8611fcc8-d8bc-4e8c-8949-36d2c7f9e98c",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:22.208259+08:00"
+          },
+          {
+            "executionId": "247ec476-a056-481a-b4e6-456c8413bb23",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：通用咨询；意图：退换货咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:25.779646600+08:00"
+          },
+          {
+            "executionId": "fdb918e1-6f5c-4249-a4a5-c482c7e47f5f",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:25.779646600+08:00"
+          },
+          {
+            "executionId": "67a45948-8ad0-4a4b-ac4e-269dc36ad374",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:25.780192200+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+        "content": "收纳盒有什么优惠？",
+        "clientMessageId": "acb7d2d6-36f1-466c-ae76-cc9b724ad5d4"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 4955,
+      "snapshot": {
+        "session": {
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "shopId": "demo-shop-tb",
+          "shopName": "安静生活淘宝店（演示）",
+          "platform": "TAOBAO",
+          "customerId": "demo-customer-tb-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "淘宝演示店收纳盒活动：仅淘宝演示店收纳盒新订单单件9折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+          "updatedAt": "2026-10-20T17:53:30.733980400+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "3552941f-28d2-46f2-9532-a6e1ecd42ce9",
+          "sessionId": "1ba53912-079f-40e4-9d80-64ea2995ddcb",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "淘宝演示店收纳盒活动：仅淘宝演示店收纳盒新订单单件9折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+          "createdAt": "2026-10-20T17:53:30.733980400+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "售前咨询",
+          "intentName": "商品优惠",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-tb-activity",
+            "title": "淘宝演示店收纳盒活动",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "仅淘宝演示店收纳盒新订单单件9折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+            "scope": "SHOP"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "67a45948-8ad0-4a4b-ac4e-269dc36ad374",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:25.780192+08:00"
+          },
+          {
+            "executionId": "93660ad1-9649-45de-9210-b272e9231111",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：售前咨询；意图：商品优惠；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:30.732869200+08:00"
+          },
+          {
+            "executionId": "53646746-3456-478e-b620-c1493c0b9b98",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:30.733463700+08:00"
+          },
+          {
+            "executionId": "2b21d561-2b40-44be-b932-136fca9727a7",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:30.733980400+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+        "content": "麻烦讲讲保温杯日常怎样打理",
+        "clientMessageId": "66d98d47-a2df-4d4c-95ba-60dd2e9df1b3"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 3473,
+      "snapshot": {
+        "session": {
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "shopId": "demo-shop-dy",
+          "shopName": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customerId": "demo-customer-dy-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "保温杯清洁建议：保温杯清洁可先用温水和中性清洁剂轻洗，再充分冲净、开盖晾干；杯盖与密封圈按商品说明清洗和装回。避免用钢丝球刮擦，不使用强酸强碱清洁剂。具体耐温和清洗方式以商品说明为准。\n保温杯使用提醒：装热水后小心烫伤，饮用前确认温度；拧紧杯盖并确认密封圈装好。未提供该款商品的保温测试时长、碳酸饮料适用性或洗碗机认证，不能保证适用，先核对商品说明。",
+          "updatedAt": "2026-10-20T17:53:34.209159200+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "65cd7d43-08ec-4eb3-b1b1-45bc5f70c140",
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "保温杯清洁建议：保温杯清洁可先用温水和中性清洁剂轻洗，再充分冲净、开盖晾干；杯盖与密封圈按商品说明清洗和装回。避免用钢丝球刮擦，不使用强酸强碱清洁剂。具体耐温和清洗方式以商品说明为准。\n保温杯使用提醒：装热水后小心烫伤，饮用前确认温度；拧紧杯盖并确认密封圈装好。未提供该款商品的保温测试时长、碳酸饮料适用性或洗碗机认证，不能保证适用，先核对商品说明。",
+          "createdAt": "2026-10-20T17:53:34.202676500+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "通用咨询",
+          "intentName": "通用咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-cup-clean",
+            "title": "保温杯清洁建议",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "保温杯清洁可先用温水和中性清洁剂轻洗，再充分冲净、开盖晾干；杯盖与密封圈按商品说明清洗和装回。避免用钢丝球刮擦，不使用强酸强碱清洁剂。具体耐温和清洗方式以商品说明为准。",
+            "scope": "MERCHANT"
+          },
+          {
+            "knowledgeId": "demo-knowledge-cup-use",
+            "title": "保温杯使用提醒",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "装热水后小心烫伤，饮用前确认温度；拧紧杯盖并确认密封圈装好。未提供该款商品的保温测试时长、碳酸饮料适用性或洗碗机认证，不能保证适用，先核对商品说明。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "08e9b8a4-8d3d-4c2b-9ffb-0de501d5f9d8",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：通用咨询；意图：通用咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:34.202676500+08:00"
+          },
+          {
+            "executionId": "9627cb92-36db-47f2-8150-8ba6f8637326",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 2 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:34.202676500+08:00"
+          },
+          {
+            "executionId": "fd855fc5-57a5-4057-9706-52ab95c182b0",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 2 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:34.202676500+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+        "content": "开电子发票要准备啥资料",
+        "clientMessageId": "283088ce-2e2e-45fc-b414-d62b6eaa6ff3"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 4084,
+      "snapshot": {
+        "session": {
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "shopId": "demo-shop-dy",
+          "shopName": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customerId": "demo-customer-dy-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "开票资料与入口：如需发票，可先在原平台订单页查看开票入口；准备订单号、发票抬头，企业开票还需核对税号。此演示未接入开票系统，不能自动开票或承诺开票时限。",
+          "updatedAt": "2026-10-20T17:53:38.297305700+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "1493524b-52a3-4c07-ba75-f0f2788c8f00",
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "开票资料与入口：如需发票，可先在原平台订单页查看开票入口；准备订单号、发票抬头，企业开票还需核对税号。此演示未接入开票系统，不能自动开票或承诺开票时限。",
+          "createdAt": "2026-10-20T17:53:38.297305700+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "通用咨询",
+          "intentName": "通用咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-invoice",
+            "title": "开票资料与入口",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "如需发票，可先在原平台订单页查看开票入口；准备订单号、发票抬头，企业开票还需核对税号。此演示未接入开票系统，不能自动开票或承诺开票时限。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "fd855fc5-57a5-4057-9706-52ab95c182b0",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 2 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:34.202677+08:00"
+          },
+          {
+            "executionId": "5840dbe6-db10-4a18-beb5-64eaa773794f",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：通用咨询；意图：通用咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:38.292521300+08:00"
+          },
+          {
+            "executionId": "72d9ce17-12f2-4bb9-8c86-059b282f2d43",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:38.292521300+08:00"
+          },
+          {
+            "executionId": "966b0d79-4eac-48f7-969e-39bf3a63411f",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:38.296259800+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+        "content": "怎么退货？",
+        "clientMessageId": "99219068-9efd-4342-8ddf-f51dd0cca15e"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 3067,
+      "snapshot": {
+        "session": {
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "shopId": "demo-shop-dy",
+          "shopName": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customerId": "demo-customer-dy-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "退换货办理步骤：退换货一般先核对订单与当前店铺规则，说明商品问题并准备凭证，确认商家审核要求后再按平台指引处理。请勿自行寄往不明地址。若要在这里记录退货诉求，发送“我想退货”及本人订单号、原因，补齐后仍需确认提交。\n抖店演示店退货期限：本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。\n退货地址与寄回凭证：退货前请以原平台售后页面或商家审核后的退货地址为准，并保存寄回运单和相关凭证。当前资料没有固定退货地址，不要按发货地址直接寄回，也不要在公开消息里发完整隐私信息。",
+          "updatedAt": "2026-10-20T17:53:41.364081100+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "88779049-de49-426b-b3dc-4e11f44beaf7",
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "退换货办理步骤：退换货一般先核对订单与当前店铺规则，说明商品问题并准备凭证，确认商家审核要求后再按平台指引处理。请勿自行寄往不明地址。若要在这里记录退货诉求，发送“我想退货”及本人订单号、原因，补齐后仍需确认提交。\n抖店演示店退货期限：本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。\n退货地址与寄回凭证：退货前请以原平台售后页面或商家审核后的退货地址为准，并保存寄回运单和相关凭证。当前资料没有固定退货地址，不要按发货地址直接寄回，也不要在公开消息里发完整隐私信息。",
+          "createdAt": "2026-10-20T17:53:41.363490900+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "售后服务",
+          "intentName": "退换货咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-dy-return",
+            "title": "抖店演示店退货期限",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+            "scope": "SHOP"
+          },
+          {
+            "knowledgeId": "demo-knowledge-return-address",
+            "title": "退货地址与寄回凭证",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "退货前请以原平台售后页面或商家审核后的退货地址为准，并保存寄回运单和相关凭证。当前资料没有固定退货地址，不要按发货地址直接寄回，也不要在公开消息里发完整隐私信息。",
+            "scope": "MERCHANT"
+          },
+          {
+            "knowledgeId": "demo-knowledge-return-process",
+            "title": "退换货办理步骤",
+            "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+            "content": "退换货一般先核对订单与当前店铺规则，说明商品问题并准备凭证，确认商家审核要求后再按平台指引处理。请勿自行寄往不明地址。若要在这里记录退货诉求，发送“我想退货”及本人订单号、原因，补齐后仍需确认提交。",
+            "scope": "MERCHANT"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "966b0d79-4eac-48f7-969e-39bf3a63411f",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:38.296260+08:00"
+          },
+          {
+            "executionId": "613aaaa8-b3f0-4264-8e89-86d181fa64a0",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：售后服务；意图：退换货咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:41.361647700+08:00"
+          },
+          {
+            "executionId": "055b0741-c38b-4dcb-9786-d96e764a63a5",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 3 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:41.362192900+08:00"
+          },
+          {
+            "executionId": "d9870706-754c-4ba8-9920-6629d8c33d58",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 3 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:41.362961900+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+        "content": "退货期限几天？",
+        "clientMessageId": "25fdce5a-814d-4db6-9056-2aa7cf3ffcd6"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 3367,
+      "snapshot": {
+        "session": {
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "shopId": "demo-shop-dy",
+          "shopName": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customerId": "demo-customer-dy-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "抖店演示店退货期限：本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+          "updatedAt": "2026-10-20T17:53:44.715764500+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "e9bdfb85-4a12-4aaf-a0f9-4d36bc0b2a6d",
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "抖店演示店退货期限：本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+          "createdAt": "2026-10-20T17:53:44.715764500+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "通用咨询",
+          "intentName": "退换货咨询",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-dy-return",
+            "title": "抖店演示店退货期限",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+            "scope": "SHOP"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "d9870706-754c-4ba8-9920-6629d8c33d58",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 3 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:41.362962+08:00"
+          },
+          {
+            "executionId": "12414963-1452-43cf-8d0b-cc9a4c584e85",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:44.715764500+08:00"
+          },
+          {
+            "executionId": "53a4eea6-8bc5-4fbc-8dce-af0cbf6d6ee0",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：通用咨询；意图：退换货咨询；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:44.715764500+08:00"
+          },
+          {
+            "executionId": "75bcfaa2-e289-470b-9291-85ea50ee5c79",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:44.715764500+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+        "content": "保温杯有什么优惠？",
+        "clientMessageId": "29956f77-2e37-4e7d-adda-e4170efbd52b"
+      },
+      "httpStatus": 200,
+      "code": 0,
+      "elapsedMs": 5859,
+      "snapshot": {
+        "session": {
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "shopId": "demo-shop-dy",
+          "shopName": "安静生活抖店（演示）",
+          "platform": "DOUYIN",
+          "customerId": "demo-customer-dy-1",
+          "customerName": "小林",
+          "receptionMode": "AI",
+          "status": "active",
+          "lastMessage": "抖店演示店保温杯活动：仅抖店演示店保温杯新订单单件95折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+          "updatedAt": "2026-10-20T17:53:50.578643900+08:00",
+          "handoffSummary": null
+        },
+        "reply": {
+          "messageId": "afa29838-f44b-43e8-a192-0eb7dc593bae",
+          "sessionId": "6e3a6510-b07e-4830-a661-1e218136a192",
+          "clientMessageId": null,
+          "role": "ai",
+          "content": "抖店演示店保温杯活动：仅抖店演示店保温杯新订单单件95折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+          "createdAt": "2026-10-20T17:53:50.578643900+08:00",
+          "orderIds": [],
+          "ticketId": null
+        },
+        "analysis": {
+          "scene": "售前咨询",
+          "intentName": "商品优惠",
+          "emotion": "中性",
+          "analysisSource": "MODEL",
+          "replySource": "MODEL_KNOWLEDGE"
+        },
+        "knowledge": [
+          {
+            "knowledgeId": "demo-knowledge-dy-activity",
+            "title": "抖店演示店保温杯活动",
+            "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+            "content": "仅抖店演示店保温杯新订单单件95折；不可追溯修改历史订单。演示有效期2026-10-01至2026-10-31。",
+            "scope": "SHOP"
+          }
+        ],
+        "selectedOrderId": null,
+        "awaitingConfirmation": false,
+        "tickets": [],
+        "executions": [
+          {
+            "executionId": "75bcfaa2-e289-470b-9291-85ea50ee5c79",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:44.715765+08:00"
+          },
+          {
+            "executionId": "a94dfdeb-3d79-42a6-8a05-2220ddbc4253",
+            "action": "search_knowledge",
+            "status": "SUCCESS",
+            "summary": "按当前商家与店铺检索，命中 1 条",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:50.578643900+08:00"
+          },
+          {
+            "executionId": "acb1fb27-e23d-4550-969f-a526984674f2",
+            "action": "answer_knowledge",
+            "status": "SUCCESS",
+            "summary": "大模型选择知识；引用 1 条当前店铺答案",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:50.578643900+08:00"
+          },
+          {
+            "executionId": "da0d0bb2-d5d5-40a9-8537-c050f709b68e",
+            "action": "analyze_message",
+            "status": "SUCCESS",
+            "summary": "大模型分析；场景：售前咨询；意图：商品优惠；情绪：中性",
+            "relatedId": null,
+            "createdAt": "2026-10-20T17:53:50.578643900+08:00"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "PASS"
+}

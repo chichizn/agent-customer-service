@@ -87,7 +87,7 @@ public class WorkbenchService {
         if (plan == null) return fetch(new WorkbenchDTO.SessionId(request.sessionId()));
         // No database locks or transactions span a model request. Takeover is immediately available.
         Map<String,String> analysis;
-        try { analysis = llm.analyzeUserInput(request.content()); }
+        try { analysis = llm.analyzeUserInput(request.content(), plan.knowledge(), plan.history()); }
         catch (RuntimeException ex) { analysis = null; }
         Map<String,String> result = analysis;
         try { return tx(() -> finish(plan, result)); }
@@ -108,8 +108,7 @@ public class WorkbenchService {
             if (existing.get().getProcessingVersion()!=null && existing.get().getProcessingVersion()!=version(s))
                 throw conflict("原消息的业务上下文已变化，请使用新消息重新确认当前诉求");
         }
-        boolean wantsHuman = has(request.content(),"人工","十倍","全额赔偿","额外赔偿","额外补偿") ||
-            Pattern.compile("(?:赔偿|赔付|补偿).{0,8}(?:[0-9]+|[一二三四五六七八九十百千万]+)\\s*(?:元|块)?").matcher(request.content()).find();
+        boolean wantsHuman = wantsHuman(request.content());
         if ("AI".equals(s.getReceptionMode()) && !wantsHuman && s.getInFlightMessageId()!=null &&
             s.getInFlightAt()!=null && s.getInFlightAt().isAfter(LocalDateTime.now().minusSeconds(60)))
             throw conflict("上一条消息仍在处理中，请稍后使用原消息编号重试");
@@ -135,7 +134,18 @@ public class WorkbenchService {
         }
         s.setTurnVersion(version(s)+1); s.setInFlightMessageId(messageId); s.setInFlightAt(LocalDateTime.now());
         m.setProcessingVersion(version(s));
-        return new Plan(s.getSessionId(),messageId,version(s),request.content().trim());
+        knowledge.load(false);
+        var previous = history(s).stream().filter(item -> !messageId.equals(item.getMessageId()) &&
+            Set.of("customer","ai","human").contains(item.getRole())).toList();
+        String productContext = previous.stream().filter(item -> "customer".equals(item.getRole()) &&
+            has(item.getContent(),"保温杯","杯子","水杯","收纳盒","收纳箱","盒子","毛巾"))
+            .reduce((a,b) -> b).map(ChatMessage::getContent).orElse("");
+        var candidates = knowledge.candidates(s.getMerchantId(),s.getShopId(),request.content(),productContext).stream()
+            .sorted(Comparator.comparing(ScopedKnowledge::getId)).map(k -> Map.of("id",k.getId(),"title",k.getTitle(),
+                "content",k.getContent(),"keywords",Objects.toString(k.getKeywordsJson(),"[]"))).toList();
+        var recent = previous.subList(Math.max(0,previous.size()-10),previous.size()).stream().map(item ->
+            Map.of("role","customer".equals(item.getRole())?"user":"assistant","content",item.getContent())).toList();
+        return new Plan(s.getSessionId(),messageId,version(s),request.content().trim(),candidates,recent,productContext);
     }
 
     private WorkbenchVO.Snapshot finish(Plan plan, Map<String,String> analysis) {
@@ -145,8 +155,14 @@ public class WorkbenchService {
         boolean modelAvailable = analysis != null && analysis.get("intentCode") != null &&
             Set.of("PRODUCT_DISCOUNT","RETURN_EXCHANGE","SIZE_CONSULT","LOGISTICS_QUERY","GENERAL_QUERY")
                 .contains(analysis.get("intentCode"));
-        String intent = modelAvailable ? analysis.get("intentCode") : "GENERAL_QUERY";
-        var refs = knowledge.search(s.getMerchantId(),s.getShopId(),text);
+        var ruleRefs = knowledge.search(s.getMerchantId(),s.getShopId(),text,plan.productContext());
+        var modelRefs = modelAvailable ? modelKnowledge(s, plan, analysis) : List.<ScopedKnowledge>of();
+        var refs = modelRefs.isEmpty() ? ruleRefs : modelRefs;
+        String scene = modelAvailable ? analysis.getOrDefault("scene","通用咨询") : fallbackScene(text);
+        String intentName = modelAvailable ? analysis.getOrDefault("intentName","通用咨询") : fallbackIntent(text);
+        String emotion = modelAvailable ? analysis.getOrDefault("emotion","中性") : fallbackEmotion(text);
+        s.setAnalysisJson(json(new WorkbenchVO.Analysis(scene,intentName,emotion,modelAvailable?"MODEL":"RULE","BUSINESS_TOOL")));
+        execution(s,"analyze_message","SUCCESS",(modelAvailable?"大模型分析":"规则分析兜底")+"；场景："+scene+"；意图："+intentName+"；情绪："+emotion,null);
         s.setKnowledgeIdsJson(json(refs.stream().map(ScopedKnowledge::getId).toList()));
         execution(s,"search_knowledge","SUCCESS","按当前商家与店铺检索，命中 " + refs.size() + " 条",null);
         String prefix = modelAvailable ? "" : "【模型不可用，规则降级】";
@@ -155,7 +171,9 @@ public class WorkbenchService {
             reply(s,prefix+"已取消待确认诉求，没有创建工单。",List.of(),null);
         } else if (ConfirmationText.matches(text)) {
             confirm(s,plan,modelAvailable,prefix);
-        } else if (has(text,"工单","进度","刚才的申请","申请怎么样") && !has(text,"我要退","申请退")) {
+        } else if (!has(text,"我要退","申请退") &&
+            (has(text,"工单") && !has(text,"是什么","什么是","含义","怎么创建","如何创建") ||
+             has(text,"刚才的申请","申请怎么样") || has(text,"进度") && !has(text,"退款"))) {
             var matcher = Pattern.compile("(?i)ST[A-Z0-9]{8,}").matcher(text);
             String number = matcher.find() ? matcher.group().toUpperCase(Locale.ROOT) : null;
             var found = commerce.getServiceTicket(new TicketQuery(scope(s),number,number==null?s.getSelectedOrderId():null,null));
@@ -167,16 +185,17 @@ public class WorkbenchService {
         } else {
             String token = orderToken(text);
             boolean selecting = token!=null && text.replace(token,"").matches("[\\s。.!！]*");
-            boolean policyIntent = has(text,"几天","期限","规则","政策","运费","条件");
+            boolean policyIntent = isInformationQuestion(text) || has(text,"几天","期限","规则","政策","运费","条件");
             boolean returning = has(text,"要退货","想退货","要退款","想退款","想退掉","帮我申请退货","帮我申请退款") ||
                 has(text,"申请退货","申请退款") && !policyIntent ||
-                "RETURN_EXCHANGE".equals(intent) && !selecting && !policyIntent;
-            boolean compensation = has(text,"申请补偿","申请赔偿","我要补偿","要求补偿");
-            boolean logistics = has(text,"物流","快递","到哪","发货","到货","配送") || "LOGISTICS_QUERY".equals(intent);
+                text.matches("[\\s]*(?:退货|退款)[！!。]?");
+            boolean compensation = !policyIntent && has(text,"申请补偿","申请赔偿","我要补偿","要求补偿");
+            boolean logistics = has(text,"物流","快递","到哪","发货","到货","配送");
             boolean continuing = selecting && s.getPendingAction()!=null;
-            boolean policyQuestion = !returning && !compensation && !logistics && token==null && !refs.isEmpty() &&
-                has(text,"规则","期限","几天","运费","材质","尺寸","优惠","活动","容量");
-            boolean capacity = !returning && !compensation && !logistics && has(text,"容量","多少毫升");
+            boolean policyQuestion = !returning && !compensation && token==null && !refs.isEmpty() &&
+                (isInformationQuestion(text) || !logistics && (s.getPendingAction()==null ||
+                    has(text,"规则","期限","几天","运费","材质","尺寸","优惠","活动","容量")));
+            boolean capacity = !returning && !compensation && !logistics && !has(text,"收纳盒","毛巾") && has(text,"容量","多少毫升");
             if (policyQuestion || capacity) clearPending(s);
             boolean business = returning || compensation || logistics || token!=null || has(text,"订单") || s.getPendingAction()!=null;
             if (capacity) {
@@ -198,8 +217,12 @@ public class WorkbenchService {
                     reply(s,"请将诉求原因控制在1000字以内，补齐后再确认提交。",List.of(),null);
                 } else handleOrder(s,text,token,modelAvailable,prefix);
             } else {
-                // Return exact retrieved evidence. A model cannot invent business status or policy commitments.
-                reply(s,prefix+(refs.isEmpty()?"当前店铺缺少足够的知识依据，请补充问题或联系人工客服。":
+                // The model selects evidence; final wording is the stored answer, never unverified business claims.
+                String source = modelRefs.isEmpty()?"RULE_KNOWLEDGE":"MODEL_KNOWLEDGE";
+                s.setAnalysisJson(json(new WorkbenchVO.Analysis(scene,intentName,emotion,modelAvailable?"MODEL":"RULE",refs.isEmpty()?"CLARIFICATION":source)));
+                execution(s,"answer_knowledge","SUCCESS",refs.isEmpty()?"暂无匹配依据，请顾客补充信息，继续 AI 接待":
+                    (modelRefs.isEmpty()?"规则知识兜底":"大模型选择知识")+"；引用 "+refs.size()+" 条当前店铺答案",null);
+                reply(s,prefix+(refs.isEmpty()?"还没找到与这个问题匹配的资料。你想了解哪件商品，或订单、物流、退换货的哪一项？可以补充具体问题，我继续帮你查。":
                     refs.stream().map(k -> k.getTitle()+"："+k.getContent()).reduce((a,b)->a+"\n"+b).orElseThrow()),List.of(),null);
             }
         }
@@ -216,7 +239,9 @@ public class WorkbenchService {
         execution(s,"get_order","SUCCESS",found.message(),found.orders().size()==1?found.orders().get(0).orderId():null);
         if (found.orders().isEmpty()) {
             if (token!=null) s.setSelectedOrderId(null);
-            reply(s,prefix+"当前店铺和顾客下未找到匹配订单，请先提供本人保温杯订单或规格。",List.of(),null);
+            var product = knowledge.search(s.getMerchantId(),s.getShopId(),"保温杯容量");
+            reply(s,prefix+(token==null && !product.isEmpty()?product.stream().map(ScopedKnowledge::getContent)
+                .reduce((a,b)->a+"\n"+b).orElseThrow():"当前店铺和顾客下未找到匹配订单，请先提供本人保温杯订单或规格。"),List.of(),null);
             return;
         }
         boolean single = found.orders().size()==1;
@@ -350,7 +375,7 @@ public class WorkbenchService {
         return new WorkbenchVO.Snapshot(sessionView(s),messageViews(s),orderViews,logisticViews,ticketViews,references,
             executions.findBySessionIdOrderByCreatedAtAscIdAsc(s.getSessionId()).stream().map(e -> new WorkbenchVO.Execution(
                 e.getId(),e.getAction(),e.getStatus(),e.getSummary(),e.getRelatedId(),iso(e.getCreatedAt()))).toList(),
-            s.getSelectedOrderId(),Boolean.TRUE.equals(s.getAwaitingConfirmation()));
+            s.getSelectedOrderId(),Boolean.TRUE.equals(s.getAwaitingConfirmation()),readAnalysis(s));
     }
 
     private WorkbenchVO.Session sessionView(ChatSession s) {
@@ -456,6 +481,63 @@ public class WorkbenchService {
         });
     }
     private void touch(ChatSession s) { s.setUpdatedAt(LocalDateTime.now()); }
+    private List<ScopedKnowledge> modelKnowledge(ChatSession s, Plan plan, Map<String,String> analysis) {
+        if (analysis==null || analysis.get("knowledgeIds")==null) return List.of();
+        try {
+            var selected = mapper.readTree(analysis.get("knowledgeIds"));
+            if (!selected.isArray() || selected.size()>3) return List.of();
+            Map<String,ScopedKnowledge> allowed = new HashMap<>();
+            knowledge.candidates(s.getMerchantId(),s.getShopId(),plan.content(),plan.productContext())
+                .forEach(k -> allowed.put(k.getId(),k));
+            List<ScopedKnowledge> result = new ArrayList<>();
+            for (var value : selected) {
+                if (!value.isTextual() || !allowed.containsKey(value.asText())) return List.of();
+                var row = allowed.get(value.asText());
+                if (!result.contains(row)) result.add(row);
+            }
+            return result;
+        } catch (Exception ex) { return List.of(); }
+    }
+    private WorkbenchVO.Analysis readAnalysis(ChatSession s) {
+        if (s.getAnalysisJson()==null) return null;
+        try { return mapper.readValue(s.getAnalysisJson(),WorkbenchVO.Analysis.class); }
+        catch (Exception ex) { return null; }
+    }
+    private boolean isInformationQuestion(String text) {
+        return has(text,"怎么","如何","流程","步骤","规则","政策","条件","期限","多久","几天","多少","什么时候","何时",
+            "能不能","可不可以","是否","支持","能退吗","可以退吗","能换吗","是什么","什么是","几点",
+            "发货时间","发货安排","人工服务时间","客服时间","营业时间","不用人工","不要转人工",
+            "发什么快递","用什么快递","哪家快递","什么快递","运费","邮费","发票","开票","付款","支付",
+            "改地址","修改地址","取消订单","工单的含义","退款进度","显示签收","没收到货");
+    }
+    private boolean wantsHuman(String text) {
+        String request = text.replaceAll("(?:不需要|不要|不用|不想|别|无需)(?:再|帮我)?(?:转|找|接入)?人工(?:客服)?", "");
+        boolean explicit = request.matches("\\s*人工(?:客服)?[！!。？?]*\\s*") ||
+            (!isInformationQuestion(request) || has(request,"我要人工","我要转人工","我需要人工")) &&
+            Pattern.compile("(?:我要|我想|转|找|叫|需要|接入|接通|让).{0,4}人工").matcher(request).find();
+        boolean demand = !isInformationQuestion(text) && (has(text,"十倍","全额赔偿","额外赔偿","额外补偿") ||
+            Pattern.compile("(?:赔偿|赔付|补偿).{0,8}(?:[0-9]+|[一二三四五六七八九十百千万]+)\\s*(?:元|块)?").matcher(text).find());
+        return explicit || demand;
+    }
+    private String fallbackScene(String text) {
+        if (has(text,"退货","换货","退款","售后","质量","破损")) return "售后服务";
+        if (has(text,"快递","物流","发货","到货","配送")) return "物流配送";
+        if (has(text,"支付","付款","发票","开票")) return "支付问题";
+        if (has(text,"商品","杯","盒","毛巾","价格","优惠","活动")) return "售前咨询";
+        return "通用咨询";
+    }
+    private String fallbackIntent(String text) {
+        if (has(text,"优惠","活动","折扣","促销")) return "商品优惠查询";
+        if (has(text,"退货","退款","换货")) return "退换货咨询";
+        if (has(text,"尺寸","规格","容量","毫升")) return "商品规格咨询";
+        if (has(text,"物流","快递","发货","到哪")) return "物流查询";
+        return "通用咨询";
+    }
+    private String fallbackEmotion(String text) {
+        if (has(text,"投诉","差评","生气","失望","垃圾","气死","太差")) return "负面";
+        if (has(text,"谢谢","感谢","满意","好评","不错")) return "正面";
+        return "中性";
+    }
     private long version(ChatSession s) { return s.getTurnVersion()==null?0:s.getTurnVersion(); }
     private String extractReason(String text) {
         var matcher = Pattern.compile("(?:原因[是为：:]?|因为)[\\s：:，,]*(.+)").matcher(text);
@@ -496,5 +578,6 @@ public class WorkbenchService {
     private <T> T tx(Supplier<T> work) { return new TransactionTemplate(transactionManager).execute(status -> work.get()); }
     private static CommerceException notFound() { return new CommerceException("NOT_FOUND","演示会话或身份不存在，请重新加载演示数据和页面"); }
     private static CommerceException conflict(String message) { return new CommerceException("IDEMPOTENCY_CONFLICT",message); }
-    private record Plan(String sessionId,String messageId,long version,String content) {}
+    private record Plan(String sessionId,String messageId,long version,String content,
+        List<Map<String,String>> knowledge,List<Map<String,String>> history,String productContext) {}
 }

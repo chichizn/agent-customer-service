@@ -2,7 +2,7 @@
   "version": "1.1.0",
   "seedPath": "backend/src/main/resources/commerce/demo-data.json",
   "knowledgePath": "demo-data/knowledge.integration.v1.json",
-  "expectedKnowledgeCount": 10,
+  "expectedKnowledgeCount": 39,
   "merchantId": "demo-merchant",
   "expectedCounts": { "shops": 2, "customers": 5, "products": 3, "orders": 12, "logistics": 7 },
   "referenceTime": "2026-10-18T12:00:00+08:00",

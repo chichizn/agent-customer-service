@@ -63,6 +63,11 @@
     await openSession({ shopId: shopId.value, customerId: customerId.value, forceNew })
   }
   const questions = [
+    '你好，在吗？',
+    '保温杯怎么清洗？',
+    '收纳盒有什么优惠？',
+    '支持开发票吗？',
+    '怎么退货？运费谁承担？',
     '我的杯子到哪了？',
     '我想退货，原因是不喜欢这个颜色',
     '商品破损了，希望记录补偿诉求',
