@@ -170,6 +170,9 @@ llm:
   model: ${LLM_MODEL:gpt-4o-mini}
   connect-timeout-ms: ${LLM_CONNECT_TIMEOUT_MS:3000}
   read-timeout-ms: ${LLM_READ_TIMEOUT_MS:8000}
+  analysis-temperature: ${LLM_ANALYSIS_TEMPERATURE:0.1}
+  reply-temperature: ${LLM_REPLY_TEMPERATURE:0.7}
+  reply-json-mode: ${LLM_REPLY_JSON_MODE:true}
 
 # 管理端点
 management:

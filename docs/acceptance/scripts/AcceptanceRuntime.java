@@ -54,6 +54,11 @@ public class AcceptanceRuntime {
                             if (mode.equals("hold-before-finish")) pause("before-finish");
                             return result;
                         }
+                        @Override public WorkbenchReply generateWorkbenchReply(String text,
+                                List<Map<String,String>> knowledge, List<Map<String,String>> history) {
+                            if (mode.equals("disabled")) return null;
+                            return original.generateWorkbenchReply(text,knowledge,history);
+                        }
                     };
                     if (bean instanceof CommerceService) {
                         ProxyFactory proxy = new ProxyFactory(bean);

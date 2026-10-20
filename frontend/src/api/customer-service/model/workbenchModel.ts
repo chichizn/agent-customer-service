@@ -137,7 +137,13 @@ export interface SessionSnapshot {
     intentName: string
     emotion: string
     analysisSource: 'MODEL' | 'RULE'
-    replySource: 'MODEL_KNOWLEDGE' | 'RULE_KNOWLEDGE' | 'BUSINESS_TOOL' | 'CLARIFICATION'
+    replySource:
+      | 'MODEL_GENERATED'
+      | 'MODEL_GENERAL'
+      | 'MODEL_KNOWLEDGE'
+      | 'RULE_KNOWLEDGE'
+      | 'BUSINESS_TOOL'
+      | 'CLARIFICATION'
   }
 }
 

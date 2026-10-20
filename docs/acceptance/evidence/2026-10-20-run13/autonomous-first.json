@@ -1,0 +1,321 @@
+{
+  "generatedAt": "2026-10-20T11:43:50.654Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "dbPort": 13307,
+  "checks": [
+    {
+      "name": "我有点纠结，陪我选选吧",
+      "status": "PASS"
+    },
+    {
+      "name": "平时上下班通勤，想带着喝水，该从哪些方面考虑？",
+      "status": "FAIL",
+      "error": "The expression evaluated to a falsy value:\n\n  assert(['MODEL_GENERATED', 'MODEL_GENERAL'].includes(s.analysis.replySource))\n"
+    },
+    {
+      "name": "这个保温杯具体能保温多少小时？",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "path": "/api/chat/session/open",
+      "body": {
+        "shopId": "demo-shop-tb",
+        "customerId": "demo-customer-tb-3",
+        "forceNew": true
+      },
+      "elapsedMs": 35,
+      "session": {
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "shopId": "demo-shop-tb",
+        "shopName": "安静生活淘宝店（演示）",
+        "platform": "TAOBAO",
+        "customerId": "demo-customer-tb-3",
+        "customerName": "小许（无订单测试）",
+        "receptionMode": "AI",
+        "status": "active",
+        "lastMessage": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+        "updatedAt": "2026-10-20T19:43:50.679929100+08:00",
+        "handoffSummary": null
+      },
+      "reply": {
+        "messageId": "51441c40-bf0a-45ba-93be-75944bd9393e",
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "clientMessageId": null,
+        "role": "system",
+        "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+        "createdAt": "2026-10-20T19:43:50.681929400+08:00",
+        "orderIds": [],
+        "ticketId": null
+      },
+      "analysis": null,
+      "knowledge": [],
+      "awaitingConfirmation": false,
+      "tickets": [],
+      "executions": []
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "clientMessageId": "59ad241d-6e64-463c-8d46-ff0f7e1b242a",
+        "content": "我有点纠结，陪我选选吧"
+      },
+      "elapsedMs": 6551,
+      "session": {
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "shopId": "demo-shop-tb",
+        "shopName": "安静生活淘宝店（演示）",
+        "platform": "TAOBAO",
+        "customerId": "demo-customer-tb-3",
+        "customerName": "小许（无订单测试）",
+        "receptionMode": "AI",
+        "status": "active",
+        "lastMessage": "当然可以。你在纠结哪几样？把选项和最在意的点告诉我，比如容量、颜色、用途或预算，我陪你一起比较。",
+        "updatedAt": "2026-10-20T19:43:57.228711400+08:00",
+        "handoffSummary": null
+      },
+      "reply": {
+        "messageId": "4086f636-e384-41b3-9241-5f2b01fa38a3",
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "clientMessageId": null,
+        "role": "ai",
+        "content": "当然可以。你在纠结哪几样？把选项和最在意的点告诉我，比如容量、颜色、用途或预算，我陪你一起比较。",
+        "createdAt": "2026-10-20T19:43:57.227711300+08:00",
+        "orderIds": [],
+        "ticketId": null
+      },
+      "analysis": {
+        "scene": "通用咨询",
+        "intentName": "通用咨询",
+        "emotion": "中性",
+        "analysisSource": "MODEL",
+        "replySource": "MODEL_GENERAL"
+      },
+      "knowledge": [],
+      "awaitingConfirmation": false,
+      "tickets": [],
+      "executions": [
+        {
+          "executionId": "f1eb1e01-8034-4acb-be8d-85677f5f13f2",
+          "action": "analyze_message",
+          "status": "SUCCESS",
+          "summary": "大模型分析；场景：通用咨询；意图：通用咨询；情绪：中性",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:43:57.224713400+08:00"
+        },
+        {
+          "executionId": "b54b67f2-4615-47c7-aaf6-e1fcb3d761be",
+          "action": "search_knowledge",
+          "status": "SUCCESS",
+          "summary": "按当前商家与店铺检索，命中 0 条",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:43:57.225717100+08:00"
+        },
+        {
+          "executionId": "13890505-9c73-4b24-91bf-e2fb30f2b734",
+          "action": "generate_reply",
+          "status": "SUCCESS",
+          "summary": "大模型自主生成回复；类型：GENERAL；引用 0 条当前店铺资料",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:43:57.226712100+08:00"
+        }
+      ]
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "clientMessageId": "e66ea459-ff27-4d1b-8620-fdc2f3bea3d6",
+        "content": "平时上下班通勤，想带着喝水，该从哪些方面考虑？"
+      },
+      "elapsedMs": 11702,
+      "session": {
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "shopId": "demo-shop-tb",
+        "shopName": "安静生活淘宝店（演示）",
+        "platform": "TAOBAO",
+        "customerId": "demo-customer-tb-3",
+        "customerName": "小许（无订单测试）",
+        "receptionMode": "AI",
+        "status": "active",
+        "lastMessage": "保温杯使用提醒：装热水后小心烫伤，饮用前确认温度；拧紧杯盖并确认密封圈装好。未提供该款商品的保温测试时长、碳酸饮料适用性或洗碗机认证，不能保证适用，先核对商品说明。\n保温杯规格与容量：演示订单的保温杯有白色500ml和黑色750ml两种规格。先确认具体订单或规格，再回答容量；未选规格不能一律答500ml。未提供材质检测报告或保温时长，不作相关保证。",
+        "updatedAt": "2026-10-20T19:44:08.932308800+08:00",
+        "handoffSummary": null
+      },
+      "reply": {
+        "messageId": "1a832d0c-eb5f-4bf0-8b72-252c78aed3f1",
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "clientMessageId": null,
+        "role": "ai",
+        "content": "保温杯使用提醒：装热水后小心烫伤，饮用前确认温度；拧紧杯盖并确认密封圈装好。未提供该款商品的保温测试时长、碳酸饮料适用性或洗碗机认证，不能保证适用，先核对商品说明。\n保温杯规格与容量：演示订单的保温杯有白色500ml和黑色750ml两种规格。先确认具体订单或规格，再回答容量；未选规格不能一律答500ml。未提供材质检测报告或保温时长，不作相关保证。",
+        "createdAt": "2026-10-20T19:44:08.931276500+08:00",
+        "orderIds": [],
+        "ticketId": null
+      },
+      "analysis": {
+        "scene": "售前咨询",
+        "intentName": "通用咨询",
+        "emotion": "中性",
+        "analysisSource": "MODEL",
+        "replySource": "RULE_KNOWLEDGE"
+      },
+      "knowledge": [
+        {
+          "knowledgeId": "demo-knowledge-cup",
+          "title": "保温杯规格与容量",
+          "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+          "content": "演示订单的保温杯有白色500ml和黑色750ml两种规格。先确认具体订单或规格，再回答容量；未选规格不能一律答500ml。未提供材质检测报告或保温时长，不作相关保证。",
+          "scope": "MERCHANT"
+        },
+        {
+          "knowledgeId": "demo-knowledge-cup-use",
+          "title": "保温杯使用提醒",
+          "source": "演示客服知识 v1.2；操作指引与通用保养建议，非平台承诺；商品事实以订单种子为准",
+          "content": "装热水后小心烫伤，饮用前确认温度；拧紧杯盖并确认密封圈装好。未提供该款商品的保温测试时长、碳酸饮料适用性或洗碗机认证，不能保证适用，先核对商品说明。",
+          "scope": "MERCHANT"
+        }
+      ],
+      "awaitingConfirmation": false,
+      "tickets": [],
+      "executions": [
+        {
+          "executionId": "13890505-9c73-4b24-91bf-e2fb30f2b734",
+          "action": "generate_reply",
+          "status": "SUCCESS",
+          "summary": "大模型自主生成回复；类型：GENERAL；引用 0 条当前店铺资料",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:43:57.226712+08:00"
+        },
+        {
+          "executionId": "74d22be5-f78e-4e73-8a8a-e291655901fd",
+          "action": "analyze_message",
+          "status": "SUCCESS",
+          "summary": "大模型分析；场景：售前咨询；意图：通用咨询；情绪：中性",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:08.927785400+08:00"
+        },
+        {
+          "executionId": "03009216-75c0-44cf-88fd-f1e175f6d463",
+          "action": "search_knowledge",
+          "status": "SUCCESS",
+          "summary": "按当前商家与店铺检索，命中 2 条",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:08.928781800+08:00"
+        },
+        {
+          "executionId": "f54b961a-c75c-47bf-b203-22334d99c200",
+          "action": "generate_reply",
+          "status": "FAILED",
+          "summary": "生成不可用、返回无效或资料发生变化，使用规则答案兜底",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:08.929737700+08:00"
+        },
+        {
+          "executionId": "2919ce65-258a-4f72-9442-d5881f9aaf03",
+          "action": "answer_knowledge",
+          "status": "SUCCESS",
+          "summary": "规则知识兜底；引用 2 条当前店铺答案",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:08.930749100+08:00"
+        }
+      ]
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "clientMessageId": "8c811049-99d0-44ec-8f49-8935b724f609",
+        "content": "这个保温杯具体能保温多少小时？"
+      },
+      "elapsedMs": 16964,
+      "session": {
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "shopId": "demo-shop-tb",
+        "shopName": "安静生活淘宝店（演示）",
+        "platform": "TAOBAO",
+        "customerId": "demo-customer-tb-3",
+        "customerName": "小许（无订单测试）",
+        "receptionMode": "AI",
+        "status": "active",
+        "lastMessage": "目前资料没有这款保温杯的保温测试时长，暂时不能确认具体能保温多少小时，也不能保证能保温一整个工作日。你看中的是白色500ml还是黑色750ml？如果商品页或说明书上有保温参数，可以发来，我帮你结合通勤需求看看，具体以商品说明为准。",
+        "updatedAt": "2026-10-20T19:44:25.901317400+08:00",
+        "handoffSummary": null
+      },
+      "reply": {
+        "messageId": "af1047cb-2e67-4780-8d6d-e2c03ab6f5a8",
+        "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+        "clientMessageId": null,
+        "role": "ai",
+        "content": "目前资料没有这款保温杯的保温测试时长，暂时不能确认具体能保温多少小时，也不能保证能保温一整个工作日。你看中的是白色500ml还是黑色750ml？如果商品页或说明书上有保温参数，可以发来，我帮你结合通勤需求看看，具体以商品说明为准。",
+        "createdAt": "2026-10-20T19:44:25.901317400+08:00",
+        "orderIds": [],
+        "ticketId": null
+      },
+      "analysis": {
+        "scene": "售前咨询",
+        "intentName": "通用咨询",
+        "emotion": "中性",
+        "analysisSource": "MODEL",
+        "replySource": "MODEL_GENERATED"
+      },
+      "knowledge": [
+        {
+          "knowledgeId": "demo-knowledge-cup",
+          "title": "保温杯规格与容量",
+          "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+          "content": "演示订单的保温杯有白色500ml和黑色750ml两种规格。先确认具体订单或规格，再回答容量；未选规格不能一律答500ml。未提供材质检测报告或保温时长，不作相关保证。",
+          "scope": "MERCHANT"
+        }
+      ],
+      "awaitingConfirmation": false,
+      "tickets": [],
+      "executions": [
+        {
+          "executionId": "f54b961a-c75c-47bf-b203-22334d99c200",
+          "action": "generate_reply",
+          "status": "FAILED",
+          "summary": "生成不可用、返回无效或资料发生变化，使用规则答案兜底",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:08.929738+08:00"
+        },
+        {
+          "executionId": "2919ce65-258a-4f72-9442-d5881f9aaf03",
+          "action": "answer_knowledge",
+          "status": "SUCCESS",
+          "summary": "规则知识兜底；引用 2 条当前店铺答案",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:08.930749+08:00"
+        },
+        {
+          "executionId": "35f35555-905e-4f2f-8877-669b86ea77e9",
+          "action": "analyze_message",
+          "status": "SUCCESS",
+          "summary": "大模型分析；场景：售前咨询；意图：通用咨询；情绪：中性",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:25.899387300+08:00"
+        },
+        {
+          "executionId": "9a88e0e8-968c-4591-a6f4-aab53970d1a7",
+          "action": "search_knowledge",
+          "status": "SUCCESS",
+          "summary": "按当前商家与店铺检索，命中 2 条",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:25.899919800+08:00"
+        },
+        {
+          "executionId": "394f09b1-c3c0-4739-a4b4-ed5749792967",
+          "action": "generate_reply",
+          "status": "SUCCESS",
+          "summary": "大模型自主生成回复；类型：GROUNDED；引用 1 条当前店铺资料",
+          "relatedId": null,
+          "createdAt": "2026-10-20T19:44:25.900802200+08:00"
+        }
+      ]
+    }
+  ],
+  "sessionId": "64c92643-9187-4146-9964-66ac2dcdb4b6",
+  "status": "FAIL"
+}

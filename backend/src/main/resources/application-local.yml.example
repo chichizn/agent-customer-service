@@ -48,6 +48,9 @@ llm:
   model: gpt-4o-mini                             # ← 可选模型：gpt-4o-mini / deepseek-chat 等
   connect-timeout-ms: 3000                        # 1～5000 毫秒
   read-timeout-ms: 8000                           # 1～20000 毫秒；较慢网关可设 20000
+  analysis-temperature: 0.1                       # 意图分析温度，0～2
+  reply-temperature: 0.7                          # 自主回复温度，0～2
+  reply-json-mode: true                           # 网关不支持 response_format 时设 false
 
 # ==========================================
 # 📊 Druid 监控台（可选）

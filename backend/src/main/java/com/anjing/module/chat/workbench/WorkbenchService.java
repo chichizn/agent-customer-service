@@ -90,7 +90,17 @@ public class WorkbenchService {
         try { analysis = llm.analyzeUserInput(request.content(), plan.knowledge(), plan.history()); }
         catch (RuntimeException ex) { analysis = null; }
         Map<String,String> result = analysis;
-        try { return tx(() -> finish(plan, result)); }
+        try {
+            // Recheck after analysis: takeover/reset may have invalidated the round while the model was waiting.
+            var input = tx(() -> replyInput(plan,result));
+            LlmService.WorkbenchReply generated = null;
+            if (input != null) {
+                try { generated = llm.generateWorkbenchReply(plan.content(),input,plan.history()); }
+                catch (RuntimeException ignored) { /* The existing scoped answer is the fallback. */ }
+            }
+            var draft = new Draft(input,generated);
+            return tx(() -> finish(plan, result, draft));
+        }
         catch (RuntimeException ex) {
             try { recordFailure(plan, ex); }
             catch (RuntimeException recordingError) { ex.addSuppressed(recordingError); }
@@ -148,7 +158,25 @@ public class WorkbenchService {
         return new Plan(s.getSessionId(),messageId,version(s),request.content().trim(),candidates,recent,productContext);
     }
 
-    private WorkbenchVO.Snapshot finish(Plan plan, Map<String,String> analysis) {
+    private List<Map<String,String>> replyInput(Plan plan, Map<String,String> analysis) {
+        ChatSession s = lockSession(plan.sessionId());
+        if (!current(s,plan) || CANCEL.matcher(plan.content()).matches() || ConfirmationText.matches(plan.content()) ||
+            ticketQuery(plan.content())) return null;
+        var refs = modelKnowledge(s,plan,analysis);
+        if (refs.isEmpty()) refs = knowledge.search(s.getMerchantId(),s.getShopId(),plan.content(),plan.productContext());
+        var route = route(s,plan.content(),refs);
+        if (route.capacity() || route.business() && !route.policyQuestion()) return null;
+        return evidence(s,plan);
+    }
+
+    private List<Map<String,String>> evidence(ChatSession s, Plan plan) {
+        return knowledge.candidates(s.getMerchantId(),s.getShopId(),plan.content(),plan.productContext()).stream()
+            .sorted(Comparator.comparing(ScopedKnowledge::getId))
+            .map(k -> Map.of("id",k.getId(),"title",k.getTitle(),"content",k.getContent(),
+                "keywords",Objects.toString(k.getKeywordsJson(),"[]"))).toList();
+    }
+
+    private WorkbenchVO.Snapshot finish(Plan plan, Map<String,String> analysis, Draft draft) {
         ChatSession s = lockSession(plan.sessionId());
         if (!current(s,plan)) return snapshot(s);
         String text = plan.content();
@@ -171,9 +199,7 @@ public class WorkbenchService {
             reply(s,prefix+"已取消待确认诉求，没有创建工单。",List.of(),null);
         } else if (ConfirmationText.matches(text)) {
             confirm(s,plan,modelAvailable,prefix);
-        } else if (!has(text,"我要退","申请退") &&
-            (has(text,"工单") && !has(text,"是什么","什么是","含义","怎么创建","如何创建") ||
-             has(text,"刚才的申请","申请怎么样") || has(text,"进度") && !has(text,"退款"))) {
+        } else if (ticketQuery(text)) {
             var matcher = Pattern.compile("(?i)ST[A-Z0-9]{8,}").matcher(text);
             String number = matcher.find() ? matcher.group().toUpperCase(Locale.ROOT) : null;
             var found = commerce.getServiceTicket(new TicketQuery(scope(s),number,number==null?s.getSelectedOrderId():null,null));
@@ -183,21 +209,12 @@ public class WorkbenchService {
                 (t.history().isEmpty()?"":t.history().get(t.history().size()-1).note())).reduce((a,b)->a+"\n"+b).orElseThrow())+
                 " 本系统未执行平台退货或退款。",List.of(),found.isEmpty()?null:found.get(0).ticketId());
         } else {
-            String token = orderToken(text);
-            boolean selecting = token!=null && text.replace(token,"").matches("[\\s。.!！]*");
-            boolean policyIntent = isInformationQuestion(text) || has(text,"几天","期限","规则","政策","运费","条件");
-            boolean returning = has(text,"要退货","想退货","要退款","想退款","想退掉","帮我申请退货","帮我申请退款") ||
-                has(text,"申请退货","申请退款") && !policyIntent ||
-                text.matches("[\\s]*(?:退货|退款)[！!。]?");
-            boolean compensation = !policyIntent && has(text,"申请补偿","申请赔偿","我要补偿","要求补偿");
-            boolean logistics = has(text,"物流","快递","到哪","发货","到货","配送");
-            boolean continuing = selecting && s.getPendingAction()!=null;
-            boolean policyQuestion = !returning && !compensation && token==null && !refs.isEmpty() &&
-                (isInformationQuestion(text) || !logistics && (s.getPendingAction()==null ||
-                    has(text,"规则","期限","几天","运费","材质","尺寸","优惠","活动","容量")));
-            boolean capacity = !returning && !compensation && !logistics && !has(text,"收纳盒","毛巾") && has(text,"容量","多少毫升");
+            var route = route(s,text,refs);
+            String token = route.token();
+            boolean returning = route.returning(), compensation = route.compensation(), logistics = route.logistics();
+            boolean continuing = route.continuing(), policyQuestion = route.policyQuestion(), capacity = route.capacity();
             if (policyQuestion || capacity) clearPending(s);
-            boolean business = returning || compensation || logistics || token!=null || has(text,"订单") || s.getPendingAction()!=null;
+            boolean business = route.business();
             if (capacity) {
                 answerCapacity(s,token,prefix);
             } else if (business && !policyQuestion) {
@@ -217,13 +234,22 @@ public class WorkbenchService {
                     reply(s,"请将诉求原因控制在1000字以内，补齐后再确认提交。",List.of(),null);
                 } else handleOrder(s,text,token,modelAvailable,prefix);
             } else {
-                // The model selects evidence; final wording is the stored answer, never unverified business claims.
-                String source = modelRefs.isEmpty()?"RULE_KNOWLEDGE":"MODEL_KNOWLEDGE";
-                s.setAnalysisJson(json(new WorkbenchVO.Analysis(scene,intentName,emotion,modelAvailable?"MODEL":"RULE",refs.isEmpty()?"CLARIFICATION":source)));
-                execution(s,"answer_knowledge","SUCCESS",refs.isEmpty()?"暂无匹配依据，请顾客补充信息，继续 AI 接待":
-                    (modelRefs.isEmpty()?"规则知识兜底":"大模型选择知识")+"；引用 "+refs.size()+" 条当前店铺答案",null);
-                reply(s,prefix+(refs.isEmpty()?"还没找到与这个问题匹配的资料。你想了解哪件商品，或订单、物流、退换货的哪一项？可以补充具体问题，我继续帮你查。":
-                    refs.stream().map(k -> k.getTitle()+"："+k.getContent()).reduce((a,b)->a+"\n"+b).orElseThrow()),List.of(),null);
+                var generated = validReply(s,plan,draft);
+                if (generated != null) {
+                    s.setKnowledgeIdsJson(json(generated.knowledgeIds()));
+                    String source = generated.knowledgeIds().isEmpty()?"MODEL_GENERAL":"MODEL_GENERATED";
+                    s.setAnalysisJson(json(new WorkbenchVO.Analysis(scene,intentName,emotion,modelAvailable?"MODEL":"RULE",source)));
+                    execution(s,"generate_reply","SUCCESS","大模型自主生成回复；类型："+generated.answerType()+
+                        "；引用 "+generated.knowledgeIds().size()+" 条当前店铺资料",null);
+                    reply(s,generated.answer(),List.of(),null);
+                } else {
+                    if (draft.input()!=null) execution(s,"generate_reply","FAILED","生成不可用、返回无效或资料发生变化，使用规则答案兜底",null);
+                    s.setAnalysisJson(json(new WorkbenchVO.Analysis(scene,intentName,emotion,modelAvailable?"MODEL":"RULE",refs.isEmpty()?"CLARIFICATION":"RULE_KNOWLEDGE")));
+                    execution(s,"answer_knowledge","SUCCESS",refs.isEmpty()?"暂无匹配依据，请顾客补充信息，继续 AI 接待":
+                        "规则知识兜底；引用 "+refs.size()+" 条当前店铺答案",null);
+                    reply(s,prefix+(refs.isEmpty()?"还没找到与这个问题匹配的资料。你想了解哪件商品，或订单、物流、退换货的哪一项？可以补充具体问题，我继续帮你查。":
+                        refs.stream().map(k -> k.getTitle()+"："+k.getContent()).reduce((a,b)->a+"\n"+b).orElseThrow()),List.of(),null);
+                }
             }
         }
         messages.findById(plan.messageId()).orElseThrow().setDeliveryState("DONE");
@@ -481,6 +507,42 @@ public class WorkbenchService {
         });
     }
     private void touch(ChatSession s) { s.setUpdatedAt(LocalDateTime.now()); }
+    private boolean ticketQuery(String text) {
+        return !has(text,"我要退","申请退") &&
+            (has(text,"工单") && !has(text,"是什么","什么是","含义","怎么创建","如何创建") ||
+             has(text,"刚才的申请","申请怎么样") || has(text,"进度") && !has(text,"退款"));
+    }
+    private Route route(ChatSession s,String text,List<ScopedKnowledge> refs) {
+        String token = orderToken(text);
+        boolean selecting = token!=null && text.replace(token,"").matches("[\\s。.!！]*");
+        boolean policyIntent = isInformationQuestion(text) || has(text,"几天","期限","规则","政策","运费","条件");
+        boolean returning = has(text,"要退货","想退货","要退款","想退款","想退掉","帮我申请退货","帮我申请退款") ||
+            has(text,"申请退货","申请退款") && !policyIntent || text.matches("[\\s]*(?:退货|退款)[！!。]?");
+        boolean compensation = !policyIntent && has(text,"申请补偿","申请赔偿","我要补偿","要求补偿");
+        boolean logistics = has(text,"物流","快递","到哪","发货","到货","配送");
+        boolean continuing = selecting && s.getPendingAction()!=null;
+        boolean policyQuestion = !returning && !compensation && token==null && !refs.isEmpty() &&
+            (isInformationQuestion(text) || !logistics && (s.getPendingAction()==null ||
+                has(text,"规则","期限","几天","运费","材质","尺寸","优惠","活动","容量")));
+        boolean capacity = !returning && !compensation && !logistics && !has(text,"收纳盒","毛巾") && has(text,"容量","多少毫升");
+        boolean business = returning || compensation || logistics || token!=null || has(text,"订单") || s.getPendingAction()!=null;
+        return new Route(token,returning,compensation,logistics,continuing,policyQuestion,capacity,business);
+    }
+    private LlmService.WorkbenchReply validReply(ChatSession s,Plan plan,Draft draft) {
+        var result = draft.reply();
+        if (result==null || draft.input()==null || !draft.input().equals(evidence(s,plan)) ||
+            result.answer()==null || result.answer().isBlank() || result.answer().length()>3000 ||
+            result.knowledgeIds()==null || result.knowledgeIds().size()>3 ||
+            !Set.of("GROUNDED","GENERAL","CLARIFICATION").contains(Objects.toString(result.answerType(),"")) ||
+            ("GROUNDED".equals(result.answerType()) && result.knowledgeIds().isEmpty())) return null;
+        Set<String> allowed = new HashSet<>(); draft.input().forEach(k -> allowed.add(k.get("id")));
+        if (new HashSet<>(result.knowledgeIds()).size()!=result.knowledgeIds().size() ||
+            !allowed.containsAll(result.knowledgeIds())) return null;
+        // Text generation has no execution authority. Reject common fabricated success/status claims.
+        if (Pattern.compile("(?:已|已经)(?:成功)?(?:为[你您]|帮[你您])?(?:提交|创建|办理|修改|取消|退款|退货|赔付|转接|转为|转人工)|退款成功|退款已到账|(?:订单|物流|工单)(?:状态)?[：:]?(?:已签收|已发货|已完成)")
+            .matcher(result.answer()).find()) return null;
+        return result;
+    }
     private List<ScopedKnowledge> modelKnowledge(ChatSession s, Plan plan, Map<String,String> analysis) {
         if (analysis==null || analysis.get("knowledgeIds")==null) return List.of();
         try {
@@ -580,4 +642,7 @@ public class WorkbenchService {
     private static CommerceException conflict(String message) { return new CommerceException("IDEMPOTENCY_CONFLICT",message); }
     private record Plan(String sessionId,String messageId,long version,String content,
         List<Map<String,String>> knowledge,List<Map<String,String>> history,String productContext) {}
+    private record Draft(List<Map<String,String>> input,LlmService.WorkbenchReply reply) {}
+    private record Route(String token,boolean returning,boolean compensation,boolean logistics,boolean continuing,
+        boolean policyQuestion,boolean capacity,boolean business) {}
 }

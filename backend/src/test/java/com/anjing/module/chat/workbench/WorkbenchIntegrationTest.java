@@ -137,11 +137,116 @@ class WorkbenchIntegrationTest {
         send(id,"previous-product","保温杯有什么颜色");
         var result = send(id,"semantic-greeting","劳驾能帮忙解答吗");
         assertThat(last(result)).contains("你好，我在");
-        assertThat(result.analysis().replySource()).isEqualTo("MODEL_KNOWLEDGE");
+        assertThat(result.analysis().replySource()).isEqualTo("RULE_KNOWLEDGE");
         assertThat(fetch(id).analysis()).isEqualTo(result.analysis());
         verify(llm).analyzeUserInput(eq("劳驾能帮忙解答吗"),argThat(rows -> rows.stream()
             .noneMatch(row -> row.get("id").startsWith("demo-knowledge-dy-"))),
             argThat(rows -> rows.stream().anyMatch(row -> row.get("content").contains("保温杯有什么颜色"))));
+    }
+
+    @Test void generatedReplyUsesModelWordingWithoutKeywordHitAndPersistsReferences() {
+        String question = "日常怎样打理这个杯子呀";
+        when(llm.generateWorkbenchReply(eq(question),anyList(),anyList())).thenReturn(new LlmService.WorkbenchReply(
+            "可以先拆开杯盖，用中性清洁剂轻柔清洗，再充分晾干。",List.of("demo-knowledge-cup-clean"),"GROUNDED"));
+        var result = send(open("tb").session().sessionId(),"generated-1",question);
+        assertThat(last(result)).startsWith("可以先拆开杯盖");
+        assertThat(result.analysis().replySource()).isEqualTo("MODEL_GENERATED");
+        assertThat(result.knowledge()).extracting(WorkbenchVO.Knowledge::knowledgeId).containsExactly("demo-knowledge-cup-clean");
+        assertThat(fetch(result.session().sessionId()).analysis()).isEqualTo(result.analysis());
+        send(result.session().sessionId(),"generated-1",question);
+        verify(llm,times(1)).generateWorkbenchReply(eq(question),anyList(),anyList());
+    }
+
+    @Test void modelCanAnswerWithoutKnowledgeMatchEvenWhenAnalysisFails() {
+        when(llm.analyzeUserInput(anyString(),anyList(),anyList())).thenReturn(null);
+        when(llm.generateWorkbenchReply(anyString(),anyList(),anyList())).thenReturn(new LlmService.WorkbenchReply(
+            "我理解你想先比较一下，可以告诉我平时的使用场景吗？",List.of(),"GENERAL"));
+        var result = send(open("tb").session().sessionId(),"free-1","我有点纠结，陪我选选吧");
+        assertThat(last(result)).contains("使用场景");
+        assertThat(result.analysis().replySource()).isEqualTo("MODEL_GENERAL");
+        assertThat(result.analysis().analysisSource()).isEqualTo("RULE");
+        assertThat(result.knowledge()).isEmpty();
+        assertThat(tickets.count()).isZero();
+    }
+
+    @Test void generationFailureAndFabricatedExecutionClaimsUseRules() {
+        String id = open("tb").session().sessionId();
+        when(llm.generateWorkbenchReply(anyString(),anyList(),anyList())).thenThrow(new IllegalStateException("gateway failed"));
+        var result = send(id,"generation-fail","保温杯怎么清洗");
+        assertThat(last(result)).contains("中性清洁剂");
+        assertThat(result.analysis().replySource()).isEqualTo("RULE_KNOWLEDGE");
+        doReturn(new LlmService.WorkbenchReply("已经为您退款，退款已到账。",List.of(),"GENERAL"))
+            .when(llm).generateWorkbenchReply(anyString(),anyList(),anyList());
+        result = send(id,"generation-claim","你好");
+        assertThat(last(result)).contains("我在").doesNotContain("已到账");
+        assertThat(result.executions()).anyMatch(e -> e.action().equals("generate_reply") && e.status().equals("FAILED"));
+        assertThat(tickets.count()).isZero();
+    }
+
+    @Test void generationRunsOutsideTransactionAndTakeoverDropsLateReply() throws Exception {
+        String id = open("tb").session().sessionId();
+        CountDownLatch entered = new CountDownLatch(1),release = new CountDownLatch(1);
+        when(llm.generateWorkbenchReply(anyString(),anyList(),anyList())).thenAnswer(invocation -> {
+            assertThat(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()).isFalse();
+            entered.countDown(); release.await(10,TimeUnit.SECONDS);
+            return new LlmService.WorkbenchReply("迟到的模型回复",List.of(),"GENERAL");
+        });
+        var pool = Executors.newSingleThreadExecutor();
+        try {
+            var future = pool.submit(() -> send(id,"generation-takeover","你好"));
+            assertThat(entered.await(5,TimeUnit.SECONDS)).isTrue();
+            var taken = service.reception(new WorkbenchDTO.Reception(id,"HUMAN"));
+            release.countDown();
+            var result = future.get(10,TimeUnit.SECONDS);
+            assertThat(result.messages()).hasSize(taken.messages().size()).noneMatch(m -> m.content().contains("迟到"));
+            assertThat(result.session().receptionMode()).isEqualTo("HUMAN");
+        } finally { release.countDown(); pool.shutdownNow(); }
+    }
+
+    @Test void expiredOrChangedEvidenceDuringGenerationFallsBack() {
+        when(llm.generateWorkbenchReply(anyString(),anyList(),anyList())).thenAnswer(invocation -> {
+            var activity = knowledge.findById("demo-knowledge-tb-activity").orElseThrow();
+            activity.setEndsAt(java.time.LocalDateTime.parse("2026-10-17T00:00:00")); knowledge.save(activity);
+            return new LlmService.WorkbenchReply("收纳盒有9折优惠",List.of("demo-knowledge-tb-activity"),"GROUNDED");
+        });
+        var result = send(open("tb").session().sessionId(),"changed-evidence","收纳盒有什么优惠");
+        assertThat(last(result)).doesNotContain("9折");
+        assertThat(result.analysis().replySource()).isIn("RULE_KNOWLEDGE","CLARIFICATION");
+    }
+
+    @Test void foreignGeneratedReferencesAreRejectedBeforePublication() {
+        when(llm.generateWorkbenchReply(anyString(),anyList(),anyList())).thenReturn(new LlmService.WorkbenchReply(
+            "本店7天可退",List.of("demo-knowledge-dy-return"),"GROUNDED"));
+        var result = send(open("tb").session().sessionId(),"foreign-generated","退货期限几天");
+        assertThat(last(result)).contains("15天").doesNotContain("7天");
+        assertThat(result.analysis().replySource()).isEqualTo("RULE_KNOWLEDGE");
+    }
+
+    @Test void resetDuringGenerationCannotRecreateSessionOrPublishLateAnswer() throws Exception {
+        String id = open("tb").session().sessionId();
+        CountDownLatch entered = new CountDownLatch(1),release = new CountDownLatch(1);
+        when(llm.generateWorkbenchReply(anyString(),anyList(),anyList())).thenAnswer(invocation -> {
+            entered.countDown(); release.await(10,TimeUnit.SECONDS);
+            return new LlmService.WorkbenchReply("迟到回复",List.of(),"GENERAL");
+        });
+        var pool = Executors.newSingleThreadExecutor();
+        try {
+            var future = pool.submit(() -> send(id,"generation-reset","你好"));
+            assertThat(entered.await(5,TimeUnit.SECONDS)).isTrue();
+            service.reset(new WorkbenchDTO.Reset(true)); release.countDown();
+            assertThatThrownBy(() -> future.get(10,TimeUnit.SECONDS)).isInstanceOf(ExecutionException.class)
+                .hasCauseInstanceOf(CommerceException.class);
+            assertThat(sessions.existsById(id)).isFalse();
+            assertThat(tickets.count()).isZero();
+        } finally { release.countDown(); pool.shutdownNow(); }
+    }
+
+    @Test void businessToolsNeverUseGeneratedSuccessWording() {
+        String id = open("tb").session().sessionId();
+        send(id,"business-real","查询 TB202610100001 物流");
+        send(id,"business-return","想退货 TB202610100001，原因是不喜欢");
+        send(id,"business-confirm","确认提交");
+        verify(llm,never()).generateWorkbenchReply(anyString(),anyList(),anyList());
     }
 
     @Test void rejectsForeignAndExpiredModelEvidenceAndUsesLocalRules() {

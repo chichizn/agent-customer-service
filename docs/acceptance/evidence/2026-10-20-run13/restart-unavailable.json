@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-10-20T11:46:36.534Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "dbPort": 13307,
+  "checks": [
+    {
+      "name": "runtime",
+      "status": "FAIL",
+      "error": "fetch failed"
+    }
+  ],
+  "requests": [],
+  "status": "FAIL"
+}

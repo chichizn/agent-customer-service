@@ -16,6 +16,8 @@
   const note = ref('')
   const validation = ref('')
   const replyLabels = {
+    MODEL_GENERATED: '大模型依据资料生成',
+    MODEL_GENERAL: '大模型自主回复或澄清',
     MODEL_KNOWLEDGE: '大模型匹配知识回答',
     RULE_KNOWLEDGE: '规则知识兜底回答',
     BUSINESS_TOOL: '业务工具处理',

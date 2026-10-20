@@ -1,0 +1,92 @@
+{
+  "backend": {
+    "suites": [
+      {
+        "suite": "com.anjing.aspect.DistributeLockAspectTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.config.lock.LocalLockManagerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.chat.ChatContextPersistenceTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.chat.LlmServiceTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.chat.workbench.WorkbenchApplicationHttpTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.chat.workbench.WorkbenchIntegrationTest",
+        "tests": 65,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.chat.workbench.WorkbenchKnowledgeServiceTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.commerce.CommerceControllerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.commerce.CommercePersistenceTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "com.anjing.module.demo.DemoBusinessTimeTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "tests": 130.0,
+    "failures": 0.0,
+    "errors": 0.0,
+    "skipped": 0.0
+  },
+  "frontend": {
+    "tests": 14,
+    "failed": 0,
+    "command": "pnpm test:workbench"
+  },
+  "build": {
+    "command": "pnpm build:demo",
+    "exitCode": 0,
+    "includesTypecheck": true,
+    "node": "20.18.0",
+    "engineWarning": "Project requires 20.19+; build completed"
+  }
+}

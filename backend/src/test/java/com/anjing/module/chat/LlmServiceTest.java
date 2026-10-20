@@ -72,6 +72,7 @@ class LlmServiceTest {
         assertThat(service.analyzeUserInput("杯子漏水想退货")).containsEntry("intentCode", "RETURN_EXCHANGE");
         assertThat(authorization).isEqualTo("Bearer local-test-secret");
         assertThat(request.get("model")).isEqualTo("local-test-model");
+        assertThat(request.get("temperature")).isEqualTo(0.1);
         assertThat((List<?>) request.get("messages")).hasSize(2);
     }
 
@@ -119,6 +120,7 @@ class LlmServiceTest {
         try {
             assertThat(service.analyzeUserInput("想退货")).isNull();
             assertThat(service.generateReply("想退货", Map.of(), null)).isNull();
+            assertThat(service.generateWorkbenchReply("想退货",List.of(),List.of())).isNull();
             assertThat(appender.list).isNotEmpty().allSatisfy(event -> {
                 assertThat(event.getFormattedMessage()).doesNotContain("local-test-secret", "customer-private-text");
                 assertThat(event.getThrowableProxy()).isNull();
@@ -143,10 +145,61 @@ class LlmServiceTest {
         ReflectionTestUtils.setField(service, "enabled", false);
         assertThat(service.analyzeUserInput("你好")).isNull();
         assertThat(service.generateReply("你好", Map.of(), null)).isNull();
+        assertThat(service.generateWorkbenchReply("你好",List.of(),List.of())).isNull();
         ReflectionTestUtils.setField(service, "enabled", true);
         ReflectionTestUtils.setField(service, "apiKey", "");
         assertThat(service.analyzeUserInput("你好")).isNull();
         assertThat(calls).hasValue(0);
+    }
+
+    @Test void generatesWorkbenchWordingWithSeparateTemperatureAndScopedContext() throws Exception {
+        answer("{\"answer\":\"先拆开杯盖，再用软布清洗即可。\",\"knowledgeIds\":[\"cup-clean\"],\"answerType\":\"GROUNDED\"}");
+        var result = service.generateWorkbenchReply("怎么洗",List.of(Map.of("id","cup-clean","content","拆开杯盖后用软布清洗")),
+            List.of(Map.of("role","user","content","我买的是保温杯")));
+        assertThat(result.answer()).isEqualTo("先拆开杯盖，再用软布清洗即可。");
+        assertThat(result.knowledgeIds()).containsExactly("cup-clean");
+        assertThat(request.get("temperature")).isEqualTo(0.7);
+        assertThat(request.get("max_tokens")).isEqualTo(800);
+        assertThat(request.get("response_format")).isEqualTo(Map.of("type","json_object"));
+        var sent = (List<?>) request.get("messages");
+        assertThat(sent).hasSize(3);
+        assertThat(sent.get(0).toString()).contains("cup-clean","不得编造状态","不要照抄知识标题");
+        assertThat(sent.get(1).toString()).contains("我买的是保温杯");
+        ReflectionTestUtils.setField(service,"replyTemperature",0.8);
+        ReflectionTestUtils.setField(service,"replyJsonMode",false);
+        service.generateWorkbenchReply("怎么洗",List.of(Map.of("id","cup-clean")),List.of());
+        assertThat(request.get("temperature")).isEqualTo(0.8);
+        assertThat(request.containsKey("response_format")).isFalse();
+        ReflectionTestUtils.setField(service,"analysisTemperature",0.2);
+        answer("{\"intentCode\":\"GENERAL_QUERY\"}");
+        service.analyzeUserInput("你好");
+        assertThat(request.get("temperature")).isEqualTo(0.2);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings={"not-json","{}",
+        "{\"answer\":\" \" ,\"knowledgeIds\":[],\"answerType\":\"GENERAL\"}",
+        "{\"answer\":\"虚构\",\"knowledgeIds\":[],\"answerType\":\"GROUNDED\"}",
+        "{\"answer\":\"跨店\",\"knowledgeIds\":[\"foreign\"],\"answerType\":\"GROUNDED\"}",
+        "{\"answer\":\"错误类型\",\"knowledgeIds\":[],\"answerType\":\"EXECUTE\"}"})
+    void rejectsUnusableGeneratedReply(String content) throws Exception {
+        answer(content);
+        assertThat(service.generateWorkbenchReply("你好",List.of(),List.of())).isNull();
+    }
+
+    @Test void generalReplyWorksWithoutKnowledgeAndTimeoutFallsBack() throws Exception {
+        answer("{\"answer\":\"你好，我来帮你一起看看。\",\"knowledgeIds\":[],\"answerType\":\"GENERAL\"}");
+        assertThat(service.generateWorkbenchReply("你好",List.of(),List.of()).answer()).contains("一起看看");
+        delayMs = 500;
+        ReflectionTestUtils.setField(service,"readTimeoutMs",100); service.configureTimeouts();
+        assertThat(service.generateWorkbenchReply("你好",List.of(),List.of())).isNull();
+    }
+
+    @Test void rejectsInvalidTemperaturesAtStartup() {
+        for (double value : new double[]{-0.1,2.1,Double.NaN,Double.POSITIVE_INFINITY}) {
+            ReflectionTestUtils.setField(service,"replyTemperature",value);
+            assertThatIllegalArgumentException().isThrownBy(service::configureTimeouts);
+        }
     }
 
     @Test void timeoutMustRemainBoundedAndPositive() {

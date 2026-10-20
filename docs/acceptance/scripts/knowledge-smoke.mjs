@@ -15,7 +15,7 @@ const report = { generatedAt: new Date().toISOString(), mode, baseUrl,
 async function post(path, body) {
   const started = Date.now()
   const response = await fetch(baseUrl + path, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body), signal: AbortSignal.timeout(30000) })
+    body: JSON.stringify(body), signal: AbortSignal.timeout(55000) })
   const envelope = await response.json()
   const s = envelope.data
   report.requests.push({ path, body, httpStatus: response.status, code: envelope.code, elapsedMs: Date.now() - started,
@@ -104,13 +104,13 @@ try {
       assert.equal(s.tickets.length, 0)
     })
   } else await check('real provider selected scoped evidence', async () => {
-    const selections = report.requests.filter(r => r.snapshot?.analysis?.replySource === 'MODEL_KNOWLEDGE')
-    assert(selections.length > 0, 'No successful real model knowledge selection observed')
+    const selections = report.requests.filter(r => r.snapshot?.analysis?.replySource === 'MODEL_GENERATED')
+    assert(selections.length > 0, 'No successful real model reply generation observed')
   })
 } catch (e) { report.checks.push({ name: 'runtime', status: 'FAIL', error: e.message }) }
 report.status = report.checks.every(c => c.status === 'PASS') ? 'PASS' : 'FAIL'
 mkdirSync(dirname(output), { recursive: true })
 writeFileSync(output, JSON.stringify(report, null, 2) + '\n')
 console.log(JSON.stringify({ status: report.status, checks: report.checks.length, sessions: report.sessions,
-  failed: report.checks.filter(c => c.status !== 'PASS'), modelSelections: report.requests.filter(r => r.snapshot?.analysis?.replySource === 'MODEL_KNOWLEDGE').length }))
+  failed: report.checks.filter(c => c.status !== 'PASS'), modelGenerated: report.requests.filter(r => r.snapshot?.analysis?.replySource === 'MODEL_GENERATED').length }))
 if (report.status !== 'PASS') process.exitCode = 1

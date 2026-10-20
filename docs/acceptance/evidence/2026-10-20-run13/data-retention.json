@@ -1,0 +1,55 @@
+{
+  "port": 13307,
+  "schema": "agent_customer_service_acceptance_20261019",
+  "tables": [
+    {
+      "table": "commerce_service_ticket",
+      "before": 0,
+      "after": 0,
+      "allPreviousRowsUnchanged": true,
+      "identical": true
+    },
+    {
+      "table": "commerce_ticket_history",
+      "before": 0,
+      "after": 0,
+      "allPreviousRowsUnchanged": true,
+      "identical": true
+    },
+    {
+      "table": "commerce_ticket_submission",
+      "before": 0,
+      "after": 0,
+      "allPreviousRowsUnchanged": true,
+      "identical": true
+    },
+    {
+      "table": "cs_chat_execution",
+      "before": 228,
+      "after": 534,
+      "allPreviousRowsUnchanged": true,
+      "identical": false
+    },
+    {
+      "table": "cs_chat_message",
+      "before": 155,
+      "after": 323,
+      "allPreviousRowsUnchanged": true,
+      "identical": false
+    },
+    {
+      "table": "cs_chat_session",
+      "before": 6,
+      "after": 14,
+      "allPreviousRowsUnchanged": true,
+      "identical": false
+    },
+    {
+      "table": "cs_scoped_knowledge",
+      "before": 40,
+      "after": 40,
+      "allPreviousRowsUnchanged": true,
+      "identical": true
+    }
+  ]
+}
