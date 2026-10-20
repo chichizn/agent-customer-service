@@ -1,0 +1,1972 @@
+{
+  "generatedAt": "2026-10-20T04:00:30.890Z",
+  "scope": "POST_RESTART_CONFIRMATION_AND_TICKET_STATUS_HTTP",
+  "baseUrl": "http://127.0.0.1:10002",
+  "database": "agent_customer_service_acceptance_20261019",
+  "status": "PASS",
+  "requests": [
+    {
+      "path": "/api/chat/session/snapshot",
+      "body": {
+        "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098"
+      },
+      "status": 200,
+      "elapsedMs": 29,
+      "response": {
+        "code": 0,
+        "message": "操作成功",
+        "data": {
+          "session": {
+            "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-2",
+            "customerName": "小陈",
+            "receptionMode": "AI",
+            "status": "active",
+            "lastMessage": "请确认：订单 DY202610090004；诉求：退货；原因：不喜欢颜色。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+            "updatedAt": "2026-10-20T11:51:47.308134+08:00",
+            "handoffSummary": null
+          },
+          "messages": [
+            {
+              "messageId": "73b2fe42-b660-41fa-a37a-8c79c14ec535",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": null,
+              "role": "system",
+              "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+              "createdAt": "2026-10-20T11:51:28.907987+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "a48c0a7d-48d4-3e6c-8e98-9ab7e4c0ee34",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": "9b4da0e0-558c-4553-8704-b4c38506d6d6",
+              "role": "customer",
+              "content": "想退货 DY202610090004，原因是不喜欢颜色",
+              "createdAt": "2026-10-20T11:51:28.907987+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "4d29b092-5c1a-4c2c-8891-26d12b4082da",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610090004；诉求：退货；原因：不喜欢颜色。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:51:47.308134+08:00",
+              "orderIds": [
+                "demo-order-dy-04"
+              ],
+              "ticketId": null
+            }
+          ],
+          "orders": [
+            {
+              "orderId": "demo-order-dy-06",
+              "orderNumber": "DY202610140006",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-2",
+              "items": [
+                {
+                  "name": "纯棉毛巾",
+                  "quantity": 1,
+                  "specification": "蓝色"
+                }
+              ],
+              "paidAmount": 18,
+              "status": "SHIPPED",
+              "createdAt": "2026-10-14T14:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-05",
+              "orderNumber": "DY202610130005",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-2",
+              "items": [
+                {
+                  "name": "收纳盒",
+                  "quantity": 1,
+                  "specification": "透明中号"
+                }
+              ],
+              "paidAmount": 0,
+              "status": "CANCELLED",
+              "createdAt": "2026-10-13T13:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-04",
+              "orderNumber": "DY202610090004",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-2",
+              "items": [
+                {
+                  "name": "保温杯",
+                  "quantity": 1,
+                  "specification": "白色 500ml"
+                },
+                {
+                  "name": "收纳盒",
+                  "quantity": 1,
+                  "specification": "透明中号"
+                }
+              ],
+              "paidAmount": 84,
+              "status": "DELIVERED",
+              "createdAt": "2026-10-09T12:00+08:00"
+            }
+          ],
+          "logistics": [
+            {
+              "orderId": "demo-order-dy-06",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0006",
+              "status": "运输中",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-15T09:00+08:00"
+                },
+                {
+                  "description": "已离开始发地转运中心",
+                  "time": "2026-10-16T15:00+08:00"
+                }
+              ]
+            },
+            {
+              "orderId": "demo-order-dy-05",
+              "carrier": null,
+              "trackingNumber": null,
+              "status": "订单已取消，暂无可查询物流",
+              "nodes": []
+            },
+            {
+              "orderId": "demo-order-dy-04",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0004",
+              "status": "已签收",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-10T08:00+08:00"
+                },
+                {
+                  "description": "顾客已签收",
+                  "time": "2026-10-12T12:00+08:00"
+                }
+              ]
+            }
+          ],
+          "tickets": [],
+          "knowledge": [
+            {
+              "knowledgeId": "demo-knowledge-dy-fee",
+              "title": "抖店演示店退货运费",
+              "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+              "content": "本演示店个人原因退货可申请一次最高10元寄回运费补贴，需商家审核；额外赔偿需人工决定，不自动批准。",
+              "scope": "SHOP"
+            },
+            {
+              "knowledgeId": "demo-knowledge-dy-return",
+              "title": "抖店演示店退货期限",
+              "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+              "content": "本演示店普通商品签收后7天内可提交退货诉求，需商品完好及商家审核。质量问题请说明情况。此为演示店规则，非抖店官方政策。",
+              "scope": "SHOP"
+            }
+          ],
+          "executions": [
+            {
+              "executionId": "58a59b84-fd1d-4c01-9491-d2c12b5caf49",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 2 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:47.307398+08:00"
+            },
+            {
+              "executionId": "f1839ce8-1d4c-4c17-a601-ad57b10625a9",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-04",
+              "createdAt": "2026-10-20T11:51:47.308134+08:00"
+            }
+          ],
+          "selectedOrderId": "demo-order-dy-04",
+          "awaitingConfirmation": true
+        },
+        "timestamp": 1792468818533,
+        "success": true
+      }
+    },
+    {
+      "path": "/api/chat/session/snapshot",
+      "body": {
+        "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c"
+      },
+      "status": 200,
+      "elapsedMs": 9,
+      "response": {
+        "code": 0,
+        "message": "操作成功",
+        "data": {
+          "session": {
+            "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-1",
+            "customerName": "小林",
+            "receptionMode": "AI",
+            "status": "active",
+            "lastMessage": "工单 ST50AF047080F44921A8EE450100461581，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+            "updatedAt": "2026-10-20T11:51:26.227830+08:00",
+            "handoffSummary": null
+          },
+          "messages": [
+            {
+              "messageId": "5cbc5986-750d-484b-887e-f41edbc86173",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "system",
+              "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+              "createdAt": "2026-10-20T11:50:16.180533+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "2ffd37cc-db97-330c-b53f-048ac08b77ef",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "cd66c0d2-a550-466c-971b-b611a6914a3e",
+              "role": "customer",
+              "content": "订单 DY202610100001 的杯子漏水，想退货，原因是杯子漏水",
+              "createdAt": "2026-10-20T11:50:16.196661+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "c187ab3f-47e9-44f1-9d7e-719b1ee5996f",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:50:19.896287+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": null
+            },
+            {
+              "messageId": "ec870478-6edb-31f1-96cb-559a48b10a93",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "5b437e82-7c0e-49d1-a5a0-e26f8f4a0ade",
+              "role": "customer",
+              "content": "确认提交退货诉求",
+              "createdAt": "2026-10-20T11:50:19.928128+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "2e23588d-2624-470a-a8fc-10aed7dd0f15",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581：已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "aece4dd3-39e9-3e17-901b-bb9059b47e10",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "4feb382c-9939-49a3-9dc7-eddbfff1cf3b",
+              "role": "customer",
+              "content": "订单 DY202610100001 想退货，原因是杯子漏水",
+              "createdAt": "2026-10-20T11:50:24.137019+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "bc944bd4-7dae-4ab6-a1e3-146f4601a5d9",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:50:26.679006+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": null
+            },
+            {
+              "messageId": "5f3d0a5f-c87a-376f-8703-a783cd8dc390",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "d2100a43-4654-4457-baf0-8c489a034e64",
+              "role": "customer",
+              "content": "确认提交",
+              "createdAt": "2026-10-20T11:50:26.708181+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "95d3c9f8-2a79-4f23-8586-1c1b46f2e359",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581：已找到之前记录的诉求，请查看工单当前状态；本系统未执行平台退货或退款",
+              "createdAt": "2026-10-20T11:50:29.783769+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "17a96424-fa50-3d92-8748-c6c3b3c5a184",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "bb7884b3-da8e-41a1-9a94-4eac1f53b983",
+              "role": "customer",
+              "content": "刚才的申请怎么样了",
+              "createdAt": "2026-10-20T11:51:09.622190+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "49a8ff71-4598-4930-b8c1-f2d68b33c1bd",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581，状态：处理中。已联系顾客确认漏水情况\n工单 STA465714297BE496A930C6110F5AB48BC，状态：已完成。本地诉求已处理，平台结果另行确认（双端浏览器验收）\n工单 STCC23D72CF0B94C39AB556AD28C01C186，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+              "createdAt": "2026-10-20T11:51:20.786312+08:00",
+              "orderIds": [],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "d0ad244c-254c-3fcd-80ba-83610067950e",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "55f95978-8f88-4058-957e-29053a83e7b6",
+              "role": "customer",
+              "content": "工单 ST50AF047080F44921A8EE450100461581 进度",
+              "createdAt": "2026-10-20T11:51:20.837998+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "956632a2-8f20-40e9-9dcc-7827512ac1bb",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+              "createdAt": "2026-10-20T11:51:26.226838+08:00",
+              "orderIds": [],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            }
+          ],
+          "orders": [
+            {
+              "orderId": "demo-order-dy-03",
+              "orderNumber": "DY202610120003",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "纯棉毛巾",
+                  "quantity": 1,
+                  "specification": "蓝色"
+                }
+              ],
+              "paidAmount": 18,
+              "status": "PENDING_SHIPMENT",
+              "createdAt": "2026-10-12T11:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-02",
+              "orderNumber": "DY202610110002",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "收纳盒",
+                  "quantity": 1,
+                  "specification": "透明中号"
+                }
+              ],
+              "paidAmount": 35,
+              "status": "SHIPPED",
+              "createdAt": "2026-10-11T10:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-01",
+              "orderNumber": "DY202610100001",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "保温杯",
+                  "quantity": 1,
+                  "specification": "白色 500ml"
+                }
+              ],
+              "paidAmount": 49,
+              "status": "DELIVERED",
+              "createdAt": "2026-10-10T09:00+08:00"
+            }
+          ],
+          "logistics": [
+            {
+              "orderId": "demo-order-dy-03",
+              "carrier": null,
+              "trackingNumber": null,
+              "status": "订单尚未发货，暂无物流",
+              "nodes": []
+            },
+            {
+              "orderId": "demo-order-dy-02",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0002",
+              "status": "运输中",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-12T10:00+08:00"
+                },
+                {
+                  "description": "到达上海转运中心",
+                  "time": "2026-10-13T11:00+08:00"
+                }
+              ]
+            },
+            {
+              "orderId": "demo-order-dy-01",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0001",
+              "status": "已签收",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-11T09:00+08:00"
+                },
+                {
+                  "description": "顾客已签收",
+                  "time": "2026-10-13T14:00+08:00"
+                }
+              ]
+            }
+          ],
+          "tickets": [
+            {
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "ticketNumber": "ST50AF047080F44921A8EE450100461581",
+              "orderNumber": "DY202610100001",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00",
+              "updatedAt": "2026-10-20T11:51:20.825465+08:00",
+              "history": [
+                {
+                  "historyId": "821312b5-b828-441e-a597-466e91448811",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:50:24.080879"
+                },
+                {
+                  "historyId": "046250cd-1eb3-4af3-9b87-08cef5639f6c",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:51:09.603585"
+                },
+                {
+                  "historyId": "b8d45da8-7492-466f-a68c-d66188f47c25",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:51:20.825465"
+                }
+              ]
+            },
+            {
+              "ticketId": "9fe7b4ec-7e23-42ac-bd43-7bdd8eadc8f8",
+              "ticketNumber": "STA465714297BE496A930C6110F5AB48BC",
+              "orderNumber": "DY202610100001",
+              "sessionId": "f1e02acf-2c5e-419c-88ed-a064818461e5",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认（双端浏览器验收）",
+              "createdAt": "2026-10-20T11:35:08.690554+08:00",
+              "updatedAt": "2026-10-20T11:49:07.029436+08:00",
+              "history": [
+                {
+                  "historyId": "6d29b21d-d3fe-452e-9c41-4009a31b1e77",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:35:08.690554"
+                },
+                {
+                  "historyId": "d798b9d2-c3a6-4955-ada7-dd5dce2546d3",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:36:03.198308"
+                },
+                {
+                  "historyId": "10d77fd0-ade5-422d-8e74-cce46247d858",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认（双端浏览器验收）",
+                  "operatorId": "demo-operator",
+                  "occurredAt": "2026-10-20T11:49:07.029436"
+                }
+              ]
+            },
+            {
+              "ticketId": "76ca88ba-f5de-4a04-83d5-93a83e7dbd2d",
+              "ticketNumber": "STCC23D72CF0B94C39AB556AD28C01C186",
+              "orderNumber": "DY202610100001",
+              "sessionId": "8e74f774-f5a3-4534-8206-824a234e1399",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认",
+              "createdAt": "2026-10-20T11:26:15.166509+08:00",
+              "updatedAt": "2026-10-20T11:26:45.610424+08:00",
+              "history": [
+                {
+                  "historyId": "13943cbc-f5a8-4ff3-8192-5914e7f4c6b2",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:26:15.166509"
+                },
+                {
+                  "historyId": "1d533bfb-30c3-4e10-9c07-030fc97b6e84",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:26:41.179251"
+                },
+                {
+                  "historyId": "75ceddaa-3e8c-424e-9708-653add05c0e3",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:26:45.610424"
+                }
+              ]
+            }
+          ],
+          "knowledge": [
+            {
+              "knowledgeId": "demo-knowledge-ticket",
+              "title": "本地服务工单的含义",
+              "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+              "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+              "scope": "MERCHANT"
+            }
+          ],
+          "executions": [
+            {
+              "executionId": "a426c026-c392-425c-ac13-e108e629d977",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 3 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:19.894140+08:00"
+            },
+            {
+              "executionId": "b61486aa-4975-4293-a293-7bdfa6451ea1",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-01",
+              "createdAt": "2026-10-20T11:50:19.895778+08:00"
+            },
+            {
+              "executionId": "e625de34-6f3a-49b4-b545-98101ca05da5",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 2 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:24.065632+08:00"
+            },
+            {
+              "executionId": "2d747756-b79a-48fe-809a-44b50592b547",
+              "action": "create_service_ticket",
+              "status": "SUCCESS",
+              "summary": "已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00"
+            },
+            {
+              "executionId": "9e89188a-0bf1-4416-869a-2ded4a5e2b90",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 3 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:26.670119+08:00"
+            },
+            {
+              "executionId": "07955026-da44-46cf-b59f-53d05ed971ad",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-01",
+              "createdAt": "2026-10-20T11:50:26.679006+08:00"
+            },
+            {
+              "executionId": "c30fb207-6e8c-4b61-bb49-2d37d520b58f",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 0 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:29.769959+08:00"
+            },
+            {
+              "executionId": "891ec520-af65-4cae-b99f-e16d70da3ae6",
+              "action": "create_service_ticket",
+              "status": "SUCCESS",
+              "summary": "已找到之前记录的诉求，请查看工单当前状态；本系统未执行平台退货或退款",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:50:29.781767+08:00"
+            },
+            {
+              "executionId": "05b71d91-227a-45e8-be92-07d6b76ec73e",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 1 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:20.770470+08:00"
+            },
+            {
+              "executionId": "0222701b-746e-4443-8c06-40e13d2c015f",
+              "action": "get_service_ticket",
+              "status": "SUCCESS",
+              "summary": "找到 3 张当前顾客工单",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:51:20.785074+08:00"
+            },
+            {
+              "executionId": "cd8634cd-285a-457f-8199-a70e20a58c94",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 1 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:26.213939+08:00"
+            },
+            {
+              "executionId": "2966897a-6a19-48af-817a-fd83e18afe2c",
+              "action": "get_service_ticket",
+              "status": "SUCCESS",
+              "summary": "找到 1 张当前顾客工单",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:51:26.219490+08:00"
+            }
+          ],
+          "selectedOrderId": "demo-order-dy-01",
+          "awaitingConfirmation": false
+        },
+        "timestamp": 1792468818545,
+        "success": true
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+        "content": "确认提交",
+        "clientMessageId": "9e76a4e0-bc15-48f5-899e-75847ad24e74"
+      },
+      "status": 200,
+      "elapsedMs": 6711,
+      "response": {
+        "code": 0,
+        "message": "操作成功",
+        "data": {
+          "session": {
+            "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-2",
+            "customerName": "小陈",
+            "receptionMode": "AI",
+            "status": "active",
+            "lastMessage": "工单 STC4C82F6AF2D94F24A2C26C4462141E32：已记录诉求，待商家审核；本系统未执行平台退货或退款",
+            "updatedAt": "2026-10-20T12:00:25.238587900+08:00",
+            "handoffSummary": null
+          },
+          "messages": [
+            {
+              "messageId": "73b2fe42-b660-41fa-a37a-8c79c14ec535",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": null,
+              "role": "system",
+              "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+              "createdAt": "2026-10-20T11:51:28.907987+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "a48c0a7d-48d4-3e6c-8e98-9ab7e4c0ee34",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": "9b4da0e0-558c-4553-8704-b4c38506d6d6",
+              "role": "customer",
+              "content": "想退货 DY202610090004，原因是不喜欢颜色",
+              "createdAt": "2026-10-20T11:51:28.907987+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "4d29b092-5c1a-4c2c-8891-26d12b4082da",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610090004；诉求：退货；原因：不喜欢颜色。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:51:47.308134+08:00",
+              "orderIds": [
+                "demo-order-dy-04"
+              ],
+              "ticketId": null
+            },
+            {
+              "messageId": "7426bb0d-b673-359c-ae3c-dc6288994f37",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": "9e76a4e0-bc15-48f5-899e-75847ad24e74",
+              "role": "customer",
+              "content": "确认提交",
+              "createdAt": "2026-10-20T12:00:18.584691+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "62c3d964-11c3-46a6-8ec2-cacd16381ca9",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 STC4C82F6AF2D94F24A2C26C4462141E32：已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "createdAt": "2026-10-20T12:00:25.238587900+08:00",
+              "orderIds": [
+                "demo-order-dy-04"
+              ],
+              "ticketId": "265ffd2d-a8e1-4532-9d0a-ee71bc7f5a79"
+            }
+          ],
+          "orders": [
+            {
+              "orderId": "demo-order-dy-06",
+              "orderNumber": "DY202610140006",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-2",
+              "items": [
+                {
+                  "name": "纯棉毛巾",
+                  "quantity": 1,
+                  "specification": "蓝色"
+                }
+              ],
+              "paidAmount": 18,
+              "status": "SHIPPED",
+              "createdAt": "2026-10-14T14:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-05",
+              "orderNumber": "DY202610130005",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-2",
+              "items": [
+                {
+                  "name": "收纳盒",
+                  "quantity": 1,
+                  "specification": "透明中号"
+                }
+              ],
+              "paidAmount": 0,
+              "status": "CANCELLED",
+              "createdAt": "2026-10-13T13:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-04",
+              "orderNumber": "DY202610090004",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-2",
+              "items": [
+                {
+                  "name": "保温杯",
+                  "quantity": 1,
+                  "specification": "白色 500ml"
+                },
+                {
+                  "name": "收纳盒",
+                  "quantity": 1,
+                  "specification": "透明中号"
+                }
+              ],
+              "paidAmount": 84,
+              "status": "DELIVERED",
+              "createdAt": "2026-10-09T12:00+08:00"
+            }
+          ],
+          "logistics": [
+            {
+              "orderId": "demo-order-dy-06",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0006",
+              "status": "运输中",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-15T09:00+08:00"
+                },
+                {
+                  "description": "已离开始发地转运中心",
+                  "time": "2026-10-16T15:00+08:00"
+                }
+              ]
+            },
+            {
+              "orderId": "demo-order-dy-05",
+              "carrier": null,
+              "trackingNumber": null,
+              "status": "订单已取消，暂无可查询物流",
+              "nodes": []
+            },
+            {
+              "orderId": "demo-order-dy-04",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0004",
+              "status": "已签收",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-10T08:00+08:00"
+                },
+                {
+                  "description": "顾客已签收",
+                  "time": "2026-10-12T12:00+08:00"
+                }
+              ]
+            }
+          ],
+          "tickets": [
+            {
+              "ticketId": "265ffd2d-a8e1-4532-9d0a-ee71bc7f5a79",
+              "ticketNumber": "STC4C82F6AF2D94F24A2C26C4462141E32",
+              "orderNumber": "DY202610090004",
+              "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+              "orderId": "demo-order-dy-04",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-2",
+              "type": "RETURN",
+              "reason": "不喜欢颜色",
+              "status": "PENDING_REVIEW",
+              "processingNote": "已记录诉求，待商家审核",
+              "createdAt": "2026-10-20T12:00:25.236582500+08:00",
+              "updatedAt": "2026-10-20T12:00:25.236582500+08:00",
+              "history": [
+                {
+                  "historyId": "6417d63b-6fde-4e6c-9f1a-eb9ab2b83981",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-2",
+                  "occurredAt": "2026-10-20T12:00:25.2365825"
+                }
+              ]
+            }
+          ],
+          "knowledge": [],
+          "executions": [
+            {
+              "executionId": "58a59b84-fd1d-4c01-9491-d2c12b5caf49",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 2 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:47.307398+08:00"
+            },
+            {
+              "executionId": "f1839ce8-1d4c-4c17-a601-ad57b10625a9",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-04",
+              "createdAt": "2026-10-20T11:51:47.308134+08:00"
+            },
+            {
+              "executionId": "9d035990-f33c-49be-b757-d4d9481fa910",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 0 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T12:00:25.220843200+08:00"
+            },
+            {
+              "executionId": "5c9d7dba-c60b-4439-af0e-0ef4d0579d73",
+              "action": "create_service_ticket",
+              "status": "SUCCESS",
+              "summary": "已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "relatedId": "265ffd2d-a8e1-4532-9d0a-ee71bc7f5a79",
+              "createdAt": "2026-10-20T12:00:25.238587900+08:00"
+            }
+          ],
+          "selectedOrderId": "demo-order-dy-04",
+          "awaitingConfirmation": false
+        },
+        "timestamp": 1792468825257,
+        "success": true
+      }
+    },
+    {
+      "path": "/api/chat/session/snapshot",
+      "body": {
+        "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c"
+      },
+      "status": 200,
+      "elapsedMs": 18,
+      "response": {
+        "code": 0,
+        "message": "操作成功",
+        "data": {
+          "session": {
+            "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-1",
+            "customerName": "小林",
+            "receptionMode": "AI",
+            "status": "active",
+            "lastMessage": "工单 ST50AF047080F44921A8EE450100461581，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+            "updatedAt": "2026-10-20T11:51:26.227830+08:00",
+            "handoffSummary": null
+          },
+          "messages": [
+            {
+              "messageId": "5cbc5986-750d-484b-887e-f41edbc86173",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "system",
+              "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+              "createdAt": "2026-10-20T11:50:16.180533+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "2ffd37cc-db97-330c-b53f-048ac08b77ef",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "cd66c0d2-a550-466c-971b-b611a6914a3e",
+              "role": "customer",
+              "content": "订单 DY202610100001 的杯子漏水，想退货，原因是杯子漏水",
+              "createdAt": "2026-10-20T11:50:16.196661+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "c187ab3f-47e9-44f1-9d7e-719b1ee5996f",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:50:19.896287+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": null
+            },
+            {
+              "messageId": "ec870478-6edb-31f1-96cb-559a48b10a93",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "5b437e82-7c0e-49d1-a5a0-e26f8f4a0ade",
+              "role": "customer",
+              "content": "确认提交退货诉求",
+              "createdAt": "2026-10-20T11:50:19.928128+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "2e23588d-2624-470a-a8fc-10aed7dd0f15",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581：已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "aece4dd3-39e9-3e17-901b-bb9059b47e10",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "4feb382c-9939-49a3-9dc7-eddbfff1cf3b",
+              "role": "customer",
+              "content": "订单 DY202610100001 想退货，原因是杯子漏水",
+              "createdAt": "2026-10-20T11:50:24.137019+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "bc944bd4-7dae-4ab6-a1e3-146f4601a5d9",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:50:26.679006+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": null
+            },
+            {
+              "messageId": "5f3d0a5f-c87a-376f-8703-a783cd8dc390",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "d2100a43-4654-4457-baf0-8c489a034e64",
+              "role": "customer",
+              "content": "确认提交",
+              "createdAt": "2026-10-20T11:50:26.708181+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "95d3c9f8-2a79-4f23-8586-1c1b46f2e359",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581：已找到之前记录的诉求，请查看工单当前状态；本系统未执行平台退货或退款",
+              "createdAt": "2026-10-20T11:50:29.783769+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "17a96424-fa50-3d92-8748-c6c3b3c5a184",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "bb7884b3-da8e-41a1-9a94-4eac1f53b983",
+              "role": "customer",
+              "content": "刚才的申请怎么样了",
+              "createdAt": "2026-10-20T11:51:09.622190+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "49a8ff71-4598-4930-b8c1-f2d68b33c1bd",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581，状态：处理中。已联系顾客确认漏水情况\n工单 STA465714297BE496A930C6110F5AB48BC，状态：已完成。本地诉求已处理，平台结果另行确认（双端浏览器验收）\n工单 STCC23D72CF0B94C39AB556AD28C01C186，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+              "createdAt": "2026-10-20T11:51:20.786312+08:00",
+              "orderIds": [],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "d0ad244c-254c-3fcd-80ba-83610067950e",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "55f95978-8f88-4058-957e-29053a83e7b6",
+              "role": "customer",
+              "content": "工单 ST50AF047080F44921A8EE450100461581 进度",
+              "createdAt": "2026-10-20T11:51:20.837998+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "956632a2-8f20-40e9-9dcc-7827512ac1bb",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+              "createdAt": "2026-10-20T11:51:26.226838+08:00",
+              "orderIds": [],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            }
+          ],
+          "orders": [
+            {
+              "orderId": "demo-order-dy-03",
+              "orderNumber": "DY202610120003",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "纯棉毛巾",
+                  "quantity": 1,
+                  "specification": "蓝色"
+                }
+              ],
+              "paidAmount": 18,
+              "status": "PENDING_SHIPMENT",
+              "createdAt": "2026-10-12T11:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-02",
+              "orderNumber": "DY202610110002",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "收纳盒",
+                  "quantity": 1,
+                  "specification": "透明中号"
+                }
+              ],
+              "paidAmount": 35,
+              "status": "SHIPPED",
+              "createdAt": "2026-10-11T10:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-01",
+              "orderNumber": "DY202610100001",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "保温杯",
+                  "quantity": 1,
+                  "specification": "白色 500ml"
+                }
+              ],
+              "paidAmount": 49,
+              "status": "DELIVERED",
+              "createdAt": "2026-10-10T09:00+08:00"
+            }
+          ],
+          "logistics": [
+            {
+              "orderId": "demo-order-dy-03",
+              "carrier": null,
+              "trackingNumber": null,
+              "status": "订单尚未发货，暂无物流",
+              "nodes": []
+            },
+            {
+              "orderId": "demo-order-dy-02",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0002",
+              "status": "运输中",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-12T10:00+08:00"
+                },
+                {
+                  "description": "到达上海转运中心",
+                  "time": "2026-10-13T11:00+08:00"
+                }
+              ]
+            },
+            {
+              "orderId": "demo-order-dy-01",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0001",
+              "status": "已签收",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-11T09:00+08:00"
+                },
+                {
+                  "description": "顾客已签收",
+                  "time": "2026-10-13T14:00+08:00"
+                }
+              ]
+            }
+          ],
+          "tickets": [
+            {
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "ticketNumber": "ST50AF047080F44921A8EE450100461581",
+              "orderNumber": "DY202610100001",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00",
+              "updatedAt": "2026-10-20T11:51:20.825465+08:00",
+              "history": [
+                {
+                  "historyId": "821312b5-b828-441e-a597-466e91448811",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:50:24.080879"
+                },
+                {
+                  "historyId": "046250cd-1eb3-4af3-9b87-08cef5639f6c",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:51:09.603585"
+                },
+                {
+                  "historyId": "b8d45da8-7492-466f-a68c-d66188f47c25",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:51:20.825465"
+                }
+              ]
+            },
+            {
+              "ticketId": "9fe7b4ec-7e23-42ac-bd43-7bdd8eadc8f8",
+              "ticketNumber": "STA465714297BE496A930C6110F5AB48BC",
+              "orderNumber": "DY202610100001",
+              "sessionId": "f1e02acf-2c5e-419c-88ed-a064818461e5",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认（双端浏览器验收）",
+              "createdAt": "2026-10-20T11:35:08.690554+08:00",
+              "updatedAt": "2026-10-20T11:49:07.029436+08:00",
+              "history": [
+                {
+                  "historyId": "6d29b21d-d3fe-452e-9c41-4009a31b1e77",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:35:08.690554"
+                },
+                {
+                  "historyId": "d798b9d2-c3a6-4955-ada7-dd5dce2546d3",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:36:03.198308"
+                },
+                {
+                  "historyId": "10d77fd0-ade5-422d-8e74-cce46247d858",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认（双端浏览器验收）",
+                  "operatorId": "demo-operator",
+                  "occurredAt": "2026-10-20T11:49:07.029436"
+                }
+              ]
+            },
+            {
+              "ticketId": "76ca88ba-f5de-4a04-83d5-93a83e7dbd2d",
+              "ticketNumber": "STCC23D72CF0B94C39AB556AD28C01C186",
+              "orderNumber": "DY202610100001",
+              "sessionId": "8e74f774-f5a3-4534-8206-824a234e1399",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认",
+              "createdAt": "2026-10-20T11:26:15.166509+08:00",
+              "updatedAt": "2026-10-20T11:26:45.610424+08:00",
+              "history": [
+                {
+                  "historyId": "13943cbc-f5a8-4ff3-8192-5914e7f4c6b2",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:26:15.166509"
+                },
+                {
+                  "historyId": "1d533bfb-30c3-4e10-9c07-030fc97b6e84",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:26:41.179251"
+                },
+                {
+                  "historyId": "75ceddaa-3e8c-424e-9708-653add05c0e3",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:26:45.610424"
+                }
+              ]
+            }
+          ],
+          "knowledge": [
+            {
+              "knowledgeId": "demo-knowledge-ticket",
+              "title": "本地服务工单的含义",
+              "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+              "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+              "scope": "MERCHANT"
+            }
+          ],
+          "executions": [
+            {
+              "executionId": "a426c026-c392-425c-ac13-e108e629d977",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 3 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:19.894140+08:00"
+            },
+            {
+              "executionId": "b61486aa-4975-4293-a293-7bdfa6451ea1",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-01",
+              "createdAt": "2026-10-20T11:50:19.895778+08:00"
+            },
+            {
+              "executionId": "e625de34-6f3a-49b4-b545-98101ca05da5",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 2 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:24.065632+08:00"
+            },
+            {
+              "executionId": "2d747756-b79a-48fe-809a-44b50592b547",
+              "action": "create_service_ticket",
+              "status": "SUCCESS",
+              "summary": "已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00"
+            },
+            {
+              "executionId": "9e89188a-0bf1-4416-869a-2ded4a5e2b90",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 3 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:26.670119+08:00"
+            },
+            {
+              "executionId": "07955026-da44-46cf-b59f-53d05ed971ad",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-01",
+              "createdAt": "2026-10-20T11:50:26.679006+08:00"
+            },
+            {
+              "executionId": "c30fb207-6e8c-4b61-bb49-2d37d520b58f",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 0 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:29.769959+08:00"
+            },
+            {
+              "executionId": "891ec520-af65-4cae-b99f-e16d70da3ae6",
+              "action": "create_service_ticket",
+              "status": "SUCCESS",
+              "summary": "已找到之前记录的诉求，请查看工单当前状态；本系统未执行平台退货或退款",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:50:29.781767+08:00"
+            },
+            {
+              "executionId": "05b71d91-227a-45e8-be92-07d6b76ec73e",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 1 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:20.770470+08:00"
+            },
+            {
+              "executionId": "0222701b-746e-4443-8c06-40e13d2c015f",
+              "action": "get_service_ticket",
+              "status": "SUCCESS",
+              "summary": "找到 3 张当前顾客工单",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:51:20.785074+08:00"
+            },
+            {
+              "executionId": "cd8634cd-285a-457f-8199-a70e20a58c94",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 1 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:26.213939+08:00"
+            },
+            {
+              "executionId": "2966897a-6a19-48af-817a-fd83e18afe2c",
+              "action": "get_service_ticket",
+              "status": "SUCCESS",
+              "summary": "找到 1 张当前顾客工单",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:51:26.219490+08:00"
+            }
+          ],
+          "selectedOrderId": "demo-order-dy-01",
+          "awaitingConfirmation": false
+        },
+        "timestamp": 1792468825267,
+        "success": true
+      }
+    },
+    {
+      "path": "/api/chat/message/send",
+      "body": {
+        "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+        "content": "刚才的申请怎么样了",
+        "clientMessageId": "613db76f-df20-4d26-bf71-13f67af8c8ac"
+      },
+      "status": 200,
+      "elapsedMs": 5623,
+      "response": {
+        "code": 0,
+        "message": "操作成功",
+        "data": {
+          "session": {
+            "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+            "shopId": "demo-shop-dy",
+            "shopName": "安静生活抖店（演示）",
+            "platform": "DOUYIN",
+            "customerId": "demo-customer-dy-1",
+            "customerName": "小林",
+            "receptionMode": "AI",
+            "status": "active",
+            "lastMessage": "工单 ST50AF047080F44921A8EE450100461581，状态：已完成。本地诉求已处理，平台结果另行确认\n工单 STA465714297BE496A930C6110F5AB48BC，状态：已完成。本地诉求已处理，平台结果另行确认（双端浏览器验收）\n工单 STCC23D72CF0B94C39AB556AD28C01C186，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+            "updatedAt": "2026-10-20T12:00:30.892158700+08:00",
+            "handoffSummary": null
+          },
+          "messages": [
+            {
+              "messageId": "5cbc5986-750d-484b-887e-f41edbc86173",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "system",
+              "content": "演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。",
+              "createdAt": "2026-10-20T11:50:16.180533+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "2ffd37cc-db97-330c-b53f-048ac08b77ef",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "cd66c0d2-a550-466c-971b-b611a6914a3e",
+              "role": "customer",
+              "content": "订单 DY202610100001 的杯子漏水，想退货，原因是杯子漏水",
+              "createdAt": "2026-10-20T11:50:16.196661+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "c187ab3f-47e9-44f1-9d7e-719b1ee5996f",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:50:19.896287+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": null
+            },
+            {
+              "messageId": "ec870478-6edb-31f1-96cb-559a48b10a93",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "5b437e82-7c0e-49d1-a5a0-e26f8f4a0ade",
+              "role": "customer",
+              "content": "确认提交退货诉求",
+              "createdAt": "2026-10-20T11:50:19.928128+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "2e23588d-2624-470a-a8fc-10aed7dd0f15",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581：已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "aece4dd3-39e9-3e17-901b-bb9059b47e10",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "4feb382c-9939-49a3-9dc7-eddbfff1cf3b",
+              "role": "customer",
+              "content": "订单 DY202610100001 想退货，原因是杯子漏水",
+              "createdAt": "2026-10-20T11:50:24.137019+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "bc944bd4-7dae-4ab6-a1e3-146f4601a5d9",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。",
+              "createdAt": "2026-10-20T11:50:26.679006+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": null
+            },
+            {
+              "messageId": "5f3d0a5f-c87a-376f-8703-a783cd8dc390",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "d2100a43-4654-4457-baf0-8c489a034e64",
+              "role": "customer",
+              "content": "确认提交",
+              "createdAt": "2026-10-20T11:50:26.708181+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "95d3c9f8-2a79-4f23-8586-1c1b46f2e359",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581：已找到之前记录的诉求，请查看工单当前状态；本系统未执行平台退货或退款",
+              "createdAt": "2026-10-20T11:50:29.783769+08:00",
+              "orderIds": [
+                "demo-order-dy-01"
+              ],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "17a96424-fa50-3d92-8748-c6c3b3c5a184",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "bb7884b3-da8e-41a1-9a94-4eac1f53b983",
+              "role": "customer",
+              "content": "刚才的申请怎么样了",
+              "createdAt": "2026-10-20T11:51:09.622190+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "49a8ff71-4598-4930-b8c1-f2d68b33c1bd",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581，状态：处理中。已联系顾客确认漏水情况\n工单 STA465714297BE496A930C6110F5AB48BC，状态：已完成。本地诉求已处理，平台结果另行确认（双端浏览器验收）\n工单 STCC23D72CF0B94C39AB556AD28C01C186，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+              "createdAt": "2026-10-20T11:51:20.786312+08:00",
+              "orderIds": [],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "d0ad244c-254c-3fcd-80ba-83610067950e",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "55f95978-8f88-4058-957e-29053a83e7b6",
+              "role": "customer",
+              "content": "工单 ST50AF047080F44921A8EE450100461581 进度",
+              "createdAt": "2026-10-20T11:51:20.837998+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "956632a2-8f20-40e9-9dcc-7827512ac1bb",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+              "createdAt": "2026-10-20T11:51:26.226838+08:00",
+              "orderIds": [],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            },
+            {
+              "messageId": "eebe9e32-76d0-36f0-b133-8133631d411d",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": "613db76f-df20-4d26-bf71-13f67af8c8ac",
+              "role": "customer",
+              "content": "刚才的申请怎么样了",
+              "createdAt": "2026-10-20T12:00:25.283212+08:00",
+              "orderIds": [],
+              "ticketId": null
+            },
+            {
+              "messageId": "01c1bb9a-6460-489e-b910-f7c3b30b2bc9",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "clientMessageId": null,
+              "role": "ai",
+              "content": "工单 ST50AF047080F44921A8EE450100461581，状态：已完成。本地诉求已处理，平台结果另行确认\n工单 STA465714297BE496A930C6110F5AB48BC，状态：已完成。本地诉求已处理，平台结果另行确认（双端浏览器验收）\n工单 STCC23D72CF0B94C39AB556AD28C01C186，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。",
+              "createdAt": "2026-10-20T12:00:30.892158700+08:00",
+              "orderIds": [],
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b"
+            }
+          ],
+          "orders": [
+            {
+              "orderId": "demo-order-dy-03",
+              "orderNumber": "DY202610120003",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "纯棉毛巾",
+                  "quantity": 1,
+                  "specification": "蓝色"
+                }
+              ],
+              "paidAmount": 18,
+              "status": "PENDING_SHIPMENT",
+              "createdAt": "2026-10-12T11:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-02",
+              "orderNumber": "DY202610110002",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "收纳盒",
+                  "quantity": 1,
+                  "specification": "透明中号"
+                }
+              ],
+              "paidAmount": 35,
+              "status": "SHIPPED",
+              "createdAt": "2026-10-11T10:00+08:00"
+            },
+            {
+              "orderId": "demo-order-dy-01",
+              "orderNumber": "DY202610100001",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "items": [
+                {
+                  "name": "保温杯",
+                  "quantity": 1,
+                  "specification": "白色 500ml"
+                }
+              ],
+              "paidAmount": 49,
+              "status": "DELIVERED",
+              "createdAt": "2026-10-10T09:00+08:00"
+            }
+          ],
+          "logistics": [
+            {
+              "orderId": "demo-order-dy-03",
+              "carrier": null,
+              "trackingNumber": null,
+              "status": "订单尚未发货，暂无物流",
+              "nodes": []
+            },
+            {
+              "orderId": "demo-order-dy-02",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0002",
+              "status": "运输中",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-12T10:00+08:00"
+                },
+                {
+                  "description": "到达上海转运中心",
+                  "time": "2026-10-13T11:00+08:00"
+                }
+              ]
+            },
+            {
+              "orderId": "demo-order-dy-01",
+              "carrier": "演示速运",
+              "trackingNumber": "DEMO-DY-0001",
+              "status": "已签收",
+              "nodes": [
+                {
+                  "description": "商家已交寄",
+                  "time": "2026-10-11T09:00+08:00"
+                },
+                {
+                  "description": "顾客已签收",
+                  "time": "2026-10-13T14:00+08:00"
+                }
+              ]
+            }
+          ],
+          "tickets": [
+            {
+              "ticketId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "ticketNumber": "ST50AF047080F44921A8EE450100461581",
+              "orderNumber": "DY202610100001",
+              "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00",
+              "updatedAt": "2026-10-20T11:51:20.825465+08:00",
+              "history": [
+                {
+                  "historyId": "821312b5-b828-441e-a597-466e91448811",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:50:24.080879"
+                },
+                {
+                  "historyId": "046250cd-1eb3-4af3-9b87-08cef5639f6c",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:51:09.603585"
+                },
+                {
+                  "historyId": "b8d45da8-7492-466f-a68c-d66188f47c25",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:51:20.825465"
+                }
+              ]
+            },
+            {
+              "ticketId": "9fe7b4ec-7e23-42ac-bd43-7bdd8eadc8f8",
+              "ticketNumber": "STA465714297BE496A930C6110F5AB48BC",
+              "orderNumber": "DY202610100001",
+              "sessionId": "f1e02acf-2c5e-419c-88ed-a064818461e5",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认（双端浏览器验收）",
+              "createdAt": "2026-10-20T11:35:08.690554+08:00",
+              "updatedAt": "2026-10-20T11:49:07.029436+08:00",
+              "history": [
+                {
+                  "historyId": "6d29b21d-d3fe-452e-9c41-4009a31b1e77",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:35:08.690554"
+                },
+                {
+                  "historyId": "d798b9d2-c3a6-4955-ada7-dd5dce2546d3",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:36:03.198308"
+                },
+                {
+                  "historyId": "10d77fd0-ade5-422d-8e74-cce46247d858",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认（双端浏览器验收）",
+                  "operatorId": "demo-operator",
+                  "occurredAt": "2026-10-20T11:49:07.029436"
+                }
+              ]
+            },
+            {
+              "ticketId": "76ca88ba-f5de-4a04-83d5-93a83e7dbd2d",
+              "ticketNumber": "STCC23D72CF0B94C39AB556AD28C01C186",
+              "orderNumber": "DY202610100001",
+              "sessionId": "8e74f774-f5a3-4534-8206-824a234e1399",
+              "orderId": "demo-order-dy-01",
+              "shopId": "demo-shop-dy",
+              "customerId": "demo-customer-dy-1",
+              "type": "RETURN",
+              "reason": "杯子漏水",
+              "status": "COMPLETED",
+              "processingNote": "本地诉求已处理，平台结果另行确认",
+              "createdAt": "2026-10-20T11:26:15.166509+08:00",
+              "updatedAt": "2026-10-20T11:26:45.610424+08:00",
+              "history": [
+                {
+                  "historyId": "13943cbc-f5a8-4ff3-8192-5914e7f4c6b2",
+                  "fromStatus": null,
+                  "toStatus": "PENDING_REVIEW",
+                  "note": "已记录诉求，待商家审核",
+                  "operatorId": "demo-customer-dy-1",
+                  "occurredAt": "2026-10-20T11:26:15.166509"
+                },
+                {
+                  "historyId": "1d533bfb-30c3-4e10-9c07-030fc97b6e84",
+                  "fromStatus": "PENDING_REVIEW",
+                  "toStatus": "PROCESSING",
+                  "note": "已联系顾客确认漏水情况",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:26:41.179251"
+                },
+                {
+                  "historyId": "75ceddaa-3e8c-424e-9708-653add05c0e3",
+                  "fromStatus": "PROCESSING",
+                  "toStatus": "COMPLETED",
+                  "note": "本地诉求已处理，平台结果另行确认",
+                  "operatorId": "acceptance-merchant",
+                  "occurredAt": "2026-10-20T11:26:45.610424"
+                }
+              ]
+            }
+          ],
+          "knowledge": [
+            {
+              "knowledgeId": "demo-knowledge-ticket",
+              "title": "本地服务工单的含义",
+              "source": "C成员编制的演示资料 v1.1；商品规格对齐D种子，店铺规则非平台官方政策",
+              "content": "本系统只记录诉求并交商家审核。本地工单完成不等于平台退款、退货受理或赔偿成功。",
+              "scope": "MERCHANT"
+            }
+          ],
+          "executions": [
+            {
+              "executionId": "a426c026-c392-425c-ac13-e108e629d977",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 3 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:19.894140+08:00"
+            },
+            {
+              "executionId": "b61486aa-4975-4293-a293-7bdfa6451ea1",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-01",
+              "createdAt": "2026-10-20T11:50:19.895778+08:00"
+            },
+            {
+              "executionId": "e625de34-6f3a-49b4-b545-98101ca05da5",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 2 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:24.065632+08:00"
+            },
+            {
+              "executionId": "2d747756-b79a-48fe-809a-44b50592b547",
+              "action": "create_service_ticket",
+              "status": "SUCCESS",
+              "summary": "已记录诉求，待商家审核；本系统未执行平台退货或退款",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:50:24.080879+08:00"
+            },
+            {
+              "executionId": "9e89188a-0bf1-4416-869a-2ded4a5e2b90",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 3 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:26.670119+08:00"
+            },
+            {
+              "executionId": "07955026-da44-46cf-b59f-53d05ed971ad",
+              "action": "get_order",
+              "status": "SUCCESS",
+              "summary": "已找到一笔匹配订单",
+              "relatedId": "demo-order-dy-01",
+              "createdAt": "2026-10-20T11:50:26.679006+08:00"
+            },
+            {
+              "executionId": "c30fb207-6e8c-4b61-bb49-2d37d520b58f",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 0 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:50:29.769959+08:00"
+            },
+            {
+              "executionId": "891ec520-af65-4cae-b99f-e16d70da3ae6",
+              "action": "create_service_ticket",
+              "status": "SUCCESS",
+              "summary": "已找到之前记录的诉求，请查看工单当前状态；本系统未执行平台退货或退款",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:50:29.781767+08:00"
+            },
+            {
+              "executionId": "05b71d91-227a-45e8-be92-07d6b76ec73e",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 1 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:20.770470+08:00"
+            },
+            {
+              "executionId": "0222701b-746e-4443-8c06-40e13d2c015f",
+              "action": "get_service_ticket",
+              "status": "SUCCESS",
+              "summary": "找到 3 张当前顾客工单",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:51:20.785074+08:00"
+            },
+            {
+              "executionId": "cd8634cd-285a-457f-8199-a70e20a58c94",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 1 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T11:51:26.213939+08:00"
+            },
+            {
+              "executionId": "2966897a-6a19-48af-817a-fd83e18afe2c",
+              "action": "get_service_ticket",
+              "status": "SUCCESS",
+              "summary": "找到 1 张当前顾客工单",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T11:51:26.219490+08:00"
+            },
+            {
+              "executionId": "04561e4a-7929-43f6-9ed8-2c804ad672e0",
+              "action": "search_knowledge",
+              "status": "SUCCESS",
+              "summary": "按当前商家与店铺检索，命中 1 条",
+              "relatedId": null,
+              "createdAt": "2026-10-20T12:00:30.888507600+08:00"
+            },
+            {
+              "executionId": "72e68632-927e-456c-b4ff-10f420fee687",
+              "action": "get_service_ticket",
+              "status": "SUCCESS",
+              "summary": "找到 3 张当前顾客工单",
+              "relatedId": "7d9c7b74-4410-42b5-8625-72b8f30f080b",
+              "createdAt": "2026-10-20T12:00:30.890455300+08:00"
+            }
+          ],
+          "selectedOrderId": "demo-order-dy-01",
+          "awaitingConfirmation": false
+        },
+        "timestamp": 1792468830898,
+        "success": true
+      }
+    }
+  ]
+}

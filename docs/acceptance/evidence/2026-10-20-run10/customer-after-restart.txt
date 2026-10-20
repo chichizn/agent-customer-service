@@ -1,0 +1,118 @@
+- main:
+  - generic: CUSTOMER SIMULATOR
+  - heading "顾客模拟入口 平台消息模拟" [level=1]:
+    - text: 顾客模拟入口
+    - generic: 平台消息模拟
+  - paragraph: 以顾客视角，体验一次完整的咨询。
+  - link "打开客服工作台 ↗":
+    - /url: "#/customer-workbench-preview"
+  - generic: 平台消息为演示消息，业务结果由后端返回。
+  - note:
+    - generic: 演示时间
+    - generic: 演示活动按 2026/10/18 12:00（Asia/Shanghai）判断有效期。
+    - text: 订单与物流为预置数据；消息和工单记录实际操作时间，售后诉求由商家审核。
+  - complementary:
+    - heading "演示身份" [level=2]
+    - generic: 01 / IDENTITY
+    - text: 平台与店铺
+    - combobox "平台与店铺":
+      - option "抖店 · 安静生活抖店（演示）" [selected]
+      - option "淘宝 · 安静生活淘宝店（演示）"
+    - text: 顾客身份
+    - combobox "顾客身份":
+      - option "小林" [selected]
+      - option "小陈"
+    - button "恢复最近会话 ↗"
+    - button "显式新建会话"
+    - text: 已有会话
+    - combobox "已有会话":
+      - option "请选择会话"
+      - option "bb9f00f4-d680-4b · 工单 ST50AF04708"
+      - option "c2971bcc-f851-47 · 当前没有可提交的待确认诉求，"
+      - option "f1ce369f-c4f5-40 · 找到多笔匹配订单，请先选择具"
+      - option "cd26c78f-8788-4f · 工单 STA46571429" [selected]
+      - option "89f6a3df-51ea-4a · 当前没有可提交的待确认诉求，"
+      - option "bdad1146-c52e-45 · 找到多笔匹配订单，请先选择具"
+      - option "1c2d7da4-d04e-43 · 工单 STA46571429"
+      - option "31a2ae6d-f8e7-4c · 当前没有可提交的待确认诉求，"
+      - option "2aa3cd13-4f9d-49 · 找到多笔匹配订单，请先选择具"
+      - option "00bd5936-c34d-44 · 工单 STA46571429"
+      - option "f1e02acf-2c5e-41 · 刚才的申请怎么样了"
+      - option "63d17253-1ae2-4f · 当前没有可提交的待确认诉求，"
+      - option "5c80462a-e2ad-4e · 【模型不可用，规则降级】找到"
+      - option "8e74f774-f5a3-45 · 工单 STCC23D72CF"
+      - option "ad787995-bb21-4a · 请确认：订单 DY20261"
+      - option "3f9b748d-fa73-4a · 找到多笔匹配订单，请先选择具"
+    - generic: 02 / QUICK START
+    - heading "试试这些问题" [level=3]
+    - button "我的杯子到哪了？":
+      - generic: 我的杯子到哪了？
+      - generic: ↗
+    - button "我想退货，原因是不喜欢这个颜色":
+      - generic: 我想退货，原因是不喜欢这个颜色
+      - generic: ↗
+    - button "商品破损了，希望记录补偿诉求":
+      - generic: 商品破损了，希望记录补偿诉求
+      - generic: ↗
+    - button "刚才的工单进度怎么样了？":
+      - generic: 刚才的工单进度怎么样了？
+      - generic: ↗
+    - button "店铺的退货规则是什么？":
+      - generic: 店铺的退货规则是什么？
+      - generic: ↗
+    - button "我要转人工":
+      - generic: 我要转人工
+      - generic: ↗
+    - paragraph: 快捷问题只填入输入框，由你确认发送。切换身份会清空当前会话视图。
+  - heading "小林 的咨询 抖店" [level=2]:
+    - text: 小林 的咨询
+    - generic: 抖店
+  - paragraph: 安静生活抖店（演示）
+  - generic: 顾客视角
+  - generic: AI 接待客服消息会自动同步到此处
+  - log "会话消息":
+    - article:
+      - paragraph: 演示会话已建立。服务工单仅记录本地诉求，不代表平台退货、退款或赔偿成功。
+    - article:
+      - generic: 小
+      - strong: 顾客
+      - time: 10/20 11:45
+      - paragraph: 订单 DY202610100001 的杯子漏水，想退货，原因是杯子漏水
+    - article:
+      - generic: AI
+      - strong: AI 客服
+      - time: 10/20 11:45
+      - paragraph: 请确认：订单 DY202610100001；诉求：退货；原因：杯子漏水。回复“确认提交”后仅创建本地工单，待商家审核，不执行平台退款。
+      - button "demo-order-dy-01"
+    - article:
+      - generic: 小
+      - strong: 顾客
+      - time: 10/20 11:46
+      - paragraph: 确认提交
+    - article:
+      - generic: AI
+      - strong: AI 客服
+      - time: 10/20 11:46
+      - paragraph: 工单 STA465714297BE496A930C6110F5AB48BC：已找到之前记录的诉求，请查看工单当前状态；本系统未执行平台退货或退款
+      - button "demo-order-dy-01"
+      - generic: 本地工单 · 9fe7b4ec-7e23-42ac-bd43-7bdd8eadc8f8
+    - article:
+      - generic: 小
+      - strong: 顾客
+      - time: 10/20 11:49
+      - paragraph: 刚才的申请怎么样了
+    - article:
+      - generic: AI
+      - strong: AI 客服
+      - time: 10/20 11:49
+      - paragraph: 工单 STA465714297BE496A930C6110F5AB48BC，状态：已完成。本地诉求已处理，平台结果另行确认（双端浏览器验收） 工单 STCC23D72CF0B94C39AB556AD28C01C186，状态：已完成。本地诉求已处理，平台结果另行确认 本系统未执行平台退货或退款。
+      - generic: 本地工单 · 9fe7b4ec-7e23-42ac-bd43-7bdd8eadc8f8
+  - generic: 顾客消息
+  - textbox "顾客消息":
+    - /placeholder: 输入想咨询的问题…
+  - generic: Enter 发送 · Shift + Enter 换行 0/2000
+  - button "发送消息" [disabled]:
+    - text: 发送消息
+    - generic: ↗
+- generic "Toggle devtools panel":
+- generic "Toggle Component Inspector":

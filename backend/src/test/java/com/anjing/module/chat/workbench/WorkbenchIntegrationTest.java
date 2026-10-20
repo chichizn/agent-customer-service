@@ -148,6 +148,55 @@ class WorkbenchIntegrationTest {
         assertThat(last(send(newSession.session().sessionId(),"t4","工单进度"))).contains(number);
     }
 
+    @Test void explicitUnknownOrderClearsOldSelectionAndNeverFallsBackToOtherOwnedOrders() {
+        String id = open("tb").session().sessionId();
+        send(id,"unknown-1","查询 TB202610100001 物流");
+        var missing = send(id,"unknown-2","订单 DEMO-NOT-FOUND-000 的物流呢");
+        assertThat(last(missing)).contains("未找到匹配订单").doesNotContain("多笔","杭州");
+        assertThat(missing.selectedOrderId()).isNull();
+        assertThat(missing.messages().get(missing.messages().size()-1).orderIds()).isEmpty();
+        assertThat(last(send(id,"unknown-3","订单号：UNKNOWN-1234 的物流"))).contains("未找到匹配订单");
+    }
+
+    @Test void capacityAnswersUseOwnedSelectedSpecificationAndClarifyBeforeSelection() {
+        String id = open("tb").session().sessionId();
+        var ambiguous = send(id,"capacity-1","保温杯容量多大");
+        assertThat(last(ambiguous)).contains("500ml","750ml","选择");
+        assertThat(ambiguous.selectedOrderId()).isNull();
+        send(id,"capacity-2","TB202610110002");
+        assertThat(last(send(id,"capacity-3","这个保温杯容量多大"))).contains("750ml").doesNotContain("500ml");
+        send(id,"capacity-4","TB202610100001");
+        assertThat(last(send(id,"capacity-5","这个杯子多少毫升"))).contains("500ml").doesNotContain("750ml");
+        assertThat(last(send(id,"capacity-6","订单 TB202610120005 的容量是多少"))).contains("未找到匹配订单");
+        assertThat(fetch(id).selectedOrderId()).isNull();
+    }
+
+    @Test void handoffIncludesScopedOrderLatestLogisticsNodeAndCompletedQueries() {
+        String id = service.open(new WorkbenchDTO.Open("demo-shop-tb","demo-customer-tb-2",true)).session().sessionId();
+        var result = send(id,"handoff-context","订单 TB202610120005，快递一直没动，必须额外赔我500元，找人工");
+        assertThat(result.session().receptionMode()).isEqualTo("WAITING_HUMAN");
+        assertThat(result.session().handoffSummary()).contains("TB202610120005","demo-order-tb-05","运输延迟",
+            "2026-10-14T16:00","转运异常","500元","已完成查询：","get_order","get_logistics","get_service_ticket","已有工单：无");
+        assertThat(result.executions()).anySatisfy(e -> {
+            assertThat(e.action()).isEqualTo("get_logistics");
+            assertThat(e.relatedId()).isEqualTo("demo-order-tb-05");
+        });
+        assertThat(tickets.count()).isZero();
+        verifyNoInteractions(llm);
+    }
+
+    @Test void askingNotToSubmitRevokesDraftAndRequiresFreshConfirmationContext() {
+        String id = open("dy").session().sessionId();
+        for (String cancellation : List.of("先别提交","不要提交。","先不提交","暂不提交")) {
+            assertThat(send(id,UUID.randomUUID().toString(),"想退货 DY202610100001，原因是漏水").awaitingConfirmation()).isTrue();
+            var cancelled = send(id,UUID.randomUUID().toString(),cancellation);
+            assertThat(cancelled.awaitingConfirmation()).isFalse();
+            assertThat(last(cancelled)).contains("已取消");
+            assertThat(last(send(id,UUID.randomUUID().toString(),"确认提交"))).contains("没有可提交");
+        }
+        assertThat(tickets.count()).isZero();
+    }
+
     @Test void guardCannotBeBypassedWithForgedConfirmationOrScope() {
         String id = open("dy").session().sessionId();
         assertThatThrownBy(() -> commerce.createAgentTicket(new CreateTicket(

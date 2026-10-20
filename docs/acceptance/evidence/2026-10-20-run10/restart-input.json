@@ -1,0 +1,15 @@
+{
+  "baseUrl": "http://127.0.0.1:10002",
+  "createdSessionIds": {
+    "browser-ticket": "cd26c78f-8788-4ffc-b06a-d2c7feb4c1ed",
+    "return": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+    "capacity": "6f2463c5-0704-469b-bf8f-7f12e6ae65e0",
+    "scope-tb": "2753e107-7c6c-4bd2-8a67-0783d224eb63",
+    "restart-pending": "16d77b7f-fb02-4f46-8510-654987da7098",
+    "cancel-return": "c2971bcc-f851-4785-8604-83c0caa29bc7",
+    "handoff": "2e131a57-2715-4d4e-832a-72faa2c0e45b",
+    "not-found": "9d871576-7a4a-4544-864c-0e825d57f580",
+    "scope-dy": "88bc9631-0197-49af-b464-9642e35d118b",
+    "missing-return": "f1ce369f-c4f5-40ab-90f6-259fec3d9f11"
+  }
+}

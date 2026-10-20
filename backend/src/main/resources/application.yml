@@ -168,6 +168,8 @@ llm:
   api-url: ${LLM_API_URL:https://api.onerouter.top/v1/chat/completions}
   api-key: ${LLM_API_KEY:}
   model: ${LLM_MODEL:gpt-4o-mini}
+  connect-timeout-ms: ${LLM_CONNECT_TIMEOUT_MS:3000}
+  read-timeout-ms: ${LLM_READ_TIMEOUT_MS:8000}
 
 # 管理端点
 management:

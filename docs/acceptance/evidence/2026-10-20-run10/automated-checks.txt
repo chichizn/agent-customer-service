@@ -1,0 +1,48 @@
+BACKEND: mvn -o -B test
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s -- in com.anjing.module.demo.DemoBusinessTimeTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 80, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  22.621 s
+[INFO] Finished at: 2026-10-20T11:43:24+08:00
+[INFO] ------------------------------------------------------------------------
+FRONTEND: npm run test:workbench
+✔ 同一身份恢复会话，显式新建才创建；不同店铺知识范围独立 (1339.7509ms)
+✔ 重置只影响独立演示键，并阻止重置前的迟到处理 (657.4939ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16036.5314
+CHECKER: node --test docs/acceptance/scripts/integration.test.mjs
+✔ checker detects fabricated logistics (0.6125ms)
+✔ equivalent Jackson wall-time serialization is accepted (0.9164ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111.4088
+FRONTEND BUILD: npm run build; Node v24.19.0
+
+> art-design-pro@0.0.0 build
+> vue-tsc --noEmit && vite build
+
+🚀 API_URL = https://m1.apifoxmock.com/m1/6400575-6097373-default
+🚀 VERSION = 3.0.1
+vite v7.1.7 building for production...
+transforming...
+✓ 2951 modules transformed.
+dist/assets/useChart-CEXYyG8h.js                                                      754.52 kB │ gzip: 246.89 kB
+dist/assets/index-B0OqVRn9.js                                                       1,363.03 kB │ gzip: 451.35 kB
+✓ built in 13.38s

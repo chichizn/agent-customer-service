@@ -32,14 +32,28 @@ public class LlmService {
     @Value("${llm.enabled:false}")
     private boolean enabled;
 
+    @Value("${llm.connect-timeout-ms:3000}")
+    private int connectTimeoutMs = 3000;
+
+    @Value("${llm.read-timeout-ms:8000}")
+    private int readTimeoutMs = 8000;
+
+    private static final Set<String> INTENTS = Set.of("PRODUCT_DISCOUNT", "RETURN_EXCHANGE",
+            "SIZE_CONSULT", "LOGISTICS_QUERY", "GENERAL_QUERY");
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PostConstruct
     public void configureTimeouts() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(3000);
-        factory.setReadTimeout(8000);
+        // Legacy chat can make two sequential calls; keep their configured wait below the UI's 60s timeout.
+        // Workbench makes one call and holds an in-flight lease for 60s.
+        if (connectTimeoutMs < 1 || connectTimeoutMs > 5000 || readTimeoutMs < 1 || readTimeoutMs > 20000) {
+            throw new IllegalArgumentException("llm.connect-timeout-ms must be 1..5000; llm.read-timeout-ms must be 1..20000");
+        }
+        factory.setConnectTimeout(connectTimeoutMs);
+        factory.setReadTimeout(readTimeoutMs);
         restTemplate.setRequestFactory(factory);
     }
 
@@ -100,7 +114,7 @@ public class LlmService {
             HttpEntity<String> entity = new HttpEntity<>(
                     objectMapper.writeValueAsString(requestBody), headers);
 
-            log.info("LLM 请求发送: url={}, model={}", apiUrl, model);
+            log.info("LLM 请求发送: model={}", model);
 
             ResponseEntity<String> response = restTemplate.exchange(
                     apiUrl, HttpMethod.POST, entity, String.class);
@@ -111,26 +125,23 @@ public class LlmService {
 
             // 解析响应
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                JsonNode root = objectMapper.readTree(response.getBody());
-                JsonNode choices = root.get("choices");
-                if (choices != null && choices.isArray() && !choices.isEmpty()) {
-                    String content = choices.get(0).get("message").get("content").asText();
+                String content = responseContent(response.getBody());
+                if (content != null) {
                     log.info("LLM 回复生成成功: 长度={}, request-id={}", content.length(), requestId);
                     return content;
                 }
             }
 
-            log.warn("LLM 回复解析失败: request-id={}, body={}", requestId,
-                    response.getBody() != null ? response.getBody().substring(0, Math.min(200, response.getBody().length())) : "null");
+            log.warn("LLM 回复解析失败: request-id={}", requestId);
             return null;
 
         } catch (org.springframework.web.client.HttpClientErrorException | org.springframework.web.client.HttpServerErrorException e) {
             String requestId = extractRequestId(e.getResponseHeaders());
-            log.error("LLM 调用失败: url={}, status={}, request-id={}, error={}",
-                    apiUrl, e.getStatusCode(), requestId, e.getResponseBodyAsString().substring(0, Math.min(200, e.getResponseBodyAsString().length())));
+            // A gateway may echo credentials or customer content in its error body; never log it.
+            log.error("LLM 调用失败: status={}, request-id={}", e.getStatusCode(), requestId);
             return null;
         } catch (Exception e) {
-            log.error("LLM 调用异常: url={}, error={}", apiUrl, e.getMessage());
+            log.error("LLM 调用异常: type={}", e.getClass().getSimpleName());
             return null;
         }
     }
@@ -180,15 +191,16 @@ public class LlmService {
                     apiUrl, HttpMethod.POST, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                JsonNode root = objectMapper.readTree(response.getBody());
-                JsonNode choices = root.get("choices");
-                if (choices != null && choices.isArray() && !choices.isEmpty()) {
-                    String content = choices.get(0).get("message").get("content").asText().trim();
+                String content = responseContent(response.getBody());
+                if (content != null) {
+                    content = content.trim();
                     // 去除可能的 markdown 代码块包裹
                     if (content.startsWith("```")) {
                         content = content.replaceAll("```json\\s*", "").replaceAll("```\\s*", "").trim();
                     }
                     JsonNode result = objectMapper.readTree(content);
+                    if (!result.isObject() || !result.path("intentCode").isTextual() ||
+                            !INTENTS.contains(result.path("intentCode").asText())) return null;
                     Map<String, String> analysis = new HashMap<>();
                     analysis.put("scene", result.has("scene") ? result.get("scene").asText() : "通用咨询");
                     analysis.put("intentCode", result.has("intentCode") ? result.get("intentCode").asText() : "GENERAL_QUERY");
@@ -202,9 +214,14 @@ public class LlmService {
             }
             return null;
         } catch (Exception e) {
-            log.warn("LLM 分析失败，将使用关键词兜底: {}", e.getMessage());
+            log.warn("LLM 分析失败，将使用关键词兜底: type={}", e.getClass().getSimpleName());
             return null;
         }
+    }
+
+    private String responseContent(String body) throws java.io.IOException {
+        JsonNode content = objectMapper.readTree(body).path("choices").path(0).path("message").path("content");
+        return content.isTextual() && !content.asText().isBlank() ? content.asText() : null;
     }
 
     /**

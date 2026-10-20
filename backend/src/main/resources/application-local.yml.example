@@ -46,6 +46,8 @@ llm:
   api-url: https://api.onerouter.top/v1/chat/completions
   api-key: your_api_key_here                     # ← 填你的 API Key
   model: gpt-4o-mini                             # ← 可选模型：gpt-4o-mini / deepseek-chat 等
+  connect-timeout-ms: 3000                        # 1～5000 毫秒
+  read-timeout-ms: 8000                           # 1～20000 毫秒；较慢网关可设 20000
 
 # ==========================================
 # 📊 Druid 监控台（可选）

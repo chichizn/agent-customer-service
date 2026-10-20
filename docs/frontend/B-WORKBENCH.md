@@ -19,7 +19,7 @@
 
 真实模式已接入 D 的 commerce 接口：从 `/api/commerce/demo/identities` 读取商家、店铺和顾客；按当前会话身份查询订单、物流和该顾客的全部工单；更新工单时提交 `expectedStatus`、处理说明和操作人。工作台展示后端的订单号、工单号及工单处理历史。首次演示前需调用 `/api/commerce/demo/load` 加载演示数据。
 
-本次已补齐 A 的 `session/snapshot`、`session/open`、人工消息和接待模式更新接口，以及消息编排、范围知识、确认 guard 和统一重置。前端列表显式提交 `workbench: true`，重置提交 `confirmed: true`。接口与后端自动化验证见 [A 后端集成交付](../backend/A-INTEGRATION.md)；真实 MySQL、实际模型和浏览器端到端验收仍待执行。API 请求失败会直接显示错误，不会回退到 mock。
+本次已补齐 A 的 `session/snapshot`、`session/open`、人工消息和接待模式更新接口，以及消息编排、范围知识、确认 guard 和统一重置。前端列表显式提交 `workbench: true`，重置提交 `confirmed: true`。接口见 [A 后端集成交付](../backend/A-INTEGRATION.md)。2026-10-20 已补充隔离 MySQL、真实模型 HTTP 建单与处理、有限双端操作及重启恢复证据；完整 AC 尚未逐项完成，范围见 [run10 验证](../acceptance/evidence/2026-10-20-run10/verification.md)。API 请求失败会直接显示错误，不会回退到 mock。
 
 前端模拟数据：两家店、四个顾客、每店六笔订单；三个预置会话。固定数据用于开发和演示，C 的正式演示数据可后续替换。API 模式的真实身份现为五位，其中淘宝小许无订单，专供 AC-05 验证。
 

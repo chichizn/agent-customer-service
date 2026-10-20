@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 public class WorkbenchService {
     private static final String MERCHANT = CommerceDemoService.MERCHANT_ID;
     private static final Pattern ORDER_TOKEN = Pattern.compile("(?i)(?:demo-order-[a-z0-9-]+|(?:TB|DY)[0-9]{6,})");
+    private static final Pattern LABELLED_ORDER = Pattern.compile("订单(?:编号|号码|号)?[：:\\s]*([A-Za-z0-9][A-Za-z0-9_-]{2,63})(?![A-Za-z0-9_-])");
+    private static final Pattern CANCEL = Pattern.compile("(?:取消(?:提交|申请|退货|退款)?|算了|不(?:退货|退款|申请)了|(?:先|暂时)?(?:别|不要|不)提交|暂不提交)[！!。]?");
     private final ChatSessionRepository sessions;
     private final ChatMessageRepository messages;
     private final ChatExecutionRepository executions;
@@ -121,9 +123,8 @@ public class WorkbenchService {
             m.setDeliveryState("DONE"); return null;
         }
         if (wantsHuman) {
-            var token = ORDER_TOKEN.matcher(request.content());
-            if (token.find()) {
-                String value = token.group();
+            String value = orderToken(request.content());
+            if (value!=null) {
                 var owned = commerce.getOrder(new OrderQuery(scope(s),value.toLowerCase(Locale.ROOT).startsWith("demo-order-")?value:null,
                     value.toLowerCase(Locale.ROOT).startsWith("demo-order-")?null:value.toUpperCase(Locale.ROOT),null));
                 s.setSelectedOrderId(owned.orders().size()==1?owned.orders().get(0).orderId():null);
@@ -149,7 +150,7 @@ public class WorkbenchService {
         s.setKnowledgeIdsJson(json(refs.stream().map(ScopedKnowledge::getId).toList()));
         execution(s,"search_knowledge","SUCCESS","按当前商家与店铺检索，命中 " + refs.size() + " 条",null);
         String prefix = modelAvailable ? "" : "【模型不可用，规则降级】";
-        if (text.matches("(?:取消(?:提交|申请|退货|退款)?|算了|不(?:退货|退款|申请)了)[！!。]?")) {
+        if (CANCEL.matcher(text).matches()) {
             clearPending(s);
             reply(s,prefix+"已取消待确认诉求，没有创建工单。",List.of(),null);
         } else if (ConfirmationText.matches(text)) {
@@ -164,8 +165,7 @@ public class WorkbenchService {
                 (t.history().isEmpty()?"":t.history().get(t.history().size()-1).note())).reduce((a,b)->a+"\n"+b).orElseThrow())+
                 " 本系统未执行平台退货或退款。",List.of(),found.isEmpty()?null:found.get(0).ticketId());
         } else {
-            var tokenMatcher = ORDER_TOKEN.matcher(text);
-            String token = tokenMatcher.find() ? tokenMatcher.group() : null;
+            String token = orderToken(text);
             boolean selecting = token!=null && text.replace(token,"").matches("[\\s。.!！]*");
             boolean returning = has(text,"要退货","想退货","申请退货","申请退款","要退款","想退款","想退掉") ||
                 "RETURN_EXCHANGE".equals(intent) && !selecting && !has(text,"几天","期限","规则","运费");
@@ -174,9 +174,12 @@ public class WorkbenchService {
             boolean continuing = selecting && s.getPendingAction()!=null;
             boolean policyQuestion = !returning && !compensation && !logistics && token==null && !refs.isEmpty() &&
                 has(text,"规则","期限","几天","运费","材质","尺寸","优惠","活动","容量");
-            if (policyQuestion) clearPending(s);
+            boolean capacity = !returning && !compensation && !logistics && has(text,"容量","多少毫升");
+            if (policyQuestion || capacity) clearPending(s);
             boolean business = returning || compensation || logistics || token!=null || has(text,"订单") || s.getPendingAction()!=null;
-            if (business && !policyQuestion) {
+            if (capacity) {
+                answerCapacity(s,token,prefix);
+            } else if (business && !policyQuestion) {
                 if (returning || compensation) {
                     clearPending(s);
                     s.setPendingAction(compensation?"COMPENSATION":"RETURN");
@@ -201,6 +204,28 @@ public class WorkbenchService {
         messages.findById(plan.messageId()).orElseThrow().setDeliveryState("DONE");
         s.setInFlightMessageId(null); s.setInFlightAt(null); s.setConfirmationMessageId(null); touch(s);
         sessions.flush(); return snapshot(s);
+    }
+
+    private void answerCapacity(ChatSession s,String token,String prefix) {
+        String explicitId = token!=null && token.toLowerCase(Locale.ROOT).startsWith("demo-order-") ? token : null;
+        var found = commerce.getOrder(new OrderQuery(scope(s),explicitId!=null?explicitId:token==null?s.getSelectedOrderId():null,
+            token!=null && explicitId==null?token.toUpperCase(Locale.ROOT):null,
+            token==null && s.getSelectedOrderId()==null?"杯":null));
+        execution(s,"get_order","SUCCESS",found.message(),found.orders().size()==1?found.orders().get(0).orderId():null);
+        if (found.orders().isEmpty()) {
+            if (token!=null) s.setSelectedOrderId(null);
+            reply(s,prefix+"当前店铺和顾客下未找到匹配订单，请先提供本人保温杯订单或规格。",List.of(),null);
+            return;
+        }
+        boolean single = found.orders().size()==1;
+        if (single) s.setSelectedOrderId(found.orders().get(0).orderId());
+        String details = found.orders().stream().map(o -> "订单 "+o.orderNumber()+"："+o.items().stream()
+            .filter(i -> i.productName().contains("杯"))
+            .map(i -> i.productName()+"，规格："+Objects.toString(i.specification(),"未提供，请联系商家确认"))
+            .reduce((a,b)->a+"；"+b).orElse("该订单没有保温杯，请核对订单或提供规格"))
+            .reduce((a,b)->a+"\n"+b).orElseThrow();
+        reply(s,prefix+(single?"":"找到多笔杯子订单，请先选择具体订单：\n")+details,
+            found.orders().stream().map(Order::orderId).toList(),null);
     }
 
     private void handleOrder(ChatSession s,String text,String token,boolean modelAvailable,String prefix) {
@@ -306,7 +331,7 @@ public class WorkbenchService {
     private WorkbenchVO.Snapshot snapshot(ChatSession s) {
         var allOrders = commerce.getOrder(new OrderQuery(scope(s),null,null,null)).orders();
         var orderViews = allOrders.stream().map(o -> map("orderId",o.orderId(),"orderNumber",o.orderNumber(),"shopId",o.shopId(),
-            "customerId",o.customerId(),"items",o.items().stream().map(i -> Map.of("name",i.productName(),"quantity",i.quantity())).toList(),
+            "customerId",o.customerId(),"items",o.items().stream().map(i -> map("name",i.productName(),"quantity",i.quantity(),"specification",i.specification())).toList(),
             "paidAmount",o.actualPaid(),"status",o.status(),"createdAt",iso(o.orderedAt()))).toList();
         var logisticViews = allOrders.stream().map(o -> commerce.getLogistics(new LogisticsQuery(scope(s),o.orderId())))
             .map(l -> map("orderId",l.orderId(),"carrier",l.carrier(),"trackingNumber",l.trackingNumber(),
@@ -378,10 +403,28 @@ public class WorkbenchService {
         execution(s,"handoff_to_human","SUCCESS",s.getHandoffSummary(),s.getSelectedOrderId());
     }
     private String summary(ChatSession s,String reason) {
+        String orderDetails = "未确认", logisticsDetails = "未查询";
+        if (s.getSelectedOrderId()!=null) {
+            var owned = commerce.getOrder(new OrderQuery(scope(s),s.getSelectedOrderId(),null,null));
+            execution(s,"get_order","SUCCESS",owned.message(),s.getSelectedOrderId());
+            if (owned.orders().size()==1) {
+                var order = owned.orders().get(0);
+                orderDetails = order.orderNumber()+" / "+order.orderId();
+                var logistics = commerce.getLogistics(new LogisticsQuery(scope(s),order.orderId()));
+                execution(s,"get_logistics","SUCCESS",logistics.available()?logistics.status():logistics.unavailableReason(),order.orderId());
+                var latest = logistics.nodes().stream().max(Comparator.comparing(LogisticsNode::occurredAt));
+                logisticsDetails = logistics.available()?logistics.status()+"；末节点："+
+                    latest.map(n -> iso(n.occurredAt())+" "+n.description()).orElse("未提供") : logistics.unavailableReason();
+            }
+        }
         var tickets = commerce.getServiceTicket(new TicketQuery(scope(s),null,null,null));
+        execution(s,"get_service_ticket","SUCCESS","找到 "+tickets.size()+" 张当前顾客工单",null);
+        String queries = executions.findBySessionIdOrderByCreatedAtAscIdAsc(s.getSessionId()).stream()
+            .filter(e -> "SUCCESS".equals(e.getStatus()) && Set.of("get_order","get_logistics","get_service_ticket","search_knowledge").contains(e.getAction()))
+            .map(ChatExecution::getAction).distinct().reduce((a,b)->a+"、"+b).orElse("无");
         String latestCustomerMessage = history(s).stream().filter(m -> "customer".equals(m.getRole()))
             .reduce((previous,current) -> current).map(ChatMessage::getContent).orElse("未提供");
-        return "转交原因："+reason+"；订单："+Objects.toString(s.getSelectedOrderId(),"未确认")+
+        return "转交原因："+reason+"；订单："+orderDetails+"；物流："+logisticsDetails+"；已完成查询："+queries+
             "；诉求："+Objects.toString(s.getPendingAction(),"待补充")+"；原因："+Objects.toString(s.getPendingReason(),"待补充")+
             "；顾客最近消息："+latestCustomerMessage+
             "；已有工单："+tickets.stream().map(t -> t.ticketNumber()+"/"+t.status()).reduce((a,b)->a+"、"+b).orElse("无")+
@@ -421,6 +464,13 @@ public class WorkbenchService {
         if (has(text,"收纳盒")) return "收纳盒";
         if (has(text,"毛巾")) return "毛巾";
         return null;
+    }
+    private String orderToken(String text) {
+        // Prefer a labelled identifier even if it is unknown, rather than silently listing unrelated owned orders.
+        var labelled = LABELLED_ORDER.matcher(text);
+        if (labelled.find()) return labelled.group(1);
+        var known = ORDER_TOKEN.matcher(text);
+        return known.find()?known.group():null;
     }
     private static boolean has(String text,String... words) { return Arrays.stream(words).anyMatch(text::contains); }
     private static String ticketStatus(TicketStatus status) { return switch(status) {

@@ -39,6 +39,16 @@ node docs/acceptance/scripts/workbench-restart-check.mjs capture docs/acceptance
 node docs/acceptance/scripts/workbench-restart-check.mjs verify docs/acceptance/evidence/restart-before.json docs/acceptance/evidence/restart-after.json
 ```
 
+真实模型业务冒烟会创建并保留会话、工单及处理历史，调用已配置模型；还会把本轮工单从待审核更新到处理中、已完成，执行人工接管/回复/交回。不会 reset，也不会自动关闭其他未结工单。新建工单的前置条件是 DY01 不存在未结的 RETURN_REQUEST；若存在，应在商家工作台核实并完成正常处理。后端按顾客、订单及类型复用未结诉求，修改原因不能隔离旧工单。
+
+```powershell
+node docs/acceptance/scripts/live-business-smoke.mjs --allow-write --database agent_customer_service_acceptance_20261019 docs/acceptance/evidence/live-business-latest.json
+```
+
+脚本只接受回环 HTTP；`--database` 是操作者声明，不能证明实际数据源，运行前必须独立核实后端连接13307隔离库。要求已启用且可用的模型，不读取或记录模型凭据；请求等待35秒，覆盖后端最长20秒读超时。九组检查通过不等于22项AC通过：并发仅覆盖已完成请求同键重放，不覆盖首次写入竞争、响应丢失、处理中接管或工具失败注入。本轮结果见 [run10](evidence/2026-10-20-run10/verification.md)。
+
+若要用真实模型报告做重启比较，将其 `sessions` 映射为 `{ "baseUrl": "http://127.0.0.1:10002", "createdSessionIds": { "名称": "实际会话ID" } }`，再执行 capture/verify。完整快照哈希涵盖工单与待确认状态；报告中的单独计数只是摘要。它仍不能代替双端页面恢复及重启后继续确认/查询的实际操作。
+
 | 检查 | 退出码 | 通过含义 |
 |---|---|---|
 | check-integration | 0 / 1 | 离线数据与 C 场景/知识一致 / 有错 |
@@ -48,6 +58,7 @@ node docs/acceptance/scripts/workbench-restart-check.mjs verify docs/acceptance/
 | workbench-smoke | 0 / 非0 | 六组有限工作台 HTTP 检查通过 / 失败，写入会话和消息 |
 | workbench-restart-check | 0 / 非0 | 重启前快照捕获或重启后完整快照一致 / 失败，仅查询 |
 | demo-reset-smoke | 0 / 1 / 2 | 隔离库重置流程及知识恢复通过 / 断言失败 / 参数不符；`--allow-write` 会清理演示数据 |
+| live-business-smoke | 0 / 非0 | 九组有限真实模型业务 HTTP 检查通过 / 存在失败；会创建工单并更新处理状态 |
 
 旧数据/加载器回归用 `node demo-data/scripts/verify-package.mjs`；不传输出路径可避免覆盖历史证据。
 

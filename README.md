@@ -1,10 +1,10 @@
 # Agent Customer Service - 智能电商客服系统
 
-> LLM 大模型 + 知识库检索 + 规则兜底，双引擎架构保证系统永远可用。
+> Vue + Java 电商客服演示项目：LLM 意图分析、范围知识检索和业务规则；模型异常时查询降级，无法安全执行的写诉求转人工。
 
 当前 Demo 目标与四人分工见 [功能需求说明](docs/requirements/README.md)；B 成员可独立运行的 Vue 工作台、顾客入口及 A/D 联调契约见 [B 前端交付说明](docs/frontend/B-WORKBENCH.md)。
 
-A 的会话、订单/工单编排、人工接管、范围知识及统一重置已补充本地实现，接口、启动步骤与验证范围见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。隔离 MySQL 的只读查询和工作台冒烟已验证；真实模型、浏览器双端及完整 AC 验收仍待执行，详见[最新验收记录](docs/acceptance/RESULTS-2026-10-20.md)。
+A 的会话、订单/工单编排、人工接管、范围知识及统一重置已补充本地实现，接口见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。2026-10-20 已在隔离 MySQL 验证真实模型确认建单、商家处理、顾客查询、人工协作及10个会话重启恢复，并完成有限双端浏览器操作。后端80项、前端14项、C检查器26项测试及前端构建通过；完整22项AC仍需逐项验收，模型存在偶发超时，详见[最新验收记录](docs/acceptance/RESULTS-2026-10-20.md)。
 
 ## 环境要求
 
@@ -74,12 +74,16 @@ llm:
   api-url: https://api.onerouter.top/v1/chat/completions
   api-key: YOUR_API_KEY                     # 在本地填写，勿提交真实密钥
   model: gpt-4o-mini
+  connect-timeout-ms: 3000                # 1～5000 毫秒
+  read-timeout-ms: 8000                   # 1～20000 毫秒；较慢网关可设 20000
 ```
 
 **API Key 获取方式：**
 - OneRouter API Key：https://onerouter.pro
 
 > `application-local.yml` 已被 `.gitignore` 排除，不会上传到 GitHub。
+
+使用服务商提供的完整 Chat Completions 地址及已开通模型名。超时也可通过 `LLM_CONNECT_TIMEOUT_MS`、`LLM_READ_TIMEOUT_MS` 配置（本地 YAML 同名配置优先）；0或越界会拒绝启动。提高超时只延长等待，不保证网关成功；模型分析失败或返回非法意图时，不自动创建售后工单。
 
 演示活动默认按 `2026-10-18T12:00:00+08:00` 判断有效期，工作台和顾客端会显示这一基准。可在启动后端的终端设置 `DEMO_TIME_MODE=system` 使用系统时间，或设置 `DEMO_REFERENCE_TIME` 修改固定基准（必须含时区，例如 `2026-11-01T12:00:00+08:00`）。种子日期不会自动平移；消息、工单和请求超时仍使用真实时间，非演示知识始终按系统时间过滤。售后仍由商家审核，当前不自动判定退货资格。
 
@@ -122,6 +126,10 @@ pnpm dev
 ```
 
 前端运行在 http://localhost:20002，API 请求配置以 frontend/.env.development 为准。
+
+工作台默认使用前端模拟。联调真实后端时，在 `frontend/.env.local` 配置 `VITE_CUSTOMER_SERVICE_MODE=api`、`VITE_API_URL=/`、`VITE_API_PROXY_URL=http://127.0.0.1:10002`，重启前端。示例见 `frontend/.env.workbench.example`。两个入口为 `/#/customer-workbench-preview`（商家）、`/#/customer-simulator`（顾客），首次使用须先加载演示种子，步骤见 [A 后端集成交付](docs/backend/A-INTEGRATION.md)。
+
+`npm run build` 会执行 Vue 类型检查并生成静态文件；真实部署仍须显式配置 API 模式、`VITE_API_URL` 及同源 `/api` 反向代理。Vite 开发代理不适用于生产静态服务。
 
 ## 6. 验证
 

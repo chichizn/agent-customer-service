@@ -1,0 +1,118 @@
+{
+  "generatedAt": "2026-10-20T03:58:04.101Z",
+  "baseUrl": "http://127.0.0.1:10002",
+  "scope": "READ_ONLY_WORKBENCH_SNAPSHOT_RESTART_COMPARISON_NOT_FULL_AC",
+  "status": "CAPTURED",
+  "sessions": [
+    {
+      "name": "browser-ticket",
+      "sessionId": "cd26c78f-8788-4ffc-b06a-d2c7feb4c1ed",
+      "snapshotSha256": "f53699793576397b32facac9f1ebb8c775b0eabfe8e55780c956a0ed17f80b85",
+      "messageCount": 7,
+      "executionCount": 6,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": "demo-order-dy-01",
+      "ticketCount": 3
+    },
+    {
+      "name": "return",
+      "sessionId": "bb9f00f4-d680-4b20-9566-3c586c3a9a2c",
+      "snapshotSha256": "795ea748b88bf737bd909bb5791f506038a4d2673e67c9557c7fc8ddf4e0b0b7",
+      "messageCount": 13,
+      "executionCount": 12,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": "demo-order-dy-01",
+      "ticketCount": 3
+    },
+    {
+      "name": "capacity",
+      "sessionId": "6f2463c5-0704-469b-bf8f-7f12e6ae65e0",
+      "snapshotSha256": "b54f15a6eae8344399bd2b4762ebcbde4282ad46d55d1ac57aea7a6f4be7bcbb",
+      "messageCount": 11,
+      "executionCount": 10,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": "demo-order-tb-01",
+      "ticketCount": 0
+    },
+    {
+      "name": "scope-tb",
+      "sessionId": "2753e107-7c6c-4bd2-8a67-0783d224eb63",
+      "snapshotSha256": "21a7f6b34dad4bcc60375a98016c20493c4755cc3333a1d7bb13d243ecac3ff1",
+      "messageCount": 7,
+      "executionCount": 6,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 0
+    },
+    {
+      "name": "restart-pending",
+      "sessionId": "16d77b7f-fb02-4f46-8510-654987da7098",
+      "snapshotSha256": "18f00e305ecabc557702ce4420ab0b22cf6e4298bd753ae5adc36284ed73a3c2",
+      "messageCount": 3,
+      "executionCount": 2,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": "demo-order-dy-04",
+      "ticketCount": 0
+    },
+    {
+      "name": "cancel-return",
+      "sessionId": "c2971bcc-f851-4785-8604-83c0caa29bc7",
+      "snapshotSha256": "2e80217e08793b5d89e8d075496184356f64a3d76ed352a0d1d5b306af898a5c",
+      "messageCount": 7,
+      "executionCount": 4,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": "demo-order-dy-01",
+      "ticketCount": 3
+    },
+    {
+      "name": "handoff",
+      "sessionId": "2e131a57-2715-4d4e-832a-72faa2c0e45b",
+      "snapshotSha256": "fd04827fc36fb3fee20fd132adc73c52d0f35e71eb2db89bf17d2b88e94ea300",
+      "messageCount": 12,
+      "executionCount": 14,
+      "humanMessageCount": 1,
+      "receptionMode": "HUMAN",
+      "selectedOrderId": "demo-order-tb-05",
+      "ticketCount": 0
+    },
+    {
+      "name": "not-found",
+      "sessionId": "9d871576-7a4a-4544-864c-0e825d57f580",
+      "snapshotSha256": "672dbea9bc643aea91b577c026c63c421ed730e9d97060409ef686f1f1b4a034",
+      "messageCount": 3,
+      "executionCount": 2,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 0
+    },
+    {
+      "name": "scope-dy",
+      "sessionId": "88bc9631-0197-49af-b464-9642e35d118b",
+      "snapshotSha256": "6c9e90e87a69acadd67e5c0ac0e658638016cb2afe68f88dc6068b259e708bf5",
+      "messageCount": 3,
+      "executionCount": 2,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 0
+    },
+    {
+      "name": "missing-return",
+      "sessionId": "f1ce369f-c4f5-40ab-90f6-259fec3d9f11",
+      "snapshotSha256": "60ccbd57f3d1caba3f9ac5cdf8e273d057dabb1714d4aa0c196881abb26e4bcf",
+      "messageCount": 3,
+      "executionCount": 2,
+      "humanMessageCount": 0,
+      "receptionMode": "AI",
+      "selectedOrderId": null,
+      "ticketCount": 3
+    }
+  ]
+}
